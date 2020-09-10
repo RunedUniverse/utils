@@ -1,4 +1,4 @@
-package net.runeduniverse.libs.util;
+package net.runeduniverse.libs.utils;
 
 public class StringVariableGenerator {
 

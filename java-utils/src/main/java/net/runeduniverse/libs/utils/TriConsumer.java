@@ -1,4 +1,4 @@
-package net.runeduniverse.libs.util;
+package net.runeduniverse.libs.utils;
 
 import java.util.Objects;
 
