@@ -17,8 +17,8 @@ public class ChainTest {
 
 		UUID taskUUID = UUID.randomUUID();
 
-		TriggerMap startTriggerMap = new TriggerMap();
-		TriggerMap timeoutTriggerMap = new TriggerMap();
+		TriggerMap<UUID> startTriggerMap = new TriggerMap<UUID>();
+		TriggerMap<UUID> timeoutTriggerMap = new TriggerMap<UUID>();
 
 		Thread thread = new Thread(
 
@@ -70,8 +70,8 @@ public class ChainTest {
 
 		UUID taskUUID = UUID.randomUUID();
 
-		TriggerMap startTriggerMap = new TriggerMap();
-		TriggerMap timeoutTriggerMap = new TriggerMap();
+		TriggerMap<UUID> startTriggerMap = new TriggerMap<UUID>();
+		TriggerMap<UUID> timeoutTriggerMap = new TriggerMap<UUID>();
 
 		Thread thread = startTriggerMap.create(taskUUID).burying(false).append(new ChainableTask(new Runnable() {
 
