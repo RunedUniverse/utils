@@ -26,6 +26,6 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.libs</groupId>
   <artifactId>utils-async</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
