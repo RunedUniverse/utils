@@ -45,7 +45,14 @@ public class ThreadPool extends AChain<ThreadPool> {
 	public ThreadPool join() {
 		for (Thread thread : this.pool)
 			try {
-				thread.join();
+				switch (thread.getState()) {
+				case TERMINATED:
+				case NEW:
+					break;
+
+				default:
+					thread.join();
+				}
 			} catch (Exception e) {
 				if (!handle(e))
 					return this;
@@ -64,6 +71,10 @@ public class ThreadPool extends AChain<ThreadPool> {
 		this.start();
 		this.join();
 		done();
+	}
+
+	public void clear() {
+		this.pool.clear();
 	}
 
 	// only for CDLRunnable

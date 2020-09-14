@@ -15,8 +15,8 @@ public abstract class AChain<CHAIN extends Chainable<?>> implements Chainable<CH
 	@Override
 	public CHAIN burying(boolean buryInterruptedException) {
 		this.buryInterruptedException = buryInterruptedException;
-		if (descendant != null)
-			descendant.burying(buryInterruptedException);
+		if (this.descendant != null)
+			this.descendant.burying(buryInterruptedException);
 		return instance;
 	}
 
@@ -37,9 +37,9 @@ public abstract class AChain<CHAIN extends Chainable<?>> implements Chainable<CH
 	@SuppressWarnings("deprecation")
 	@Override
 	public <C extends Chainable<?>> C append(C descendant) {
+		descendant.setPrecedent(this);
 		this.descendant = descendant;
-		this.descendant.burying(buryInterruptedException);
-		this.descendant.setPrecedent(this);
+		descendant.burying(buryInterruptedException);
 		return descendant;
 	}
 

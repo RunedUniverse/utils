@@ -6,7 +6,7 @@ import java.util.Map;
 public class TriggerMap<KEY> {
 
 	private final int initPermits;
-	private Map<KEY, Trigger> map = new HashMap<>();
+	private final Map<KEY, Trigger> map = new HashMap<>();
 
 	public TriggerMap() {
 		this.initPermits = 0;

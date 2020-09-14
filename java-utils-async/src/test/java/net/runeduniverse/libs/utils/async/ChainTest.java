@@ -112,4 +112,21 @@ public class ChainTest {
 		thread.join();
 		print("FINISHED");
 	}
+
+	@Test
+	public void paramTrigger() throws InterruptedException {
+		TriggeredParamTask<UUID> task = new TriggeredParamTask<UUID>();
+
+		task.setConsumer(uuid -> {
+			System.out.println("UUID loaded! >> " + uuid);
+		});
+
+		Thread thread = task.runAsThread();
+
+		UUID uuid = UUID.randomUUID();
+		System.out.println("UUID generated! >> " + uuid);
+
+		task.trigger(uuid);
+		thread.join();
+	}
 }
