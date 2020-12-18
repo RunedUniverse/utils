@@ -1,17 +1,19 @@
 package net.runeduniverse.libs.utils.async;
 
-public interface Chainable<CHAIN> extends Threadable {
+public interface IChainable<CHAIN> extends IThreadable {
 
 	// SETTINGS
 	CHAIN burying(boolean buryInterruptedException);
 
 	// METHODS
-	<C extends Chainable<?>> C append(C descendant);
+	<C extends IChainable<?>> C append(C descendant);
+
+	void stop();
 
 	@Deprecated
 	void execute();
 
 	// SETTER
 	@Deprecated
-	void setPrecedent(Chainable<?> precedent);
+	void setPrecedent(IChainable<?> precedent);
 }

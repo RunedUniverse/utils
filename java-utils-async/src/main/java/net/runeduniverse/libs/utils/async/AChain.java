@@ -2,12 +2,14 @@ package net.runeduniverse.libs.utils.async;
 
 import lombok.Setter;
 
-public abstract class AChain<CHAIN extends Chainable<?>> implements Chainable<CHAIN> {
+public abstract class AChain<CHAIN extends IChainable<?>> implements IChainable<CHAIN> {
 
 	protected boolean buryInterruptedException = true;
+	protected boolean stopAsap = false;
+	protected boolean ignoreStop = false;
 	@Setter
-	protected Chainable<?> precedent = null;
-	protected Chainable<?> descendant = null;
+	protected IChainable<?> precedent = null;
+	protected IChainable<?> descendant = null;
 
 	protected CHAIN instance = null;
 
@@ -23,8 +25,9 @@ public abstract class AChain<CHAIN extends Chainable<?>> implements Chainable<CH
 	// METHODS
 	@SuppressWarnings("deprecation")
 	protected void done() {
-		if (descendant != null)
-			descendant.execute();
+		if (this.isStopping() || this.descendant == null)
+			return;
+		this.descendant.execute();
 	}
 
 	protected boolean handle(Exception e) {
@@ -34,20 +37,37 @@ public abstract class AChain<CHAIN extends Chainable<?>> implements Chainable<CH
 		return false;
 	}
 
+	protected boolean isStopping() {
+		return this.ignoreStop ? false : this.stopAsap;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
-	public <C extends Chainable<?>> C append(C descendant) {
+	public <C extends IChainable<?>> C append(C descendant) {
 		descendant.setPrecedent(this);
 		this.descendant = descendant;
 		descendant.burying(buryInterruptedException);
 		return descendant;
 	}
 
+	@Override
+	public void stop() {
+		if (this.stopAsap)
+			return;
+		this.stopAsap = true;
+		if (this.precedent != null)
+			this.precedent.stop();
+		if (this.descendant != null)
+			this.descendant.stop();
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
+		if (this.isStopping())
+			return;
 		if (this.precedent == null)
-			instance.execute();
+			this.instance.execute();
 		else
 			this.precedent.run();
 	}

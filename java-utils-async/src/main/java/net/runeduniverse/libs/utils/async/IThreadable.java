@@ -1,6 +1,6 @@
 package net.runeduniverse.libs.utils.async;
 
-public interface Threadable extends Runnable {
+public interface IThreadable extends Runnable {
 
 	public default Thread asThread() {
 		return new Thread(this);

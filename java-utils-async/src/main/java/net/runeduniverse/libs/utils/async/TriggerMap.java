@@ -3,7 +3,7 @@ package net.runeduniverse.libs.utils.async;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TriggerMap<KEY> {
+public class TriggerMap<KEY> implements IRegistry<KEY> {
 
 	private final int initPermits;
 	private final Map<KEY, Trigger> map = new HashMap<>();
@@ -16,6 +16,7 @@ public class TriggerMap<KEY> {
 		this.initPermits = initPermits;
 	}
 
+	@Override
 	public Trigger create(KEY key) {
 		Trigger trigger = this.map.get(key);
 		if (trigger != null)
