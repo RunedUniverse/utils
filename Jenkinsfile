@@ -10,7 +10,7 @@ pipeline {
       }
     }
 
-    stage('java-utils') {
+    stage('Build') {
       parallel {
         stage('java-utils') {
           steps {
