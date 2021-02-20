@@ -1,11 +1,7 @@
 pipeline {
   agent any
-  tools {
-    maven 'Maven 3.6.3' 
-    jdk 'OpenJDK 8'
-   }
   stages {
-    stage ('Initialize') {
+    stage('Initialize') {
       steps {
         sh '''
           echo "PATH = ${PATH}"
@@ -13,18 +9,33 @@ pipeline {
           '''
       }
     }
-    stage('Build') {
-      steps {
-        dir(path: 'java-utils') {
-          sh 'mvn clean compile install deploy'
+
+    stage('java-utils') {
+      parallel {
+        stage('java-utils') {
+          steps {
+            dir(path: 'java-utils') {
+              sh 'mvn clean compile install deploy'
+            }
+
+          }
         }
 
-        dir(path: 'java-utils-async') {
-          sh 'mvn clean compile install deploy'
+        stage('java-utils-async') {
+          steps {
+            dir(path: 'java-utils-async') {
+              sh 'mvn clean compile install deploy'
+            }
+
+          }
         }
 
       }
     }
 
+  }
+  tools {
+    maven 'Maven 3.6.3'
+    jdk 'OpenJDK 8'
   }
 }
