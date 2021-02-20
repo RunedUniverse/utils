@@ -8,7 +8,7 @@ Each artifact starts with the name of the programming language followed by its r
 ```
 <repository>
   <id>runeduniverse-releases</id>
-  <url>http://runeduniverse.net:8081/repository/maven-releases/</url>
+  <url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
 </repository>
 ```
 ### Dependencies

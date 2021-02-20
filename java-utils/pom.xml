@@ -15,13 +15,13 @@
 	<repositories>
 		<repository>
 			<id>runeduniverse-releases</id>
-			<url>http://runeduniverse.net:8081/repository/maven-releases/</url>
+			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
 			<id>runeduniverse-releases</id>
-			<url>http://runeduniverse.net:8081/repository/maven-releases/</url>
+			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
 		</repository>
 	</distributionManagement>
 
