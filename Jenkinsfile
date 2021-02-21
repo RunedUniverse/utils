@@ -15,7 +15,7 @@ pipeline {
         stage('java-utils') {
           steps {
             dir(path: 'java-utils') {
-              sh 'mvn clean compile install deploy'
+              sh 'mvn -DskipTests clean compile install deploy'
             }
 
           }
@@ -24,12 +24,27 @@ pipeline {
         stage('java-utils-async') {
           steps {
             dir(path: 'java-utils-async') {
-              sh 'mvn clean compile install deploy'
+              sh 'mvn -DskipTests clean compile install deploy'
             }
 
           }
         }
-
+        
+        stage('Test') {
+          steps {
+            dir(path: 'java-utils') {
+              sh 'mvn test'
+            }
+            dir(path: 'java-utils-async') {
+              sh 'mvn test'
+            }
+          }
+          post {
+            always {
+              junit '*/target/surefire-reports/*.xml'
+              }
+            }
+          }
       }
     }
 
