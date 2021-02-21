@@ -20,34 +20,31 @@ pipeline {
 
           }
         }
-
         stage('java-utils-async') {
           steps {
             dir(path: 'java-utils-async') {
               sh 'mvn -DskipTests clean compile install deploy'
             }
-
           }
         }
-        
-        stage('Test') {
-          steps {
-            dir(path: 'java-utils') {
-              sh 'mvn test'
-            }
-            dir(path: 'java-utils-async') {
-              sh 'mvn test'
-            }
-          }
-          post {
-            always {
-              junit '*/target/surefire-reports/*.xml'
-              }
-            }
-          }
+  }
+      
+  stage('Test') {
+      steps {
+        dir(path: 'java-utils') {
+          sh 'mvn test'
+        }
+        dir(path: 'java-utils-async') {
+          sh 'mvn test'
+        }
+      }
+      post {
+        always {
+          junit '*/target/surefire-reports/*.xml'
+        }
       }
     }
-
+    }
   }
   tools {
     maven 'Maven 3.6.3'
