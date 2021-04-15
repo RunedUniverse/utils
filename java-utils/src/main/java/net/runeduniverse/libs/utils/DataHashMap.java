@@ -30,7 +30,8 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void setData(K key, D data) {
-		this.map.get(key).setData(data);
+		this.map.get(key)
+				.setData(data);
 	}
 
 	@Override
@@ -53,13 +54,15 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 		MEntry<V, D> entry = this.map.get(key);
 		if (entry == null || entry.getData() == null)
 			return false;
-		return entry.getData().equals(data);
+		return entry.getData()
+				.equals(data);
 	}
 
 	@Override
 	public boolean containsValue(V value) {
 		for (MEntry<V, D> me : this.map.values())
-			if (me.getValue().equals(value))
+			if (me.getValue()
+					.equals(value))
 				return true;
 		return false;
 	}
@@ -67,7 +70,9 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	@Override
 	public boolean containsValue(V value, D data) {
 		for (MEntry<V, D> me : this.map.values())
-			if (me.getData() != null && me.getData().equals(data) && me.getValue().equals(value))
+			if (me.getData() != null && me.getData()
+					.equals(data) && me.getValue()
+							.equals(value))
 				return true;
 		return false;
 	}
@@ -81,7 +86,8 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	@Override
 	public void forEach(D modifier, BiConsumer<K, V> action) {
 		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
-			if (MEntry.getData(entry.getValue()).equals(modifier))
+			if (MEntry.getData(entry.getValue())
+					.equals(modifier))
 				action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
 	}
 
