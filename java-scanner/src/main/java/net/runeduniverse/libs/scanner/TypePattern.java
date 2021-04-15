@@ -29,12 +29,20 @@ public class TypePattern<F extends FieldPattern, M extends MethodPattern> {
 		this.superType = type.getSuperclass();
 	}
 
+	public boolean hasField(Class<? extends Annotation> anno) {
+		return this.fields.containsKey(anno);
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean hasFields(Class<? extends Annotation>... annos) {
 		for (Class<? extends Annotation> anno : annos)
 			if (!this.fields.containsKey(anno))
 				return false;
 		return true;
+	}
+
+	public boolean hasMethod(Class<? extends Annotation> anno) {
+		return this.methods.containsKey(anno);
 	}
 
 	@SuppressWarnings("unchecked")
