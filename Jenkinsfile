@@ -17,12 +17,18 @@ pipeline {
 						dir(path: 'java-utils') {
 							sh 'mvn -DskipTests clean compile install deploy'
 						}
-
 					}
 				}
 				stage('java-utils-async') {
 					steps {
 						dir(path: 'java-utils-async') {
+							sh 'mvn -DskipTests clean compile install deploy'
+						}
+					}
+				}
+				stage('java-scanner') {
+					steps {
+						dir(path: 'java-scanner') {
 							sh 'mvn -DskipTests clean compile install deploy'
 						}
 					}
@@ -36,6 +42,9 @@ pipeline {
 					sh 'mvn test'
 				}
 				dir(path: 'java-utils-async') {
+					sh 'mvn test'
+				}
+				dir(path: 'java-scanner') {
 					sh 'mvn test'
 				}
 			}

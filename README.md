@@ -4,6 +4,7 @@ The Utils Repo contains all commonly used Utils of RunedUniverse.
 Each artifact starts with the name of the programming language followed by its respective name
 
 ## Distribution
+
 ### Maven Repository
 ```
 <repository>
@@ -12,6 +13,7 @@ Each artifact starts with the name of the programming language followed by its r
 </repository>
 ```
 ### Dependencies
+
 #### [Maven] Java Utils
 ```
 <dependency>
@@ -27,5 +29,15 @@ Each artifact starts with the name of the programming language followed by its r
   <groupId>net.runeduniverse.libs</groupId>
   <artifactId>utils-async</artifactId>
   <version>2.0.3</version>
+</dependency>
+```
+
+#### [Maven] Java Scanner
+> Provides a versatile PacketScanner for collecting Classes
+```
+<dependency>
+  <groupId>net.runeduniverse.libs</groupId>
+  <artifactId>scanner</artifactId>
+  <version>1.0.0</version>
 </dependency>
 ```
