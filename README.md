@@ -33,7 +33,7 @@ Each artifact starts with the name of the programming language followed by its r
 ```
 
 #### [Maven] Java Scanner
-> Provides a versatile PacketScanner for collecting Classes
+> Provides a versatile PackageScanner for collecting Classes
 ```
 <dependency>
   <groupId>net.runeduniverse.libs</groupId>
