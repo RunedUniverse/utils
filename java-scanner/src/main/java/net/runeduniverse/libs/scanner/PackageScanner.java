@@ -11,17 +11,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.NoArgsConstructor;
+import net.runeduniverse.libs.scanner.debug.Intercepter;
 import net.runeduniverse.libs.utils.DataHashMap;
 import net.runeduniverse.libs.utils.DataMap;
 
 @NoArgsConstructor
 public class PackageScanner {
 
-	private final List<ClassLoader> loader = new ArrayList<>();
-	private final List<String> pkgs = new ArrayList<>();
-	private final List<ITypeScanner> scanner = new ArrayList<>();
+	private final Set<ClassLoader> loader = new HashSet<>();
+	private final Set<String> pkgs = new HashSet<>();
+	private final Set<ITypeScanner> scanner = new HashSet<>();
 	private final Set<Exception> errors = new HashSet<>();
 	private boolean includeSubPkgs = false;
+	private boolean debug = false;
 	private Validator validator = null;
 
 	public PackageScanner includeClassLoader(List<ClassLoader> loader) {
@@ -82,6 +84,11 @@ public class PackageScanner {
 		return this;
 	}
 
+	public PackageScanner enableDebugMode(boolean active) {
+		this.debug = active;
+		return this;
+	}
+
 	public PackageScanner scan() {
 		if (this.loader.isEmpty())
 			this.loader.add(PackageScanner.class.getClassLoader());
@@ -132,31 +139,33 @@ public class PackageScanner {
 			return;
 		}
 		List<File> dirs = new ArrayList<>();
+		Intercepter i = new Intercepter("Discovered URL's", this.debug);
 		while (resources.hasMoreElements())
-			dirs.add(new File(resources.nextElement()
+			dirs.add(new File(i.intercept(resources.nextElement())
 					.getFile()));
 		for (File directory : dirs)
-			findClasses(classes, classLoader, directory, pkg);
+			findClasses(classes, classLoader, directory, pkg, i.addSection("Classes"));
+		i.print();
 	}
 
 	/**
 	 * Recursive method used to find all classes in a given directory and subdirs.
 	 */
 	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, File directory,
-			String pkg) {
+			String pkg, Intercepter i) {
 		if (!directory.exists())
 			return;
 		for (File file : directory.listFiles())
 			if (file.isDirectory() && !file.getName()
 					.contains(".")) {
 				if (this.includeSubPkgs)
-					findClasses(classes, classLoader, file, pkg + "." + file.getName());
+					findClasses(classes, classLoader, file, pkg + "." + file.getName(), i);
 			} else if (file.getName()
 					.endsWith(".class"))
 				try {
-					classes.put(Class.forName(pkg + '.' + file.getName()
+					classes.put(Class.forName(i.intercept(pkg + '.' + file.getName()
 							.substring(0, file.getName()
-									.length() - 6),
+									.length() - 6)),
 							true, classLoader), classLoader, pkg);
 				} catch (ClassNotFoundException e) {
 				}
