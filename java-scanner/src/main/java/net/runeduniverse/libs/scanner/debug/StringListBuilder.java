@@ -4,21 +4,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.Setter;
-
 public class StringListBuilder implements java.io.Serializable, Appendable, CharSequence {
 
-	public static final CharSequence DEFAULT_INDENT = "   ";
+	public static final String DEFAULT_INDENT = "   ";
+	public static final String DEFAULT_HEADLINE = "LIST";
 
 	private static final long serialVersionUID = 7051551890872524506L;
 
 	private final StringBuilder builder = new StringBuilder();
-	@Setter
-	private CharSequence headline = "LIST";
 	private final CharSequence lineIndent;
 
 	public StringListBuilder() {
-		this.lineIndent = StringListBuilder.DEFAULT_INDENT;
+		this(StringListBuilder.DEFAULT_HEADLINE, StringListBuilder.DEFAULT_INDENT);
 	}
 
 	public StringListBuilder(CharSequence headline) {
@@ -26,7 +23,8 @@ public class StringListBuilder implements java.io.Serializable, Appendable, Char
 	}
 
 	public StringListBuilder(CharSequence headline, CharSequence lineIndent) {
-		this.headline = headline;
+		this.builder.append(DEFAULT_HEADLINE);
+		this.builder.append(':');
 		this.lineIndent = lineIndent;
 	}
 
@@ -83,6 +81,6 @@ public class StringListBuilder implements java.io.Serializable, Appendable, Char
 
 	@Override
 	public String toString() {
-		return headline + ":" + this.builder.toString();
+		return this.builder.toString();
 	}
 }
