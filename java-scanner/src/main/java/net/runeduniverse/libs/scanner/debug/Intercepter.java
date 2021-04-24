@@ -5,12 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Intercepter {
-	private final List<StringListBuilder> builder = new ArrayList<>();
+	private final List<StringListBuilder> builder;
 	private final boolean active;
 	private StringListBuilder activeBuilder;
 
+	private Intercepter(Intercepter parent, StringListBuilder activeBuilder) {
+		this.activeBuilder = activeBuilder;
+		this.builder = parent.builder;
+		this.active = parent.active;
+	}
+
 	public Intercepter(String headline, boolean active) {
 		this.activeBuilder = new StringListBuilder(headline);
+		this.builder = new ArrayList<>();
 		this.builder.add(this.activeBuilder);
 		this.active = active;
 	}
@@ -19,7 +26,7 @@ public class Intercepter {
 		StringListBuilder b = new StringListBuilder(headline);
 		this.activeBuilder = b;
 		this.builder.add(b);
-		return this;
+		return new Intercepter(this, b);
 	}
 
 	public void print() {

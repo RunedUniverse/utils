@@ -94,9 +94,11 @@ public class PackageScanner {
 			this.loader.add(PackageScanner.class.getClassLoader());
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
+		Intercepter iPkg = new Intercepter("Discovered URL's", this.debug);
+		Intercepter iClass = iPkg.addSection("Classes");
 		for (ClassLoader classLoader : loader)
 			for (String pkg : pkgs)
-				findClasses(classes, classLoader, pkg);
+				findClasses(classes, classLoader, pkg, iPkg, iClass);
 
 		classes.forEach((c, l, p) -> {
 			for (ITypeScanner s : PackageScanner.this.scanner)
@@ -106,6 +108,7 @@ public class PackageScanner {
 					this.errors.add(e);
 				}
 		});
+		iPkg.print();
 
 		if (this.validator != null)
 			try {
@@ -131,7 +134,8 @@ public class PackageScanner {
 	 * Scans all classes accessible from the context class loader which belong to
 	 * the given package and subpackages.
 	 */
-	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg) {
+	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
+			Intercepter iPkg, Intercepter iClass) {
 		Enumeration<URL> resources;
 		try {
 			resources = classLoader.getResources(pkg.replace('.', '/'));
@@ -139,13 +143,11 @@ public class PackageScanner {
 			return;
 		}
 		List<File> dirs = new ArrayList<>();
-		Intercepter i = new Intercepter("Discovered URL's", this.debug);
 		while (resources.hasMoreElements())
-			dirs.add(new File(i.intercept(resources.nextElement())
+			dirs.add(new File(iPkg.intercept(resources.nextElement())
 					.getFile()));
 		for (File directory : dirs)
-			findClasses(classes, classLoader, directory, pkg, i.addSection("Classes"));
-		i.print();
+			findClasses(classes, classLoader, directory, pkg, iClass);
 	}
 
 	/**
