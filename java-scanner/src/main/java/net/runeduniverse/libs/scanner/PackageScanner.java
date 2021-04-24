@@ -94,7 +94,8 @@ public class PackageScanner {
 			this.loader.add(PackageScanner.class.getClassLoader());
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
-		Intercepter iPkg = new Intercepter("Discovered URL's", this.debug);
+		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
+		Intercepter iPkg = i.addSection("Discovered URL's");
 		Intercepter iClass = iPkg.addSection("Classes");
 		for (ClassLoader classLoader : loader)
 			for (String pkg : pkgs)
@@ -108,7 +109,7 @@ public class PackageScanner {
 					this.errors.add(e);
 				}
 		});
-		iPkg.print();
+		i.print();
 
 		if (this.validator != null)
 			try {
