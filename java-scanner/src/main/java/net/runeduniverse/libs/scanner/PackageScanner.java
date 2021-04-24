@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.NoArgsConstructor;
+import net.runeduniverse.libs.scanner.debug.IIntercepter;
 import net.runeduniverse.libs.scanner.debug.Intercepter;
 import net.runeduniverse.libs.utils.DataHashMap;
 import net.runeduniverse.libs.utils.DataMap;
@@ -95,11 +96,12 @@ public class PackageScanner {
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
-		Intercepter iPkg = i.addSection("Discovered URL's");
-		Intercepter iClass = iPkg.addSection("Classes");
+		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
+		IIntercepter iClass = i.addSection("CLASS", "Classes");
 		for (ClassLoader classLoader : loader)
 			for (String pkg : pkgs)
 				findClasses(classes, classLoader, pkg, iPkg, iClass);
+		i.print();
 
 		classes.forEach((c, l, p) -> {
 			for (ITypeScanner s : PackageScanner.this.scanner)
@@ -109,7 +111,6 @@ public class PackageScanner {
 					this.errors.add(e);
 				}
 		});
-		i.print();
 
 		if (this.validator != null)
 			try {
@@ -136,7 +137,7 @@ public class PackageScanner {
 	 * the given package and subpackages.
 	 */
 	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
-			Intercepter iPkg, Intercepter iClass) {
+			IIntercepter iPkg, IIntercepter iClass) {
 		Enumeration<URL> resources;
 		try {
 			resources = classLoader.getResources(pkg.replace('.', '/'));
@@ -155,7 +156,7 @@ public class PackageScanner {
 	 * Recursive method used to find all classes in a given directory and subdirs.
 	 */
 	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, File directory,
-			String pkg, Intercepter i) {
+			String pkg, IIntercepter i) {
 		if (!directory.exists())
 			return;
 		for (File file : directory.listFiles())

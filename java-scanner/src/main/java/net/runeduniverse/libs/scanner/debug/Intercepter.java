@@ -1,49 +1,52 @@
 package net.runeduniverse.libs.scanner.debug;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class Intercepter {
-	private final List<StringListBuilder> builder;
+public class Intercepter implements IIntercepter {
 	private final boolean active;
-	private StringListBuilder activeBuilder;
-
-	private Intercepter(Intercepter parent, StringListBuilder activeBuilder) {
-		this.activeBuilder = activeBuilder;
-		this.builder = parent.builder;
-		this.active = parent.active;
-	}
+	private IntercepterSection baseSection;
+	private Map<String, IntercepterSection> sections = new HashMap<>();
 
 	public Intercepter(String headline, boolean active) {
-		this.activeBuilder = new StringListBuilder(headline);
-		this.builder = new ArrayList<>();
-		this.builder.add(this.activeBuilder);
+		this.baseSection = new IntercepterSection(null, headline);
 		this.active = active;
 	}
 
-	public Intercepter addSection(String headline) {
-		StringListBuilder b = new StringListBuilder(headline);
-		this.activeBuilder = b;
-		this.builder.add(b);
-		return new Intercepter(this, b);
+	public IIntercepter addSection(IntercepterSection section) {
+		this.sections.put(section.getId(), section);
+		return section;
+	}
+
+	public IIntercepter addSection(String id, String headline) {
+		return this.addSection(new IntercepterSection(id, headline));
+	}
+
+	@Override
+	public String toString() {
+		Set<String> keys = this.sections.keySet();
+		StringListBuilder resultBuilder = this.baseSection.getBuilder();
+		for (String k : keys)
+			resultBuilder.append(this.sections.get(k)
+					.getBuilder());
+		return resultBuilder.toString();
 	}
 
 	public void print() {
-		if (this.active)
-			for (StringListBuilder b : builder)
-				System.out.println(b);
+		if (!this.active)
+			return;
+		System.out.println(this.toString());
 	}
 
+	@Override
 	public URL intercept(URL url) {
-		if (this.active)
-			this.activeBuilder.appendElement(url.toString());
-		return url;
+		return this.baseSection.intercept(url);
 	}
 
+	@Override
 	public String intercept(String s) {
-		if (this.active)
-			this.activeBuilder.appendElement(s);
-		return s;
+		return this.baseSection.intercept(s);
 	}
 }
