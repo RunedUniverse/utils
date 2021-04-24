@@ -23,7 +23,7 @@ public class StringListBuilder implements java.io.Serializable, Appendable, Char
 	}
 
 	public StringListBuilder(CharSequence headline, CharSequence lineIndent) {
-		this.builder.append(DEFAULT_HEADLINE);
+		this.builder.append(headline);
 		this.builder.append(':');
 		this.lineIndent = lineIndent;
 	}
