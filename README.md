@@ -38,6 +38,6 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.libs</groupId>
   <artifactId>scanner</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.3</version>
 </dependency>
 ```

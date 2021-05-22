@@ -121,7 +121,7 @@ public class PackageScanner {
 		return this;
 	}
 
-	public void throwSurpressions(Exception exception) throws Exception {
+	public <E extends Exception> void throwSurpressions(E exception) throws E {
 		if (errors.isEmpty())
 			return;
 		errors.forEach(e -> exception.addSuppressed(e));
