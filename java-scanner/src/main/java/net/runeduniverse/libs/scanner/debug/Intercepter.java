@@ -24,6 +24,10 @@ public class Intercepter implements IIntercepter {
 		return this.addSection(new IntercepterSection(id, headline));
 	}
 
+	public IIntercepter addSection(String id, String headline, CharSequence lineIndent) {
+		return this.addSection(new IntercepterSection(id, headline, lineIndent));
+	}
+
 	@Override
 	public String toString() {
 		Set<String> keys = this.sections.keySet();

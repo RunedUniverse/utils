@@ -15,6 +15,11 @@ public class IntercepterSection implements IIntercepter {
 		this.builder = new StringListBuilder(headline);
 	}
 
+	public IntercepterSection(String id, String headline, CharSequence lineIndent) {
+		this.id = id;
+		this.builder = new StringListBuilder(headline, lineIndent);
+	}
+
 	public URL intercept(URL url) {
 		this.builder.appendElement(url.toString());
 		return url;

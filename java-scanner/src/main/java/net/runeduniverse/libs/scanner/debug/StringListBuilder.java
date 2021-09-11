@@ -7,6 +7,7 @@ import java.util.Collection;
 public class StringListBuilder implements java.io.Serializable, Appendable, CharSequence {
 
 	public static final String DEFAULT_INDENT = "   ";
+	public static final String DEFAULT_LIST_INDENT = " - ";
 	public static final String DEFAULT_HEADLINE = "LIST";
 
 	private static final long serialVersionUID = 7051551890872524506L;

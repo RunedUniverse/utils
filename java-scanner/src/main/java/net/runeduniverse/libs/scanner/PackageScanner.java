@@ -13,6 +13,7 @@ import java.util.Set;
 import lombok.NoArgsConstructor;
 import net.runeduniverse.libs.scanner.debug.IIntercepter;
 import net.runeduniverse.libs.scanner.debug.Intercepter;
+import net.runeduniverse.libs.scanner.debug.StringListBuilder;
 import net.runeduniverse.libs.utils.DataHashMap;
 import net.runeduniverse.libs.utils.DataMap;
 
@@ -96,21 +97,25 @@ public class PackageScanner {
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
-		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
-		IIntercepter iClass = i.addSection("CLASS", "Classes");
-		for (ClassLoader classLoader : loader)
-			for (String pkg : pkgs)
-				findClasses(classes, classLoader, pkg, iPkg, iClass);
+		IIntercepter iPkg = i.addSection("URL", "Discovered URL's", StringListBuilder.DEFAULT_LIST_INDENT);
+		IIntercepter iClass = i.addSection("CLASS", "Classes", StringListBuilder.DEFAULT_LIST_INDENT);
+		synchronized (this.loader) {
+			for (ClassLoader classLoader : loader)
+				for (String pkg : pkgs)
+					findClasses(classes, classLoader, pkg, iPkg, iClass);
+		}
 		i.print();
 
-		classes.forEach((c, l, p) -> {
-			for (ITypeScanner s : PackageScanner.this.scanner)
-				try {
-					s.scan(c, l, p);
-				} catch (Exception e) {
-					this.errors.add(e);
-				}
-		});
+		synchronized (this.scanner) {
+			classes.forEach((c, l, p) -> {
+				for (ITypeScanner s : PackageScanner.this.scanner)
+					try {
+						s.scan(c, l, p);
+					} catch (Exception e) {
+						this.errors.add(e);
+					}
+			});
+		}
 
 		if (this.validator != null)
 			try {
@@ -124,7 +129,10 @@ public class PackageScanner {
 	public <E extends Exception> void throwSurpressions(E exception) throws E {
 		if (errors.isEmpty())
 			return;
-		errors.forEach(e -> exception.addSuppressed(e));
+		synchronized (this.errors) {
+			errors.forEach(e -> exception.addSuppressed(e));
+			this.errors.clear();
+		}
 		throw exception;
 	}
 
