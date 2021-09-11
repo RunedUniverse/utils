@@ -97,8 +97,10 @@ public class PackageScanner {
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
-		IIntercepter iPkg = i.addSection("URL", "Discovered URL's", StringListBuilder.DEFAULT_LIST_INDENT);
-		IIntercepter iClass = i.addSection("CLASS", "Classes", StringListBuilder.DEFAULT_LIST_INDENT);
+		IIntercepter iPkg = i.addSection("URL", "Discovered URL's",
+				StringListBuilder.DEFAULT_INDENT + StringListBuilder.DEFAULT_LIST_INDENT);
+		IIntercepter iClass = i.addSection("CLASS", "Classes",
+				StringListBuilder.DEFAULT_INDENT + StringListBuilder.DEFAULT_LIST_INDENT);
 		synchronized (this.loader) {
 			for (ClassLoader classLoader : loader)
 				for (String pkg : pkgs)
