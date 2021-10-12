@@ -10,31 +10,34 @@ pipeline {
 			}
 		}
 
-		stage('Build') {
-			steps {
-			    parallel {
-					stage('java-logging') {
-						steps {
-							dir(path: 'java-logging') {
-								sh 'mvn -DskipTests clean compile install deploy'
-							}
-						}
-					}
-					stage('java-utils') {
-						steps {
-							dir(path: 'java-utils') {
-								sh 'mvn -DskipTests clean compile install deploy'
-							}
-						}
-					}
-					stage('java-utils-async') {
-						steps {
-							dir(path: 'java-utils-async') {
-								sh 'mvn -DskipTests clean compile install deploy'
-							}
+		stage('Build [1st Level]') {
+			parallel {
+				stage('java-logging') {
+					steps {
+						dir(path: 'java-logging') {
+							sh 'mvn -DskipTests clean compile install deploy'
 						}
 					}
 				}
+				stage('java-utils') {
+					steps {
+						dir(path: 'java-utils') {
+							sh 'mvn -DskipTests clean compile install deploy'
+						}
+					}
+				}
+				stage('java-utils-async') {
+					steps {
+						dir(path: 'java-utils-async') {
+							sh 'mvn -DskipTests clean compile install deploy'
+						}
+					}
+				}
+			}
+		}
+		
+		stage('Build [2nd Level]') {
+			parallel {
 				stage('java-scanner') {
 					steps {
 						dir(path: 'java-scanner') {
@@ -43,11 +46,13 @@ pipeline {
 					}
 				}
 			}
-
 		}
       
 		stage('Test') {
 			steps {
+				dir(path: 'java-logging') {
+					sh 'mvn test'
+				}
 				dir(path: 'java-utils') {
 					sh 'mvn test'
 				}
