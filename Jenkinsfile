@@ -50,17 +50,33 @@ pipeline {
       
 		stage('Test') {
 			parallel {
-				dir(path: 'java-logging') {
-					sh 'mvn test'
+				stage('java-logging') {
+					steps {
+						dir(path: 'java-logging') {
+							sh 'mvn test'
+						}
+					}
 				}
-				dir(path: 'java-utils') {
-					sh 'mvn test'
+				stage('java-utils') {
+					steps {
+						dir(path: 'java-utils') {
+							sh 'mvn test'
+						}
+					}
 				}
-				dir(path: 'java-utils-async') {
-					sh 'mvn test'
+				stage('java-utils-async') {
+					steps {
+						dir(path: 'java-utils-async') {
+							sh 'mvn test'
+						}
+					}
 				}
-				dir(path: 'java-scanner') {
-					sh 'mvn test'
+				stage('java-scanner') {
+					steps {
+						dir(path: 'java-scanner') {
+							sh 'mvn test'
+						}
+					}
 				}
 			}
 			post {
