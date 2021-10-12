@@ -13,7 +13,6 @@ import java.util.Set;
 import lombok.NoArgsConstructor;
 import net.runeduniverse.libs.scanner.debug.IIntercepter;
 import net.runeduniverse.libs.scanner.debug.Intercepter;
-import net.runeduniverse.libs.scanner.debug.StringListBuilder;
 import net.runeduniverse.libs.utils.DataHashMap;
 import net.runeduniverse.libs.utils.DataMap;
 
@@ -97,10 +96,8 @@ public class PackageScanner {
 
 		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
-		IIntercepter iPkg = i.addSection("URL", "Discovered URL's",
-				StringListBuilder.DEFAULT_INDENT + StringListBuilder.DEFAULT_LIST_INDENT);
-		IIntercepter iClass = i.addSection("CLASS", "Classes",
-				StringListBuilder.DEFAULT_INDENT + StringListBuilder.DEFAULT_LIST_INDENT);
+		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
+		IIntercepter iClass = i.addSection("CLASS", "Classes");
 		synchronized (this.loader) {
 			for (ClassLoader classLoader : loader)
 				for (String pkg : pkgs)

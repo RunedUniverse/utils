@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.runeduniverse.libs.logging.logs.CompoundTree;
+
 public class Intercepter implements IIntercepter {
 	private final boolean active;
 	private IntercepterSection baseSection;
@@ -24,18 +26,14 @@ public class Intercepter implements IIntercepter {
 		return this.addSection(new IntercepterSection(id, headline));
 	}
 
-	public IIntercepter addSection(String id, String headline, CharSequence lineIndent) {
-		return this.addSection(new IntercepterSection(id, headline, lineIndent));
-	}
-
 	@Override
 	public String toString() {
 		Set<String> keys = this.sections.keySet();
-		StringListBuilder resultBuilder = this.baseSection.getBuilder();
+		CompoundTree tree = this.baseSection.getTree();
 		for (String k : keys)
-			resultBuilder.append(this.sections.get(k)
-					.getBuilder());
-		return resultBuilder.toString();
+			tree.append(this.sections.get(k)
+					.getTree());
+		return tree.toString();
 	}
 
 	public void print() {
