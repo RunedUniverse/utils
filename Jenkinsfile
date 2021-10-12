@@ -11,18 +11,27 @@ pipeline {
 		}
 
 		stage('Build') {
-			parallel {
-				stage('java-utils') {
-					steps {
-						dir(path: 'java-utils') {
-							sh 'mvn -DskipTests clean compile install deploy'
+			steps {
+			    parallel {
+					stage('java-logging') {
+						steps {
+							dir(path: 'java-logging') {
+								sh 'mvn -DskipTests clean compile install deploy'
+							}
 						}
 					}
-				}
-				stage('java-utils-async') {
-					steps {
-						dir(path: 'java-utils-async') {
-							sh 'mvn -DskipTests clean compile install deploy'
+					stage('java-utils') {
+						steps {
+							dir(path: 'java-utils') {
+								sh 'mvn -DskipTests clean compile install deploy'
+							}
+						}
+					}
+					stage('java-utils-async') {
+						steps {
+							dir(path: 'java-utils-async') {
+								sh 'mvn -DskipTests clean compile install deploy'
+							}
 						}
 					}
 				}
@@ -34,6 +43,7 @@ pipeline {
 					}
 				}
 			}
+
 		}
       
 		stage('Test') {
