@@ -49,7 +49,7 @@ pipeline {
 		}
       
 		stage('Test') {
-			steps {
+			parallel {
 				dir(path: 'java-logging') {
 					sh 'mvn test'
 				}
