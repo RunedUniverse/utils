@@ -1,0 +1,1 @@
+package net.runeduniverse.libs.errors;
