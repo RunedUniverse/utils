@@ -19,6 +19,13 @@ pipeline {
 						}
 					}
 				}
+				stage('java-error-handling') {
+					steps {
+						dir(path: 'java-error-handling') {
+							sh 'mvn -DskipTests clean compile install deploy'
+						}
+					}
+				}
 				stage('java-utils') {
 					steps {
 						dir(path: 'java-utils') {
@@ -45,6 +52,13 @@ pipeline {
 						}
 					}
 				}
+				stage('java-chain') {
+					steps {
+						dir(path: 'java-chain') {
+							sh 'mvn -DskipTests clean compile install deploy'
+						}
+					}
+				}
 			}
 		}
       
@@ -53,6 +67,13 @@ pipeline {
 				stage('java-logging') {
 					steps {
 						dir(path: 'java-logging') {
+							sh 'mvn test'
+						}
+					}
+				}
+				stage('java-error-handling') {
+					steps {
+						dir(path: 'java-error-handling') {
 							sh 'mvn test'
 						}
 					}
@@ -74,6 +95,13 @@ pipeline {
 				stage('java-scanner') {
 					steps {
 						dir(path: 'java-scanner') {
+							sh 'mvn test'
+						}
+					}
+				}
+				stage('java-chain') {
+					steps {
+						dir(path: 'java-chain') {
 							sh 'mvn test'
 						}
 					}

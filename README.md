@@ -14,6 +14,24 @@ Each artifact starts with the name of the programming language followed by its r
 ```
 ### Dependencies
 
+#### [Maven] Java Logging Tools
+```
+<dependency>
+  <groupId>net.runeduniverse.libs</groupId>
+  <artifactId>logging</artifactId>
+  <version>0.0.2</version>
+</dependency>
+```
+
+#### [Maven] Java Error Handling Library
+```
+<dependency>
+  <groupId>net.runeduniverse.libs</groupId>
+  <artifactId>errors</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
 #### [Maven] Java Utils
 ```
 <dependency>
@@ -39,5 +57,15 @@ Each artifact starts with the name of the programming language followed by its r
   <groupId>net.runeduniverse.libs</groupId>
   <artifactId>scanner</artifactId>
   <version>1.0.3</version>
+</dependency>
+```
+
+#### [Maven] Java Chain Library
+> Provides a versatile library for building modular "Chains" by utilizing static methods
+```
+<dependency>
+  <groupId>net.runeduniverse.libs</groupId>
+  <artifactId>chain</artifactId>
+  <version>0.0.1</version>
 </dependency>
 ```
