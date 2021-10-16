@@ -15,28 +15,28 @@ pipeline {
 				stage('java-logging') {
 					steps {
 						dir(path: 'java-logging') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 				stage('java-error-handling') {
 					steps {
 						dir(path: 'java-error-handling') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 				stage('java-utils') {
 					steps {
 						dir(path: 'java-utils') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -DskipTests clean compile install'
 						}
 					}
 				}
 				stage('java-utils-async') {
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -DskipTests clean compile install'
 						}
 					}
 				}
@@ -48,33 +48,33 @@ pipeline {
 				stage('java-scanner') {
 					steps {
 						dir(path: 'java-scanner') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -DskipTests clean compile install'
 						}
 					}
 				}
 				stage('java-chain') {
 					steps {
 						dir(path: 'java-chain') {
-							sh 'mvn -DskipTests clean compile install deploy'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 			}
 		}
-      
+
 		stage('Test') {
 			parallel {
 				stage('java-logging') {
 					steps {
 						dir(path: 'java-logging') {
-							sh 'mvn test'
+							sh 'mvn -P jenkins-test'
 						}
 					}
 				}
 				stage('java-error-handling') {
 					steps {
 						dir(path: 'java-error-handling') {
-							sh 'mvn test'
+							sh 'mvn -P jenkins-test'
 						}
 					}
 				}
@@ -102,7 +102,62 @@ pipeline {
 				stage('java-chain') {
 					steps {
 						dir(path: 'java-chain') {
-							sh 'mvn test'
+							sh 'mvn -P jenkins-test'
+						}
+					}
+				}
+			}
+			post {
+				always {
+					junit '*/target/surefire-reports/*.xml'
+				}
+				failure {
+					archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
+				}
+			}
+		}
+
+		stage('Deploy') {
+			parallel {
+				stage('java-logging') {
+					steps {
+						dir(path: 'java-logging') {
+							sh 'mvn -P jenkins-deploy'
+						}
+					}
+				}
+				stage('java-error-handling') {
+					steps {
+						dir(path: 'java-error-handling') {
+							sh 'mvn -P jenkins-deploy'
+						}
+					}
+				}
+				stage('java-utils') {
+					steps {
+						dir(path: 'java-utils') {
+							sh 'mvn deploy'
+						}
+					}
+				}
+				stage('java-utils-async') {
+					steps {
+						dir(path: 'java-utils-async') {
+							sh 'mvn deploy'
+						}
+					}
+				}
+				stage('java-scanner') {
+					steps {
+						dir(path: 'java-scanner') {
+							sh 'mvn deploy'
+						}
+					}
+				}
+				stage('java-chain') {
+					steps {
+						dir(path: 'java-chain') {
+							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
@@ -110,7 +165,6 @@ pipeline {
 			post {
 				always {
 					archiveArtifacts artifacts: '*/target/*.jar', fingerprint: true
-					junit '*/target/surefire-reports/*.xml'
 				}
 			}
 		}
