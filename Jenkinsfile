@@ -12,28 +12,28 @@ pipeline {
 
 		stage('Build [1st Level]') {
 			parallel {
-				stage('java-logging') {
+				stage('Java Logging Tools') {
 					steps {
 						dir(path: 'java-logging') {
 							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
-				stage('java-error-handling') {
+				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-error-handling') {
 							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
-				stage('java-utils') {
+				stage('Java Utils') {
 					steps {
 						dir(path: 'java-utils') {
 							sh 'mvn -DskipTests clean compile install'
 						}
 					}
 				}
-				stage('java-utils-async') {
+				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
 							sh 'mvn -DskipTests clean compile install'
@@ -45,16 +45,16 @@ pipeline {
 		
 		stage('Build [2nd Level]') {
 			parallel {
-				stage('java-scanner') {
+				stage('Java Scanner') {
 					steps {
 						dir(path: 'java-scanner') {
 							sh 'mvn -DskipTests clean compile install'
 						}
 					}
 				}
-				stage('java-chain') {
+				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain') {
+						dir(path: 'java-chain-library') {
 							sh 'mvn -P jenkins-install'
 						}
 					}
@@ -64,44 +64,44 @@ pipeline {
 
 		stage('Test') {
 			parallel {
-				stage('java-logging') {
+				stage('Java Logging Tools') {
 					steps {
 						dir(path: 'java-logging') {
 							sh 'mvn -P jenkins-test'
 						}
 					}
 				}
-				stage('java-error-handling') {
+				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-error-handling') {
 							sh 'mvn -P jenkins-test'
 						}
 					}
 				}
-				stage('java-utils') {
+				stage('Java Utils') {
 					steps {
 						dir(path: 'java-utils') {
 							sh 'mvn test'
 						}
 					}
 				}
-				stage('java-utils-async') {
+				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
 							sh 'mvn test'
 						}
 					}
 				}
-				stage('java-scanner') {
+				stage('Java Scanner') {
 					steps {
 						dir(path: 'java-scanner') {
 							sh 'mvn test'
 						}
 					}
 				}
-				stage('java-chain') {
+				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain') {
+						dir(path: 'java-chain-library') {
 							sh 'mvn -P jenkins-test'
 						}
 					}
@@ -119,44 +119,44 @@ pipeline {
 
 		stage('Deploy') {
 			parallel {
-				stage('java-logging') {
+				stage('Java Logging Tools') {
 					steps {
 						dir(path: 'java-logging') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
-				stage('java-error-handling') {
+				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-error-handling') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
-				stage('java-utils') {
+				stage('Java Utils') {
 					steps {
 						dir(path: 'java-utils') {
 							sh 'mvn deploy'
 						}
 					}
 				}
-				stage('java-utils-async') {
+				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
 							sh 'mvn deploy'
 						}
 					}
 				}
-				stage('java-scanner') {
+				stage('Java Scanner') {
 					steps {
 						dir(path: 'java-scanner') {
 							sh 'mvn deploy'
 						}
 					}
 				}
-				stage('java-chain') {
+				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain') {
+						dir(path: 'java-chain-library') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
