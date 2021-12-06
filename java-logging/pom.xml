@@ -9,7 +9,7 @@
 		<version>2021.12.06</version>
 	</parent>
 	
-	<groupId>net.runeduniverse.libs</groupId>
+	<groupId>net.runeduniverse.lib</groupId>
 	<artifactId>utils-logging</artifactId>
 	<version>0.0.2</version>
 
@@ -36,6 +36,29 @@
 			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
 		</repository>
 	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.runeduniverse.lib</groupId>
+				<artifactId>utils-bom</artifactId>
+				<version>1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<profiles>
 		<profile>

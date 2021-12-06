@@ -8,8 +8,8 @@
 		<artifactId>build-helper-java</artifactId>
 		<version>2021.12.06</version>
 	</parent>
-	
-	<groupId>net.runeduniverse.libs</groupId>
+
+	<groupId>net.runeduniverse.lib</groupId>
 	<artifactId>utils-async</artifactId>
 	<version>2.1.0</version>
 
@@ -38,14 +38,27 @@
 	</repositories>
 
 	<dependencies>
-		<!-- TESTS -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.runeduniverse.lib</groupId>
+				<artifactId>utils-bom</artifactId>
+				<version>1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<profiles>
 		<profile>

@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>net.runeduniverse.lib</groupId>
-	<artifactId>utils-scanner</artifactId>
-	<version>1.0.5</version>
+	<artifactId>utils-chain</artifactId>
+	<version>0.0.1</version>
 
-	<name>Java Scanner</name>
+	<name>Chain Library</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,20 +39,16 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.runeduniverse.libs</groupId>
-			<artifactId>utils-common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.runeduniverse.libs</groupId>
-			<artifactId>utils-logging</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.runeduniverse.lib</groupId>
+			<artifactId>utils-errors</artifactId>
 		</dependency>
 	</dependencies>
 
