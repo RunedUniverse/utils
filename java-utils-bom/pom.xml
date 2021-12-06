@@ -26,7 +26,7 @@
 		<version>2021.12.06</version>
 	</parent>
 
-	<groupId>net.runeduniverse.lib</groupId>
+	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-bom</artifactId>
 	<version>1</version>
 	<packaging>pom</packaging>
@@ -94,32 +94,32 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-async</artifactId>
 				<version>[${min-utils-async-version},)</version>
 			</dependency>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-chain</artifactId>
 				<version>[${min-utils-chain-version},)</version>
 			</dependency>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-common</artifactId>
 				<version>[${min-utils-common-version},)</version>
 			</dependency>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-errors</artifactId>
 				<version>[${min-utils-errors-version},)</version>
 			</dependency>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-logging</artifactId>
 				<version>[${min-utils-logging-version},)</version>
 			</dependency>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-scanner</artifactId>
 				<version>[${min-utils-scanner-version},)</version>
 			</dependency>

@@ -26,7 +26,7 @@
 		<version>2021.12.06</version>
 	</parent>
 
-	<groupId>net.runeduniverse.lib</groupId>
+	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-chain</artifactId>
 	<version>0.0.1</version>
 
@@ -72,7 +72,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- ACTIVITIONS -->
-		<license-enforce>false</license-enforce>
+		<license-enforce>true</license-enforce>
 		<!-- ACTIVITIONS - LICENSES -->
 		<license-prj-utils-approve>true</license-prj-utils-approve>
 		<license-apache2-approve>true</license-apache2-approve>
@@ -101,15 +101,15 @@
 			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.runeduniverse.lib</groupId>
+			<groupId>net.runeduniverse.lib.utils</groupId>
 			<artifactId>utils-common</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.runeduniverse.lib</groupId>
+			<groupId>net.runeduniverse.lib.utils</groupId>
 			<artifactId>utils-errors</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.runeduniverse.lib</groupId>
+			<groupId>net.runeduniverse.lib.utils</groupId>
 			<artifactId>utils-logging</artifactId>
 		</dependency>
 	</dependencies>
@@ -117,7 +117,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>net.runeduniverse.lib</groupId>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-bom</artifactId>
 				<version>1</version>
 				<type>pom</type>
