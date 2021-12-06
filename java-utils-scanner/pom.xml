@@ -39,11 +39,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.runeduniverse.libs</groupId>
+			<groupId>net.runeduniverse.lib</groupId>
 			<artifactId>utils-common</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.runeduniverse.libs</groupId>
+			<groupId>net.runeduniverse.lib</groupId>
 			<artifactId>utils-logging</artifactId>
 		</dependency>
 		<dependency>

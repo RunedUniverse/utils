@@ -1,5 +1,9 @@
 pipeline {
 	agent any
+	tools {
+		maven 'Maven 3.6.3'
+		jdk 'OpenJDK 8'
+	}
 	stages {
 		stage('Initialize') {
 			steps {
@@ -9,34 +13,47 @@ pipeline {
 				'''
 			}
 		}
+		
+		stage('Install - Bill of Materials') {
+			steps {
+				dir(path: 'java-utils-bom') {
+					sh 'mvn dependency:resolve'
+					sh 'mvn -P jenkins-install --non-recursive'
+				}
+			}
+		}
 
 		stage('Build [1st Level]') {
 			parallel {
 				stage('Java Logging Tools') {
 					steps {
-						dir(path: 'java-logging') {
+						dir(path: 'java-utils-logging') {
+							sh 'mvn -P license-check'
 							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
-						dir(path: 'java-error-handling') {
+						dir(path: 'java-utils-error-handling') {
+							sh 'mvn -P license-check'
 							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
-				stage('Java Utils') {
+				stage('Java Utils Common') {
 					steps {
-						dir(path: 'java-utils') {
-							sh 'mvn -DskipTests clean compile install'
+						dir(path: 'java-utils-common') {
+							sh 'mvn -P license-check'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn -DskipTests clean compile install'
+							sh 'mvn -P license-check'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
@@ -47,14 +64,16 @@ pipeline {
 			parallel {
 				stage('Java Scanner') {
 					steps {
-						dir(path: 'java-scanner') {
-							sh 'mvn -DskipTests clean compile install'
+						dir(path: 'java-utils-scanner') {
+							sh 'mvn -P license-check'
+							sh 'mvn -P jenkins-install'
 						}
 					}
 				}
 				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain-library') {
+						dir(path: 'java-utils-chain') {
+							sh 'mvn -P license-check'
 							sh 'mvn -P jenkins-install'
 						}
 					}
@@ -66,43 +85,43 @@ pipeline {
 			parallel {
 				stage('Java Logging Tools') {
 					steps {
-						dir(path: 'java-logging') {
-							sh 'mvn -P jenkins-test'
+						dir(path: 'java-utils-logging') {
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
-						dir(path: 'java-error-handling') {
-							sh 'mvn -P jenkins-test'
+						dir(path: 'java-utils-error-handling') {
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
-				stage('Java Utils') {
+				stage('Java Utils Common') {
 					steps {
-						dir(path: 'java-utils') {
-							sh 'mvn test'
+						dir(path: 'java-utils-common') {
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
 				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn test'
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
 				stage('Java Scanner') {
 					steps {
-						dir(path: 'java-scanner') {
-							sh 'mvn test'
+						dir(path: 'java-utils-scanner') {
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
 				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain-library') {
-							sh 'mvn -P jenkins-test'
+						dir(path: 'java-utils-chain') {
+							sh 'mvn -P jenkins-test-system'
 						}
 					}
 				}
@@ -119,44 +138,51 @@ pipeline {
 
 		stage('Deploy') {
 			parallel {
+				stage('Bill of Materials') {
+					steps {
+						dir(path: 'java-utils-bom') {
+							sh 'mvn -P jenkins-deploy'
+						}
+					}
+				}
 				stage('Java Logging Tools') {
 					steps {
-						dir(path: 'java-logging') {
+						dir(path: 'java-utils-logging') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
-						dir(path: 'java-error-handling') {
+						dir(path: 'java-utils-error-handling') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
-				stage('Java Utils') {
+				stage('Java Utils Common') {
 					steps {
-						dir(path: 'java-utils') {
-							sh 'mvn deploy'
+						dir(path: 'java-utils-common') {
+							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
 				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn deploy'
+							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
 				stage('Java Scanner') {
 					steps {
-						dir(path: 'java-scanner') {
-							sh 'mvn deploy'
+						dir(path: 'java-utils-scanner') {
+							sh 'mvn -P jenkins-deploy'
 						}
 					}
 				}
 				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-chain-library') {
+						dir(path: 'java-java-utils') {
 							sh 'mvn -P jenkins-deploy'
 						}
 					}
@@ -169,8 +195,4 @@ pipeline {
 			}
 		}
     }
-	tools {
-		maven 'Maven 3.6.3'
-		jdk 'OpenJDK 8'
-	}
 }
