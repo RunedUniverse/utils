@@ -8,12 +8,12 @@
 		<artifactId>build-helper-java</artifactId>
 		<version>2021.12.06</version>
 	</parent>
-	
+
 	<groupId>net.runeduniverse.libs</groupId>
-	<artifactId>utils-errors</artifactId>
+	<artifactId>utils-chains</artifactId>
 	<version>0.0.1</version>
 
-	<name>Error Handling Library</name>
+	<name>Chain Library</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,6 +36,25 @@
 			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
 		</repository>
 	</repositories>
+
+	<dependencies>
+		<!-- UTILS -->
+		<dependency>
+			<groupId>net.runeduniverse.libs</groupId>
+			<artifactId>utils-common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.runeduniverse.libs</groupId>
+			<artifactId>errors</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.runeduniverse.libs</groupId>
+			<artifactId>logging</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+	</dependencies>
 
 	<profiles>
 		<profile>
