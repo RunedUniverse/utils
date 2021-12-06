@@ -72,7 +72,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- ACTIVITIONS -->
-		<license-enforce>true</license-enforce>
+		<license-enforce>false</license-enforce>
 		<!-- ACTIVITIONS - LICENSES -->
 		<license-prj-utils-approve>true</license-prj-utils-approve>
 		<license-apache2-approve>true</license-apache2-approve>

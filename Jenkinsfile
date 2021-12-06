@@ -17,7 +17,6 @@ pipeline {
 		stage('Install - Bill of Materials') {
 			steps {
 				dir(path: 'java-utils-bom') {
-					sh 'mvn dependency:resolve'
 					sh 'mvn -P license-check'
 					sh 'mvn -P jenkins-install --non-recursive'
 				}
