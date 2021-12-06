@@ -235,7 +235,7 @@ pipeline {
 				}
 				stage('Java Chain Library') {
 					steps {
-						dir(path: 'java-java-utils') {
+						dir(path: 'java-utils-chain') {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
