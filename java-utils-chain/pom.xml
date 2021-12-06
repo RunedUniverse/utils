@@ -48,7 +48,15 @@
 		</dependency>
 		<dependency>
 			<groupId>net.runeduniverse.lib</groupId>
+			<artifactId>utils-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.runeduniverse.lib</groupId>
 			<artifactId>utils-errors</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.runeduniverse.lib</groupId>
+			<artifactId>utils-logging</artifactId>
 		</dependency>
 	</dependencies>
 
