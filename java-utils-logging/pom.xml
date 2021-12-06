@@ -63,9 +63,6 @@
 	<profiles>
 		<profile>
 			<id>dev-install</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<build>
 				<defaultGoal>clean compile install</defaultGoal>
 			</build>

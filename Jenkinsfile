@@ -18,7 +18,7 @@ pipeline {
 			steps {
 				dir(path: 'java-utils-bom') {
 					sh 'mvn dependency:resolve'
-					sh 'mvn -P jenkins-install --non-recursive'
+					sh 'mvn -P license-check,jenkins-install --non-recursive'
 				}
 			}
 		}
@@ -28,32 +28,28 @@ pipeline {
 				stage('Java Logging Tools') {
 					steps {
 						dir(path: 'java-utils-logging') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-utils-error-handling') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
 				stage('Java Utils Common') {
 					steps {
 						dir(path: 'java-utils-common') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
 				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
@@ -65,16 +61,14 @@ pipeline {
 				stage('Java Scanner') {
 					steps {
 						dir(path: 'java-utils-scanner') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
 				stage('Java Chain Library') {
 					steps {
 						dir(path: 'java-utils-chain') {
-							sh 'mvn -P license-check'
-							sh 'mvn -P jenkins-install'
+							sh 'mvn -P license-check,jenkins-install'
 						}
 					}
 				}
