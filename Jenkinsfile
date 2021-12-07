@@ -100,6 +100,7 @@ pipeline {
 				stage('Java Utils Common') {
 					steps {
 						dir(path: 'java-utils-common') {
+			        		sh 'ls -l'
 							sh 'mvn -P jenkins-test-system'
 						}
 					}
