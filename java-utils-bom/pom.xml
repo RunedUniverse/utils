@@ -146,32 +146,6 @@
 				<defaultGoal>clean gpg:sign install</defaultGoal>
 			</build>
 		</profile>
-		<profile>
-			<id>jenkins-deploy-signed</id>
-			<activation>
-				<property>
-					<name>project-packaging</name>
-					<value>pom</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<configuration>
-							<artifacts>
-								<!-- gpg signatures -->
-								<artifact>
-									<file>${project.build.directory}/${project.build.finalName}.pom.asc</file>
-									<type>pom.asc</type>
-								</artifact>
-							</artifacts>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 	</profiles>
 
 	<build>
