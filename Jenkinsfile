@@ -251,6 +251,12 @@ pipeline {
 					}
 				}
 			}
+			post {
+				always {
+					archiveArtifacts artifacts: '*/**/target/*.jar', fingerprint: true
+					archiveArtifacts artifacts: '*/**/target/*.jar.asc', fingerprint: true
+				}
+			}
 		}
 			
 		stage('Stage at Maven-Central') {
@@ -359,12 +365,6 @@ pipeline {
 			    			}
 						}
 					}
-				}
-			}
-			post {
-				always {
-					archiveArtifacts artifacts: '*/**/target/*.jar', fingerprint: true
-					archiveArtifacts artifacts: '*/**/target/*.jar.asc', fingerprint: true
 				}
 			}
 		}
