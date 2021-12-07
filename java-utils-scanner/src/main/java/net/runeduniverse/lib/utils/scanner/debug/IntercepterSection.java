@@ -13,14 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.scanner.debug;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+import java.net.URL;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+import lombok.Getter;
+import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+@Getter
+public class IntercepterSection implements IIntercepter {
+
+	private final String id;
+	private final CompoundTree tree;
+
+	public IntercepterSection(String id, String headline) {
+		this.id = id;
+		this.tree = new CompoundTree(id, headline);
+	}
+
+	public URL intercept(URL url) {
+		this.tree.append("URL", url.toString());
+		return url;
+	}
+
+	public String intercept(String s) {
+		this.tree.append(s);
+		return s;
 	}
 }

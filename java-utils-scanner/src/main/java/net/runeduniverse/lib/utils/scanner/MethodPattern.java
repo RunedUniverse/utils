@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.scanner;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import lombok.Data;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+@Data
+public class MethodPattern {
+	private final Method method;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	public MethodPattern(Method method) {
+		this.method = method;
+		this.method.setAccessible(true);
+	}
+
+	public boolean invoke(Object obj, Object... args) {
+		try {
+			method.invoke(obj, args);
+			return true;
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

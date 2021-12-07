@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.logging.logs;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+public class LineEntry implements IEntry {
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+	protected CharSequence tag;
+	protected CharSequence content;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	public LineEntry(CharSequence content) {
+		this(null, content);
 	}
+
+	public LineEntry(CharSequence tag, CharSequence content) {
+		this.tag = tag;
+		this.content = content;
+	}
+
+	@Override
+	public void toRecord(TreeRecord record) {
+		record.append(new LineRecord(this.tag, this.content));
+	}
+
 }

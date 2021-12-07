@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.logging.logs;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+public interface CompoundTreeBOM {
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+	public static CharSequence INITIAL_OFFSET = "  ";
+	public static CharSequence NO_ELEMENT_OFFSET = "   ";
+	public static CharSequence EMPTY_ELEMENT_OFFSET = " │ ";
+	public static CharSequence ELEMENT_OFFSET = " ├ ";
+	public static CharSequence LAST_ELEMENT_OFFSET = " └ ";
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+	public static CharSequence TAGGED_TXT_BOX = "[%s]";
+	public static CharSequence TAGGED_TXT_SPLITTER = " » ";
+
+	public static boolean TAGS_TO_UPPER = true;
 }

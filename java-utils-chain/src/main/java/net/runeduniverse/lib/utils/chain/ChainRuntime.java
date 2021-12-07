@@ -22,7 +22,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.runeduniverse.lib.utils.errors.test.ExceptionSuppressions;
+import net.runeduniverse.lib.utils.errors.ExceptionSuppressions;
 
 @SuppressWarnings("deprecation")
 public class ChainRuntime<R> {

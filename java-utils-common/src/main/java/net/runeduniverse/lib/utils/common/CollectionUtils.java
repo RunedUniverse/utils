@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.common;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+import java.util.Collection;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+public class CollectionUtils {
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	public static final <T> T first(Collection<T> collection) {
+		for (T t : collection)
+			return t;
+		return null;
+	}
+
+	public static final <T> T firstNotNull(Collection<T> collection) {
+		for (T t : collection)
+			if (t != null)
+				return t;
+		return null;
 	}
 }

@@ -15,7 +15,7 @@
  */
 package net.runeduniverse.lib.utils.chain;
 
-import net.runeduniverse.lib.utils.logging.test.logs.CompoundTree;
+import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 
 public class ChainRuntimeExecutionTrace {
 

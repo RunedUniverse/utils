@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.logging;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+import java.util.logging.Logger;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+public class UniversalLogger extends ALogger {
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	private final Class<?> clazz;
+
+	public UniversalLogger(Class<?> clazz, Logger parent) {
+		super(clazz.getSimpleName(), null, parent);
+		this.clazz = clazz;
+	}
+
+	public <E extends Exception> E throwing(String sourceMethod, E thrown) {
+		super.throwing(clazz.getName(), sourceMethod, thrown);
+		return thrown;
+	}
+
+	public void burying(String sourceMethod, Exception exception) {
+		super.log(Level.BURY, sourceMethod + "\n" + exception);
 	}
 }

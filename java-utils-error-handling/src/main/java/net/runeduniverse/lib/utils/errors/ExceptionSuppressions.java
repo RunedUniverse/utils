@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.errors;
 
-import net.runeduniverse.lib.utils.errors.ATrunkableException;
+import java.util.Collection;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+public class ExceptionSuppressions extends ATrunkableException {
+	private static final long serialVersionUID = 215607527815606000L;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	public ExceptionSuppressions(String message) {
+		super(message);
+	}
+
+	public ExceptionSuppressions(String message, boolean trunk) {
+		super(message, trunk);
+	}
+
+	public ExceptionSuppressions addSuppressed(Collection<Exception> errors) {
+		for (Exception e : errors)
+			this.addSuppressed(e);
+		return this;
+	}
+
+	public boolean hasSuppressions() {
+		return this.getSuppressed().length > 0;
 	}
 }

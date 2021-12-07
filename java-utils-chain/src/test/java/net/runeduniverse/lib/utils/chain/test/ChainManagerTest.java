@@ -24,7 +24,7 @@ import net.runeduniverse.lib.utils.chain.Chain;
 import net.runeduniverse.lib.utils.chain.ChainManager;
 import net.runeduniverse.lib.utils.chain.ChainRuntime;
 import net.runeduniverse.lib.utils.chain.test.model.Player;
-import net.runeduniverse.lib.utils.logging.test.DebugLogger;
+import net.runeduniverse.lib.utils.logging.DebugLogger;
 
 public class ChainManagerTest {
 
