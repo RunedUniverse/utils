@@ -133,19 +133,6 @@
 				<defaultGoal>clean license:format install</defaultGoal>
 			</build>
 		</profile>
-		<!-- JENKINS -->
-		<profile>
-			<id>jenkins-install</id>
-			<activation>
-				<property>
-					<name>project-packaging</name>
-					<value>!pom</value>
-				</property>
-			</activation>
-			<build>
-				<defaultGoal>clean gpg:sign install</defaultGoal>
-			</build>
-		</profile>
 	</profiles>
 
 	<build>
