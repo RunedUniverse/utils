@@ -15,7 +15,7 @@
  */
 package net.runeduniverse.lib.utils.chain;
 
-import static net.runeduniverse.lib.utils.common.StringUtils.isBlank;
+import static net.runeduniverse.lib.utils.common.test.StringUtils.isBlank;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

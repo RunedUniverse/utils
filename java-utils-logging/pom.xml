@@ -28,7 +28,7 @@
 
 	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-logging</artifactId>
-	<version>0.0.2</version>
+	<version>1.0.0</version>
 
 	<name>Java Logging Tools</name>
 

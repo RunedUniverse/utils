@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.scanner.test;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+import java.lang.reflect.Field;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
-
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+public interface IFieldScanner<F extends FieldPattern> {
+	void scan(Field field, Class<?> type, TypePattern<F, ?> pattern) throws Exception;
 }

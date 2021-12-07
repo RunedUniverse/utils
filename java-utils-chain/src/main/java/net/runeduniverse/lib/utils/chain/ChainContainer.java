@@ -18,7 +18,7 @@ package net.runeduniverse.lib.utils.chain;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
-import net.runeduniverse.lib.utils.errors.ExceptionSuppressions;
+import net.runeduniverse.lib.utils.errors.test.ExceptionSuppressions;
 
 public final class ChainContainer {
 

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.scanner.test.debug;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+import java.net.URL;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+public interface IIntercepter {
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+	public URL intercept(URL url);
+
+	public String intercept(String s);
 }

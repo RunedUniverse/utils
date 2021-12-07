@@ -73,10 +73,10 @@
 	<properties>
 		<!-- ARTIFACT VERSIONS -->
 		<min-utils-async-version>2.1.0</min-utils-async-version>
-		<min-utils-chain-version>0.0.1</min-utils-chain-version>
+		<min-utils-chain-version>1.0.0</min-utils-chain-version>
 		<min-utils-common-version>1.0.0</min-utils-common-version>
-		<min-utils-errors-version>0.0.1</min-utils-errors-version>
-		<min-utils-logging-version>0.0.2</min-utils-logging-version>
+		<min-utils-errors-version>1.0.0</min-utils-errors-version>
+		<min-utils-logging-version>1.0.0</min-utils-logging-version>
 		<min-utils-scanner-version>1.0.5</min-utils-scanner-version>
 	</properties>
 

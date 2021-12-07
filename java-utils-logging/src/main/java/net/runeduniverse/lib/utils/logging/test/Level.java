@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.logging.test;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+public class Level extends java.util.logging.Level {
+	private static final long serialVersionUID = -1369172045174361996L;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
-
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	protected Level(String name, int value) {
+		super(name, value);
 	}
+
+	public static final Level BURY = new Level("BURY", 601);
+
 }

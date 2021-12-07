@@ -17,14 +17,14 @@ package net.runeduniverse.lib.utils.logging;
 
 import org.junit.jupiter.api.Test;
 
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
+import net.runeduniverse.lib.utils.logging.test.logs.CompoundTree;
 
 public class TreeTest {
 
 	@Test
 	public void buildTree() throws Exception {
 		CompoundTree pkgs = new CompoundTree("Packages");
-		pkgs.append(new CompoundTree("PKG", "net.runeduniverse.lib.utils.logging.fake")
+		pkgs.append(new CompoundTree("PKG", "net.runeduniverse.lib.utils.logging.test.fake")
 				.append(new CompoundTree("clAss", "Person").append("missing Class!")
 						.append("FIeLd", "id")
 						.append("fieD", "firstName")
@@ -32,7 +32,7 @@ public class TreeTest {
 				.append(new CompoundTree("class", "House").append("yet another missing Class!")
 						.append("field", "address")
 						.append("field", "size")))
-				.append(new CompoundTree("net.runeduniverse.lib.utils.logging.fake.model"));
+				.append(new CompoundTree("net.runeduniverse.lib.utils.logging.test.fake.model"));
 
 		CompoundTree rootTree = new CompoundTree("ROOT");
 		rootTree.append(pkgs);

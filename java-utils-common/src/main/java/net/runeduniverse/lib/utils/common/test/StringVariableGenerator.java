@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.common.test;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+public class StringVariableGenerator {
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+	String var = "`";
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
+	public String nextVal() {
+		this.var = inc(var.length() - 1);
+		return this.var;
 	}
+
+	private String inc(int i) {
+		char last = this.var.charAt(i);
+		if (last == 'z')
+			return (i == 0 ? "a" : inc(i - 1)) + 'a';
+		else
+			return this.var.substring(0, i) + (char) (last + 1);
+	}
+
 }

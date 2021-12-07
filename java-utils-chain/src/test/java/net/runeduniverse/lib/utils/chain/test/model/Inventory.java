@@ -13,14 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.chain.test.model;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+import lombok.Getter;
+import lombok.Setter;
+import net.runeduniverse.lib.utils.chain.test.model.relations.Slot;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+@Getter
+@Setter
+public class Inventory extends AEntity {
+	private Set<Slot> slots = new HashSet<>();
+
+	private Integer size = -1;
+	private String inventory = null;
 }

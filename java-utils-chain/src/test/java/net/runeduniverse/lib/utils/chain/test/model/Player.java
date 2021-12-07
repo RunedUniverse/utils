@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.chain.test.model;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+import java.util.UUID;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class Player {
+
+	@Setter
+	private UUID uuid;
+
+	@Setter
+	private String name;
+
+	@Setter
+	private Inventory inventory;
 }

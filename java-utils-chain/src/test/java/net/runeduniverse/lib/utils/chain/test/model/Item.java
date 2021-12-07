@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.chain.errors;
+package net.runeduniverse.lib.utils.chain.test.model;
 
-import net.runeduniverse.lib.utils.errors.test.ATrunkableException;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-public class ChainLayerCallException extends ATrunkableException {
-	private static final long serialVersionUID = -6315371891932847527L;
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class Item extends AEntity {
+	private Inventory containingInventory;
 
-	public ChainLayerCallException(String message, Throwable cause) {
-		super(message, cause, true);
-	}
+	private String str = "my string";
+	private Boolean bool = false;
+
+	private String itemStackData = null;
+
+	@Getter
+	private String itemStack = null;
 }

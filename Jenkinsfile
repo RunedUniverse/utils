@@ -46,7 +46,6 @@ pipeline {
 						dir(path: 'java-utils-common') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l target'
 						}
 					}
 				}
