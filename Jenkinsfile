@@ -19,7 +19,7 @@ pipeline {
 				dir(path: 'java-utils-bom') {
 					sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 					sh 'mvn -P jenkins-install --non-recursive'
-					sh 'ls -l'
+					sh 'ls -l target'
 				}
 			}
 		}
@@ -31,7 +31,7 @@ pipeline {
 						dir(path: 'java-utils-logging') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
@@ -40,7 +40,7 @@ pipeline {
 						dir(path: 'java-utils-error-handling') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
@@ -49,7 +49,7 @@ pipeline {
 						dir(path: 'java-utils-common') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
@@ -58,7 +58,7 @@ pipeline {
 						dir(path: 'java-utils-async') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
@@ -72,7 +72,7 @@ pipeline {
 						dir(path: 'java-utils-scanner') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
@@ -81,7 +81,7 @@ pipeline {
 						dir(path: 'java-utils-chain') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-							sh 'ls -l'
+							sh 'ls -l target'
 						}
 					}
 				}
