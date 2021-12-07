@@ -22,7 +22,7 @@
 
 	<parent>
 		<groupId>net.runeduniverse.tools</groupId>
-		<artifactId>build-helper</artifactId>
+		<artifactId>build-helper-java</artifactId>
 		<version>2021.12.06</version>
 	</parent>
 
