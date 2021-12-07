@@ -46,7 +46,6 @@ pipeline {
 						dir(path: 'java-utils-common') {
 							sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
 							sh 'mvn -P jenkins-install'
-			        		sh 'ls -l target'
 						}
 					}
 				}
@@ -144,7 +143,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -160,7 +159,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -176,7 +175,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -192,7 +191,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -208,7 +207,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -224,7 +223,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -240,7 +239,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -251,9 +250,119 @@ pipeline {
 					}
 				}
 			}
+			
+			stage('Stage at Maven-Central') {
+			parallel {
+				stage('Bill of Materials') {
+					steps {
+						dir(path: 'java-utils-bom') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Logging Tools') {
+					steps {
+						dir(path: 'java-utils-logging') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Error Handling Library') {
+					steps {
+						dir(path: 'java-utils-error-handling') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Utils Common') {
+					steps {
+						dir(path: 'java-utils-common') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Utils Async') {
+					steps {
+						dir(path: 'java-utils-async') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Scanner') {
+					steps {
+						dir(path: 'java-utils-scanner') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+				stage('Java Chain Library') {
+					steps {
+						dir(path: 'java-utils-chain') {
+							script {
+			    		    	switch(GIT_BRANCH) {
+			        				case 'master':
+			        					sh 'mvn -P repo-maven-central,jenkins-deploy'
+			        					break
+			        				default:
+			        					break
+			    				}
+			    			}
+						}
+					}
+				}
+			}
 			post {
 				always {
 					archiveArtifacts artifacts: '*/**/target/*.jar', fingerprint: true
+					archiveArtifacts artifacts: '*/**/target/*.jar.asc', fingerprint: true
 				}
 			}
 		}
