@@ -144,7 +144,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -160,7 +160,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -176,7 +176,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -192,7 +192,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -208,7 +208,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -224,7 +224,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -240,7 +240,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy-signed --fail-at-end'
+			        					sh 'mvn -P repo-releases,jenkins-deploy-signed'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
