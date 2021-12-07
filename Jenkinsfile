@@ -143,7 +143,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -159,7 +159,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -175,7 +175,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -191,7 +191,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -207,7 +207,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -223,7 +223,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
@@ -239,7 +239,7 @@ pipeline {
 							script {
 			    		    	switch(GIT_BRANCH) {
 			        				case 'master':
-			        					sh 'mvn -P repo-releases,jenkins-deploy'
+			        					sh 'mvn -P repo-releases,repo-maven-central,jenkins-deploy'
 			        					break
 			        				default:
 			        					sh 'mvn -P repo-development,jenkins-deploy'
