@@ -135,6 +135,7 @@ pipeline {
 				}
 			}
 		}
+		
 		stage('Deploy') {
 			parallel {
 				stage('Bill of Materials') {
@@ -250,8 +251,9 @@ pipeline {
 					}
 				}
 			}
+		}
 			
-			stage('Stage at Maven-Central') {
+		stage('Stage at Maven-Central') {
 			parallel {
 				stage('Bill of Materials') {
 					steps {
