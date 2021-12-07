@@ -139,7 +139,7 @@
 			<activation>
 				<property>
 					<name>project-packaging</name>
-					<value>pom</value>
+					<value>!pom</value>
 				</property>
 			</activation>
 			<build>
