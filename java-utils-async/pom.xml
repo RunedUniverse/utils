@@ -29,6 +29,7 @@
 	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-async</artifactId>
 	<version>2.1.0</version>
+	<packaging>jar</packaging>
 
 	<name>Java Utils Async</name>
 
