@@ -29,6 +29,7 @@
 	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-chain</artifactId>
 	<version>1.0.0</version>
+	<packaging>jar</packaging>
 
 	<name>Chain Library</name>
 
