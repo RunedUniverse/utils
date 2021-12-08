@@ -71,6 +71,7 @@
 	</issueManagement>
 
 	<properties>
+		<project-packaging>${project.packaging}</project-packaging>
 		<!-- ARTIFACT VERSIONS -->
 		<min-utils-async-version>2.1.0</min-utils-async-version>
 		<min-utils-chain-version>1.0.0</min-utils-chain-version>
