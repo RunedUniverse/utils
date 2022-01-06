@@ -210,6 +210,7 @@
 			<id>deploy</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
 				</defaultGoal>
 			</build>
