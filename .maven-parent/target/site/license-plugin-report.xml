@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<licensePluginReport goal="FORMAT" timestamp="1641492623372">
-    <module artifactId="build-helper-java-utils" groupId="net.runeduniverse.tools" version="v1"/>
-    <files>
-        <file path="pom.xml" result="ADDED"/>
-    </files>
-</licensePluginReport>
