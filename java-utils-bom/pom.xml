@@ -134,6 +134,7 @@
 			<id>install</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
 					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
 					org.apache.maven.plugins:maven-install-plugin:install@jenkins
@@ -144,6 +145,7 @@
 			<id>deploy</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
 				</defaultGoal>
 			</build>
@@ -152,6 +154,7 @@
 			<id>deploy-signed</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
 				</defaultGoal>

@@ -101,6 +101,7 @@
 			<id>install</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
 					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
 					org.apache.maven.plugins:maven-compiler-plugin:compile@jenkins
@@ -164,6 +165,7 @@
 			<id>test-junit-jupiter</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-surefire-plugin:test@jenkins-testing
 				</defaultGoal>
 				<plugins>
@@ -210,6 +212,7 @@
 			<id>deploy</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
 				</defaultGoal>
@@ -232,6 +235,7 @@
 			<id>deploy-signed</id>
 			<build>
 				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom
 					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
 					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
