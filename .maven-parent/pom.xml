@@ -229,10 +229,9 @@
 							<execution>
 								<id>jenkins</id>
 								<inherited>false</inherited>
-								<phase>none</phase>
-								<goals>
-									<goal>deploy</goal>
-								</goals>
+								<configuration>
+									<skip>true</skip>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
