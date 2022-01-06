@@ -38,6 +38,11 @@ pipeline {
 					sh 'ls -l target'
 				}
 			}
+			post {
+				always {
+					archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
+				}
+			}
 		}
 
 		stage('Build [1st Level]') {
@@ -49,12 +54,22 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
+						}
+					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-utils-error-handling') {
 							sh 'mvn -P install'
 							sh 'ls -l target'
+						}
+					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
 						}
 					}
 				}
@@ -65,12 +80,22 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
+						}
+					}
 				}
 				stage('Java Utils Async') {
 					steps {
 						dir(path: 'java-utils-async') {
 							sh 'mvn -P install'
 							sh 'ls -l target'
+						}
+					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
 						}
 					}
 				}
@@ -86,12 +111,22 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
+						}
+					}
 				}
 				stage('Java Chain Library') {
 					steps {
 						dir(path: 'java-utils-chain') {
 							sh 'mvn -P install'
 							sh 'ls -l target'
+						}
+					}
+					post {
+						always {
+							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
 						}
 					}
 				}
@@ -107,6 +142,7 @@ pipeline {
 			post {
 				always {
 					junit '*/target/surefire-reports/*.xml'
+					archiveArtifacts artifacts: '*/target/trace/test-junit-jupiter*', fingerprint: true
 				}
 				failure {
 				    archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
@@ -128,6 +164,7 @@ pipeline {
 			    		}
 			    	}
 				}
+				archiveArtifacts artifacts: '*/target/trace/deploy*', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.pom', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.jar', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.asc', fingerprint: true
