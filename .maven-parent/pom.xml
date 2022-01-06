@@ -1,0 +1,278 @@
+<!--
+
+    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.runeduniverse.tools</groupId>
+		<artifactId>build-helper-java</artifactId>
+		<version>2022.01.04</version>
+	</parent>
+
+	<artifactId>build-helper-java-utils</artifactId>
+	<version>v1</version>
+	<packaging>pom</packaging>
+	<name>Build Helper for Utils-Project</name>
+
+	<modules>
+		<module>../java-utils-bom</module>
+		<module>../java-utils-logging</module>
+		<module>../java-utils-error-handling</module>
+		<module>../java-utils-common</module>
+		<module>../java-utils-async</module>
+		<module>../java-utils-scanner</module>
+		<module>../java-utils-chain</module>
+	</modules>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>RunedUniverse</name>
+		<url>https://www.runeduniverse.net</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>pl4yingnight</id>
+			<name>Pl4yingNight</name>
+			<email>pl4yingnight@gmail.com</email>
+			<organization>RunedUniverse</organization>
+			<organizationUrl>https://www.runeduniverse.net</organizationUrl>
+			<timezone>Europe/Vienna</timezone>
+			<roles>
+				<role>Maintainer</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/RunedUniverse/utils</url>
+		<connection>scm:git:git://github.com/RunedUniverse/utils.git</connection>
+		<developerConnection>scm:git:git@github.com:RunedUniverse/utils.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/RunedUniverse/utils/issues</url>
+	</issueManagement>
+
+	<repositories>
+		<repository>
+			<id>runeduniverse-releases</id>
+			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
+		</repository>
+		<repository>
+			<id>runeduniverse-development</id>
+			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<id>dev-install</id>
+			<build>
+				<defaultGoal>clean license:format compile install</defaultGoal>
+			</build>
+		</profile>
+		<!-- JENKINS -->
+		<profile>
+			<id>install</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
+					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
+					org.apache.maven.plugins:maven-compiler-plugin:compile@jenkins
+					org.apache.maven.plugins:maven-resources-plugin:testResources@jenkins-testing
+					org.apache.maven.plugins:maven-compiler-plugin:testCompile@jenkins-testing
+					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
+					org.apache.maven.plugins:maven-source-plugin:jar-no-fork@jenkins
+					org.apache.maven.plugins:maven-javadoc-plugin:jar@jenkins
+					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
+					org.apache.maven.plugins:maven-install-plugin:install@jenkins
+				</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>test-junit-jupiter</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-surefire-plugin:test@jenkins-testing
+				</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins-testing</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins-testing</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins-testing</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+								<configuration>
+									<skip>true</skip>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy-signed</id>
+			<build>
+				<defaultGoal>
+					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>jenkins</id>
+								<inherited>false</inherited>
+								<phase>none</phase>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.mycila</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<configuration>
+						<properties>
+							<year>2022</year>
+							<owner>Pl4yingNight</owner>
+							<email>pl4yingnight@gmail.com</email>
+						</properties>
+						<licenseSets>
+							<licenseSet>
+								<header>${project.basedir}/../.licenses/apache2-header.txt</header>
+								<excludes>
+									<exclude>**/resources/**</exclude>
+									<exclude>**/.licenses/**</exclude>
+								</excludes>
+							</licenseSet>
+						</licenseSets>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<configuration>
+						<keyname>9CB231CE2918B342</keyname>
+						<passphraseServerId>gpg-signature-software</passphraseServerId>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

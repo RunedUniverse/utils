@@ -22,8 +22,9 @@
 
 	<parent>
 		<groupId>net.runeduniverse.tools</groupId>
-		<artifactId>build-helper-java</artifactId>
-		<version>2022.01.04</version>
+		<artifactId>build-helper-java-utils</artifactId>
+		<version>v1</version>
+		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>net.runeduniverse.lib.utils</groupId>
@@ -127,90 +128,8 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<profiles>
-		<profile>
-			<id>dev-install</id>
-			<build>
-				<defaultGoal>clean license:format compile install</defaultGoal>
-			</build>
-		</profile>
-		<!-- JENKINS -->
-		<profile>
-			<id>install</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
-					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
-					org.apache.maven.plugins:maven-compiler-plugin:compile@jenkins
-					org.apache.maven.plugins:maven-resources-plugin:testResources@jenkins-testing
-					org.apache.maven.plugins:maven-compiler-plugin:testCompile@jenkins-testing
-					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
-					org.apache.maven.plugins:maven-source-plugin:jar-no-fork@jenkins
-					org.apache.maven.plugins:maven-javadoc-plugin:jar@jenkins
-					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
-					org.apache.maven.plugins:maven-install-plugin:install@jenkins
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>test-junit-jupiter</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-surefire-plugin:test@jenkins-testing
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>deploy</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>deploy-signed</id>
-			<build>
-				<defaultGoal>
-					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
-					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
-				</defaultGoal>
-			</build>
-		</profile>
-	</profiles>
-
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<properties>
-						<year>2022</year>
-						<owner>Pl4yingNight</owner>
-						<email>pl4yingnight@gmail.com</email>
-					</properties>
-					<licenseSets>
-						<licenseSet>
-							<header>${project.basedir}/../.licenses/apache2-header.txt</header>
-							<excludes>
-								<exclude>**/resources/**</exclude>
-								<exclude>**/.licenses/**</exclude>
-							</excludes>
-						</licenseSet>
-					</licenseSets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<configuration>
-					<keyname>9CB231CE2918B342</keyname>
-					<passphraseServerId>gpg-signature-software</passphraseServerId>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>
