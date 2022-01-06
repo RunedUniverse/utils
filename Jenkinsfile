@@ -25,7 +25,9 @@ pipeline {
 		
 		stage('License Check') {
 			steps {
-				sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
+				dir(path: '.maven-parent') {
+					sh 'mvn -P license-check,license-prj-utils-approve,license-apache2-approve'
+				}
 			}
 		}
 		
