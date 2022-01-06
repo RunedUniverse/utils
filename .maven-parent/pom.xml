@@ -106,7 +106,7 @@
 			<id>install</id>
 			<properties>
 				<!-- TRACING -->
-				<tracing-prefix>${project.artifactId}</tracing-prefix>
+				<tracing-prefix>${project.artifactId}-</tracing-prefix>
 			</properties>
 			<build>
 				<defaultGoal>
@@ -174,7 +174,7 @@
 			<id>test-junit-jupiter</id>
 			<properties>
 				<!-- TRACING -->
-				<tracing-prefix>${project.artifactId}</tracing-prefix>
+				<tracing-prefix>${project.artifactId}-</tracing-prefix>
 			</properties>
 			<build>
 				<defaultGoal>
@@ -225,7 +225,7 @@
 			<id>deploy</id>
 			<properties>
 				<!-- TRACING -->
-				<tracing-prefix>${project.artifactId}</tracing-prefix>
+				<tracing-prefix>${project.artifactId}-</tracing-prefix>
 			</properties>
 			<build>
 				<defaultGoal>
@@ -252,7 +252,7 @@
 			<id>deploy-signed</id>
 			<properties>
 				<!-- TRACING -->
-				<tracing-prefix>${project.artifactId}</tracing-prefix>
+				<tracing-prefix>${project.artifactId}-</tracing-prefix>
 			</properties>
 			<build>
 				<defaultGoal>
