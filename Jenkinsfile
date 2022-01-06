@@ -38,11 +38,6 @@ pipeline {
 					sh 'ls -l target'
 				}
 			}
-			post {
-				always {
-					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
-				}
-			}
 		}
 
 		stage('Build [1st Level]') {
@@ -80,11 +75,6 @@ pipeline {
 					}
 				}
 			}
-			post {
-				always {
-					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
-				}
-			}
 		}
 		
 		stage('Build [2nd Level]') {
@@ -106,11 +96,6 @@ pipeline {
 					}
 				}
 			}
-			post {
-				always {
-					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
-				}
-			}
 		}
 
 		stage('Test') {
@@ -122,7 +107,6 @@ pipeline {
 			post {
 				always {
 					junit '*/target/surefire-reports/*.xml'
-					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				}
 				failure {
 				    archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
