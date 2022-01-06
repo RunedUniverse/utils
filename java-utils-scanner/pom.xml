@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2021 Pl4yingNight (pl4yingnight@gmail.com)
+    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>net.runeduniverse.tools</groupId>
 		<artifactId>build-helper-java</artifactId>
-		<version>2021.12.06</version>
+		<version>2022.01.04</version>
 	</parent>
 
 	<groupId>net.runeduniverse.lib.utils</groupId>
@@ -129,6 +129,49 @@
 				<defaultGoal>clean license:format compile install</defaultGoal>
 			</build>
 		</profile>
+		<!-- JENKINS -->
+		<profile>
+			<id>install</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
+					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
+					org.apache.maven.plugins:maven-compiler-plugin:compile@jenkins
+					org.apache.maven.plugins:maven-resources-plugin:testResources@jenkins-testing
+					org.apache.maven.plugins:maven-compiler-plugin:testCompile@jenkins-testing
+					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
+					org.apache.maven.plugins:maven-source-plugin:jar-no-fork@jenkins
+					org.apache.maven.plugins:maven-javadoc-plugin:jar@jenkins
+					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
+					org.apache.maven.plugins:maven-install-plugin:install@jenkins
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>test-junit-jupiter</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-surefire-plugin:test@jenkins-testing
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy-signed</id>
+			<build>
+				<defaultGoal>
+					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+			</build>
+		</profile>
 	</profiles>
 
 	<build>
@@ -140,7 +183,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<properties>
-						<year>2021</year>
+						<year>2022</year>
 						<owner>Pl4yingNight</owner>
 						<email>pl4yingnight@gmail.com</email>
 					</properties>

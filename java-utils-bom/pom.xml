@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2021 Pl4yingNight (pl4yingnight@gmail.com)
+    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>net.runeduniverse.tools</groupId>
 		<artifactId>build-helper-java</artifactId>
-		<version>2021.12.06</version>
+		<version>2022.01.04</version>
 	</parent>
 
 	<groupId>net.runeduniverse.lib.utils</groupId>
@@ -131,35 +131,40 @@
 		<profile>
 			<id>dev-install</id>
 			<build>
-				<defaultGoal>clean license:format install</defaultGoal>
+				<defaultGoal>clean license:format compile install</defaultGoal>
 			</build>
 		</profile>
 		<!-- JENKINS -->
 		<profile>
-			<id>jenkins-install</id>
-			<activation>
-				<property>
-					<name>project-packaging</name>
-					<value>pom</value>
-				</property>
-			</activation>
+			<id>install</id>
 			<build>
-				<defaultGoal>clean gpg:sign install</defaultGoal>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
+					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
+					org.apache.maven.plugins:maven-install-plugin:install@jenkins
+				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>jenkins-deploy-signed</id>
-			<activation>
-				<property>
-					<name>project-packaging</name>
-					<value>pom</value>
-				</property>
-			</activation>
+			<id>deploy</id>
 			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy-signed</id>
+			<build>
+				<defaultGoal>
+					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
 				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
+						<inherited>false</inherited>
 						<configuration>
 							<artifacts>
 								<!-- gpg signature -->
@@ -176,15 +181,13 @@
 	</profiles>
 
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<properties>
-						<year>2021</year>
+						<year>2022</year>
 						<owner>Pl4yingNight</owner>
 						<email>pl4yingnight@gmail.com</email>
 					</properties>
