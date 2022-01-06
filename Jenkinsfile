@@ -151,7 +151,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -167,7 +167,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -183,7 +183,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -199,7 +199,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -215,7 +215,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -231,7 +231,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
@@ -247,7 +247,7 @@ pipeline {
 							script {
 								switch(GIT_BRANCH) {
 									case 'master':
-										sh 'mvn -P repo-releases,repo-development,deploy-signed'
+										sh 'mvn -P repo-releases,deploy-signed'
 										break
 									default:
 										sh 'mvn -P repo-development,deploy'
