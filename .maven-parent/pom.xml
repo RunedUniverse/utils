@@ -170,7 +170,6 @@
 			<id>test-junit-jupiter</id>
 			<build>
 				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
 					org.apache.maven.plugins:maven-surefire-plugin:test@jenkins-testing
 				</defaultGoal>
 				<plugins>
@@ -217,7 +216,6 @@
 			<id>deploy</id>
 			<build>
 				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
 					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
 				</defaultGoal>
@@ -240,7 +238,6 @@
 			<id>deploy-signed</id>
 			<build>
 				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
 					org.apache.maven.plugins:maven-jar-plugin:jar@jenkins
 					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
 					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
@@ -271,6 +268,14 @@
 						</executions>
 					</plugin>
 				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>gen-eff-pom</id>
+			<build>
+				<defaultGoal>
+					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
+				</defaultGoal>
 			</build>
 		</profile>
 	</profiles>

@@ -97,6 +97,80 @@ pipeline {
 				}
 			}
 		}
+		
+		stage ('Tracing-Data'){
+			steps {
+				script {
+					switch(GIT_BRANCH) {
+						case 'master':
+							dir(path: 'java-utils-bom') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-logging') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-error-handling') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-common') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-async') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-scanner') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							dir(path: 'java-utils-chain') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
+							}
+							break
+						default:
+							dir(path: 'java-utils-bom') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-logging') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-error-handling') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-common') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-async') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-scanner') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							dir(path: 'java-utils-chain') {
+								sh 'mvn -P test-junit-jupiter,gen-eff-pom'
+								sh 'mvn -P repo-development,deploy,gen-eff-pom'
+							}
+							break
+					}
+				}
+			}
+			post {
+				always {
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
+				}
+			}
+		}
 
 		stage('Test') {
 			steps {
@@ -117,18 +191,17 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				dir(path: '.maven-parent') {				
-			    	script {
-			        	switch(GIT_BRANCH) {
-			        		case 'master':
-			        			sh 'mvn -P repo-releases,deploy-signed'
-			        			break
-			        		default:
-			        			sh 'mvn -P repo-development,deploy'
-			        			break
-			    		}
-			    	}
+					script {
+						switch(GIT_BRANCH) {
+							case 'master':
+								sh 'mvn -P repo-releases,deploy-signed'
+								break
+							default:
+								sh 'mvn -P repo-development,deploy'
+								break
+						}
+					}
 				}
-				archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.pom', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.jar', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.asc', fingerprint: true
@@ -138,15 +211,15 @@ pipeline {
 		stage('Stage at Maven-Central') {
 			steps {
 				dir(path: '.maven-parent') {	
-				    script {
-				        switch(GIT_BRANCH) {
-			        		case 'master':
-			        			sh 'mvn -P repo-maven-central,deploy-signed'
-			        			break
-			        		default:
-			        			break
-			    		}
-			    	}
+					script {
+						switch(GIT_BRANCH) {
+							case 'master':
+								sh 'mvn -P repo-maven-central,deploy-signed'
+								break
+							default:
+								break
+						}
+					}
 				}
 			}
 		}
