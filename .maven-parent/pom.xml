@@ -88,6 +88,11 @@
 			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
 		</repository>
 	</repositories>
+	
+	<properties>
+		<!-- TRACING -->
+		<tracing-log-path>../maven-build-trace/</tracing-log-path>
+	</properties>
 
 	<profiles>
 		<profile>
@@ -99,6 +104,10 @@
 		<!-- JENKINS -->
 		<profile>
 			<id>install</id>
+			<properties>
+				<!-- TRACING -->
+				<tracing-prefix>${project.artifactId}</tracing-prefix>
+			</properties>
 			<build>
 				<defaultGoal>
 					org.apache.maven.plugins:maven-help-plugin:effective-pom
@@ -163,6 +172,10 @@
 		</profile>
 		<profile>
 			<id>test-junit-jupiter</id>
+			<properties>
+				<!-- TRACING -->
+				<tracing-prefix>${project.artifactId}</tracing-prefix>
+			</properties>
 			<build>
 				<defaultGoal>
 					org.apache.maven.plugins:maven-help-plugin:effective-pom
@@ -210,6 +223,10 @@
 		</profile>
 		<profile>
 			<id>deploy</id>
+			<properties>
+				<!-- TRACING -->
+				<tracing-prefix>${project.artifactId}</tracing-prefix>
+			</properties>
 			<build>
 				<defaultGoal>
 					org.apache.maven.plugins:maven-help-plugin:effective-pom
@@ -233,6 +250,10 @@
 		</profile>
 		<profile>
 			<id>deploy-signed</id>
+			<properties>
+				<!-- TRACING -->
+				<tracing-prefix>${project.artifactId}</tracing-prefix>
+			</properties>
 			<build>
 				<defaultGoal>
 					org.apache.maven.plugins:maven-help-plugin:effective-pom

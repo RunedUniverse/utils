@@ -40,7 +40,7 @@ pipeline {
 			}
 			post {
 				always {
-					archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				}
 			}
 		}
@@ -54,22 +54,12 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
-						}
-					}
 				}
 				stage('Java Error Handling Library') {
 					steps {
 						dir(path: 'java-utils-error-handling') {
 							sh 'mvn -P install'
 							sh 'ls -l target'
-						}
-					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
 						}
 					}
 				}
@@ -80,11 +70,6 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
-						}
-					}
 				}
 				stage('Java Utils Async') {
 					steps {
@@ -93,11 +78,11 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
-						}
-					}
+				}
+			}
+			post {
+				always {
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				}
 			}
 		}
@@ -111,11 +96,6 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
-						}
-					}
 				}
 				stage('Java Chain Library') {
 					steps {
@@ -124,11 +104,11 @@ pipeline {
 							sh 'ls -l target'
 						}
 					}
-					post {
-						always {
-							archiveArtifacts artifacts: '*/target/trace/install*', fingerprint: true
-						}
-					}
+				}
+			}
+			post {
+				always {
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				}
 			}
 		}
@@ -142,7 +122,7 @@ pipeline {
 			post {
 				always {
 					junit '*/target/surefire-reports/*.xml'
-					archiveArtifacts artifacts: '*/target/trace/test-junit-jupiter*', fingerprint: true
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				}
 				failure {
 				    archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
@@ -164,13 +144,13 @@ pipeline {
 			    		}
 			    	}
 				}
-				archiveArtifacts artifacts: '*/target/trace/deploy*', fingerprint: true
+				archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.pom', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.jar', fingerprint: true
 				archiveArtifacts artifacts: '*/target/*.asc', fingerprint: true
 			}
 		}
-
+		
 		stage('Stage at Maven-Central') {
 			steps {
 				dir(path: '.maven-parent') {	
