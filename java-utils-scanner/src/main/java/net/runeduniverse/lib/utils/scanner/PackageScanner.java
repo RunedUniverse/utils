@@ -18,7 +18,7 @@ package net.runeduniverse.lib.utils.scanner;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -39,6 +39,7 @@ public class PackageScanner {
 	private final Set<ITypeScanner> scanner = new HashSet<>();
 	private final Set<Exception> errors = new HashSet<>();
 	private boolean includeSubPkgs = false;
+	private boolean useURLClassloaders = true;
 	private boolean debug = false;
 	private Validator validator = null;
 
@@ -100,6 +101,11 @@ public class PackageScanner {
 		return this;
 	}
 
+	public PackageScanner useURLClassloaders(boolean value) {
+		this.useURLClassloaders = value;
+		return this;
+	}
+
 	public PackageScanner enableDebugMode(boolean active) {
 		this.debug = active;
 		return this;
@@ -113,10 +119,11 @@ public class PackageScanner {
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
 		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
 		IIntercepter iClass = i.addSection("CLASS", "Classes");
+		IIntercepter iLoader = i.addSection("LOADER", "ClassLoader");
 		synchronized (this.loader) {
 			for (ClassLoader classLoader : loader)
 				for (String pkg : pkgs)
-					findClasses(classes, classLoader, pkg, iPkg, iClass);
+					findClasses(classes, classLoader, pkg, iPkg, iLoader, iClass);
 		}
 		i.print();
 
@@ -159,19 +166,26 @@ public class PackageScanner {
 	 * the given package and subpackages.
 	 */
 	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
-			IIntercepter iPkg, IIntercepter iClass) {
+			IIntercepter iPkg, IIntercepter iLoader, IIntercepter iClass) {
 		Enumeration<URL> resources;
 		try {
-			resources = classLoader.getResources(pkg.replace('.', '/'));
+			resources = classLoader.getResources(pkg.replace('.', '/') + '/');
 		} catch (IOException e) {
 			return;
 		}
-		List<File> dirs = new ArrayList<>();
+		Set<URL> urls = new HashSet<URL>();
 		while (resources.hasMoreElements())
-			dirs.add(new File(iPkg.intercept(resources.nextElement())
-					.getFile()));
-		for (File directory : dirs)
-			findClasses(classes, classLoader, directory, pkg, iClass);
+			urls.add(iPkg.intercept(resources.nextElement()));
+
+		String loaderSignature = classLoader == null ? "NULL" : classLoader.toString();
+		if (this.useURLClassloaders) {
+			classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), classLoader);
+			loaderSignature = classLoader.toString() + " parent=NOT->" + loaderSignature;
+		}
+		iLoader.intercept(loaderSignature);
+
+		for (URL url : urls)
+			findClasses(classes, classLoader, new File(url.getFile()), pkg, iClass);
 	}
 
 	/**
