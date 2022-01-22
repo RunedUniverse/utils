@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner;
+package net.runeduniverse.lib.utils.scanner.pattern;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

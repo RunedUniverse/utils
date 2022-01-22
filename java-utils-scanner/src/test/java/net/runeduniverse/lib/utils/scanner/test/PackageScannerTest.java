@@ -24,6 +24,11 @@ import org.junit.jupiter.api.Test;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 import net.runeduniverse.lib.utils.scanner.*;
+import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
+import net.runeduniverse.lib.utils.scanner.templates.TypeAnnotationScanner;
+import net.runeduniverse.lib.utils.scanner.templates.TypeScanner;
 import net.runeduniverse.lib.utils.scanner.test.annotations.LivingEntity;
 
 public class PackageScannerTest {
