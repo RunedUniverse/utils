@@ -1,10 +1,18 @@
 pipeline {
 	agent any
 	tools {
-		maven 'Maven 3.6.3'
-		jdk 'OpenJDK 8'
+		maven 'maven-latest'
+		jdk 'java-1.8.0'
 	}
 	stages {
+		stage('Initialize') {
+			steps {
+				sh '''
+					echo "PATH = ${PATH}"
+					echo "M2_HOME = ${M2_HOME}"
+				'''
+			}
+		}
 		stage('Update Maven Repo') {
 			steps {
 				dir(path: '.maven-parent') {
@@ -12,14 +20,6 @@ pipeline {
 					sh 'mvn -P install --non-recursive'
 					sh 'ls -l target'
 				}
-			}
-		}
-		stage('Initialize') {
-			steps {
-				sh '''
-					echo "PATH = ${PATH}"
-					echo "M2_HOME = ${M2_HOME}"
-				'''
 			}
 		}
 		
