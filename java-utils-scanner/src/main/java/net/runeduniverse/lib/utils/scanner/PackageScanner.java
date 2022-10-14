@@ -207,7 +207,7 @@ public class PackageScanner {
 						.getName();
 				if (!(entryName.endsWith(".class") && entryName.startsWith(zpkg)))
 					continue;
-				entryName = entryName.substring(zpkg.length() + 1, entryName.length() - 6);
+				entryName = entryName.substring(zpkg.length(), entryName.length() - 6);
 				if (entryName.indexOf('/') != -1) {
 					if (this.includeSubPkgs)
 						pkgEntries.put(entryName.replace('/', '.'), url);
