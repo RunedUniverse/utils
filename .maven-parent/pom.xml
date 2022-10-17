@@ -28,7 +28,7 @@
 	<artifactId>utils-parent</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
-	<name>Build Helper for Utils-Project</name>
+	<name>Utils-Project Maven Parent</name>
 
 	<modules>
 		<module>../java-utils-bom</module>
