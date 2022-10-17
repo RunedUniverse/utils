@@ -104,43 +104,6 @@ pipeline {
 		}
 		
 		stage ('Tracing-Data'){
-			steps {
-				script {
-					switch(GIT_BRANCH) {
-						case 'master':
-							dir(path: 'java-utils-bom') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-logging') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-error-handling') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-common') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-async') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-scanner') {
-								sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
-								sh 'mvn -P repo-releases,deploy-signed,gen-eff-pom'
-							}
-							dir(path: 'java-utils-chain') {
-							}
-							break
-					}
-				}
-			}
-			
-			
-			
 			parallel {
 				stage('Development') {
 					steps {
