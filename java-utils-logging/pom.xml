@@ -79,6 +79,8 @@
 		<license-apache2-approve>true</license-apache2-approve>
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
+		<!-- ARTIFACT VERSIONS -->
+		<runeduniverse-utils-bom-version>1.0.0</runeduniverse-utils-bom-version>
 	</properties>
 
 	<repositories>
@@ -108,7 +110,7 @@
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-bom</artifactId>
-				<version>1</version>
+				<version>${runeduniverse-utils-bom-version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
