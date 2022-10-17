@@ -77,17 +77,6 @@
 		<url>https://github.com/RunedUniverse/utils/issues</url>
 	</issueManagement>
 
-	<repositories>
-		<repository>
-			<id>runeduniverse-releases</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
-		</repository>
-		<repository>
-			<id>runeduniverse-development</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
-		</repository>
-	</repositories>
-
 	<properties>
 		<!-- TRACING -->
 		<tracing-log-path>../maven-build-trace/</tracing-log-path>
