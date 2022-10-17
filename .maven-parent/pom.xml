@@ -15,9 +15,7 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -26,8 +24,9 @@
 		<version>2022.08.13</version>
 	</parent>
 
-	<artifactId>build-helper-java-utils</artifactId>
-	<version>v1</version>
+	<groupId>net.runeduniverse.lib.utils</groupId>
+	<artifactId>utils-parent</artifactId>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>Build Helper for Utils-Project</name>
 
@@ -88,7 +87,7 @@
 			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
 		</repository>
 	</repositories>
-	
+
 	<properties>
 		<!-- TRACING -->
 		<tracing-log-path>../maven-build-trace/</tracing-log-path>
