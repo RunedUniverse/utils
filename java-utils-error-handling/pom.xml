@@ -80,17 +80,6 @@
 		<runeduniverse-utils-bom-version>1.0.0</runeduniverse-utils-bom-version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>runeduniverse-releases</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
-		</repository>
-		<repository>
-			<id>runeduniverse-development</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

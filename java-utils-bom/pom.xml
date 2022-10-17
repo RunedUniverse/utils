@@ -79,17 +79,6 @@
 		<min-utils-scanner-version>1.0.5</min-utils-scanner-version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>runeduniverse-releases</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
-		</repository>
-		<repository>
-			<id>runeduniverse-development</id>
-			<url>https://nexus.runeduniverse.net/repository/maven-development/</url>
-		</repository>
-	</repositories>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
