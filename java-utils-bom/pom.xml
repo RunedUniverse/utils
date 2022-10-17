@@ -120,8 +120,8 @@
 			<id>install</id>
 			<build>
 				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
 					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
+					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
 					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
 					org.apache.maven.plugins:maven-install-plugin:install@jenkins
 				</defaultGoal>
