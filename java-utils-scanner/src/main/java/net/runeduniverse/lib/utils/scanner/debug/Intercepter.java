@@ -66,4 +66,9 @@ public class Intercepter implements IIntercepter {
 	public String intercept(String s) {
 		return this.baseSection.intercept(s);
 	}
+
+	@Override
+	public ClassLoader intercept(ClassLoader loader) {
+		return this.baseSection.intercept(loader);
+	}
 }

@@ -22,4 +22,6 @@ public interface IIntercepter {
 	public URL intercept(URL url);
 
 	public String intercept(String s);
+	
+	public ClassLoader intercept(ClassLoader loader);
 }

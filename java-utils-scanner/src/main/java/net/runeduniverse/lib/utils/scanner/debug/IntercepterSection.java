@@ -40,4 +40,11 @@ public class IntercepterSection implements IIntercepter {
 		this.tree.append(s);
 		return s;
 	}
+
+	@Override
+	public ClassLoader intercept(ClassLoader loader) {
+		this.tree.append(loader.toString());
+		return loader;
+	}
+
 }

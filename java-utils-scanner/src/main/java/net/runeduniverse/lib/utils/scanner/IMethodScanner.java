@@ -17,6 +17,9 @@ package net.runeduniverse.lib.utils.scanner;
 
 import java.lang.reflect.Method;
 
+import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
+
 public interface IMethodScanner<M extends MethodPattern> {
 	void scan(Method method, Class<?> type, TypePattern<?, M> pattern) throws Exception;
 

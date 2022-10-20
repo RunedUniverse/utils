@@ -17,14 +17,20 @@ package net.runeduniverse.lib.utils.scanner;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarEntry;
+
 import lombok.NoArgsConstructor;
 import net.runeduniverse.lib.utils.common.DataHashMap;
 import net.runeduniverse.lib.utils.common.DataMap;
@@ -113,10 +119,13 @@ public class PackageScanner {
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
 		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
 		IIntercepter iClass = i.addSection("CLASS", "Classes");
+		IIntercepter iLoader = i.addSection("LOADER", "ClassLoader");
 		synchronized (this.loader) {
-			for (ClassLoader classLoader : loader)
-				for (String pkg : pkgs)
-					findClasses(classes, classLoader, pkg, iPkg, iClass);
+			for (ClassLoader classLoader : this.loader) {
+				iLoader.intercept(classLoader);
+				for (String pkg : this.pkgs)
+					loadResources(classes, classLoader, pkg, iPkg, iClass);
+			}
 		}
 		i.print();
 
@@ -158,20 +167,64 @@ public class PackageScanner {
 	 * Scans all classes accessible from the context class loader which belong to
 	 * the given package and subpackages.
 	 */
-	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
+	private void loadResources(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
 			IIntercepter iPkg, IIntercepter iClass) {
 		Enumeration<URL> resources;
+		String zpkg = pkg.replace('.', '/') + '/';
 		try {
-			resources = classLoader.getResources(pkg.replace('.', '/'));
+			resources = classLoader.getResources(zpkg);
 		} catch (IOException e) {
 			return;
 		}
-		List<File> dirs = new ArrayList<>();
-		while (resources.hasMoreElements())
-			dirs.add(new File(iPkg.intercept(resources.nextElement())
-					.getFile()));
-		for (File directory : dirs)
-			findClasses(classes, classLoader, directory, pkg, iClass);
+
+		Map<String, URL> pkgEntries = new HashMap<>();
+		URL url = null;
+		URLConnection c = null;
+		Enumeration<JarEntry> entries = null;
+		while (resources.hasMoreElements()) {
+			url = iPkg.intercept(resources.nextElement());
+			try {
+				c = url.openConnection();
+			} catch (IOException e) {
+				c = null;
+				continue;
+			}
+			if (!(c instanceof JarURLConnection)) {
+				// local path detected:
+				findClasses(classes, classLoader, new File(url.getFile()), pkg, iClass);
+				continue;
+			}
+			try {
+				entries = ((JarURLConnection) c).getJarFile()
+						.entries();
+			} catch (IOException e) {
+				entries = null;
+				continue;
+			}
+
+			while (entries.hasMoreElements()) {
+				String entryName = entries.nextElement()
+						.getName();
+				if (!(entryName.endsWith(".class") && entryName.startsWith(zpkg)))
+					continue;
+				entryName = entryName.substring(zpkg.length(), entryName.length() - 6);
+				if (entryName.indexOf('/') != -1) {
+					if (this.includeSubPkgs)
+						pkgEntries.put(entryName.replace('/', '.'), url);
+				} else
+					pkgEntries.put(entryName, url);
+			}
+		}
+
+		URLClassLoader urlLoader = classLoader instanceof URLClassLoader ? (URLClassLoader) classLoader
+				: new URLClassLoader((URL[]) new HashSet<>(pkgEntries.values()).toArray(), classLoader);
+
+		for (String clazzName : pkgEntries.keySet()) {
+			try {
+				classes.put(Class.forName(iClass.intercept(pkg + '.' + clazzName), true, urlLoader), classLoader, pkg);
+			} catch (ClassNotFoundException e) {
+			}
+		}
 	}
 
 	/**
@@ -181,9 +234,10 @@ public class PackageScanner {
 			String pkg, IIntercepter i) {
 		if (!directory.exists())
 			return;
-		for (File file : directory.listFiles())
+		for (File file : directory.listFiles()) {
 			if (file.isDirectory() && !file.getName()
 					.contains(".")) {
+
 				if (this.includeSubPkgs)
 					findClasses(classes, classLoader, file, pkg + "." + file.getName(), i);
 			} else if (file.getName()
@@ -195,6 +249,7 @@ public class PackageScanner {
 							true, classLoader), classLoader, pkg);
 				} catch (ClassNotFoundException e) {
 				}
+		}
 	}
 
 	public static interface Validator {
