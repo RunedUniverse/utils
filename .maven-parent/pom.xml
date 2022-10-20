@@ -241,6 +241,20 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<inherited>false</inherited>
+						<configuration>
+							<artifacts>
+								<!-- gpg signature -->
+								<artifact>
+									<file>${project.build.directory}/${project.build.finalName}.pom.asc</file>
+									<type>pom.asc</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
