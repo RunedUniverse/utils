@@ -241,6 +241,17 @@
 							</execution>
 						</executions>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>deploy-pom-signed</id>
+			<build>
+				<defaultGoal>
+					org.codehaus.mojo:build-helper-maven-plugin:attach-artifact@jenkins
+					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
+				</defaultGoal>
+				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>

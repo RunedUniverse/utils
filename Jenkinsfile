@@ -240,10 +240,10 @@ pipeline {
 					}
 					steps {
 						dir(path: '.maven-parent') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
 						}
 						dir(path: 'java-utils-bom') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
 						}
 						dir(path: 'java-utils-logging') {
 							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
@@ -282,10 +282,10 @@ pipeline {
 			steps {
 				// never add : -P ${REPOS} => this is ment to fail here
 				dir(path: '.maven-parent') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+					sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
 				}
 				dir(path: 'java-utils-bom') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+					sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
 				}
 				dir(path: 'java-utils-logging') {
 					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
