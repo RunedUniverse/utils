@@ -290,14 +290,6 @@
 						</licenseSets>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<configuration>
-						<keyname>9CB231CE2918B342</keyname>
-						<passphraseServerId>gpg-signature-software</passphraseServerId>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
