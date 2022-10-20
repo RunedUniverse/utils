@@ -241,19 +241,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>jenkins</id>
-								<inherited>false</inherited>
-								<configuration>
-									<skip>true</skip>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>
