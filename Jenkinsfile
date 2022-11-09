@@ -48,7 +48,6 @@ pipeline {
 			steps {
 				sh 'echo "PATH = ${PATH}"'
 				sh 'echo "M2_HOME = ${M2_HOME}"'
-				sh './.build/scan-changes.sh'
 				sh 'printenv | sort'
 			}
 		}
