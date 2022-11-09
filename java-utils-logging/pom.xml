@@ -77,7 +77,7 @@
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>1.0.0</runeduniverse-utils-bom-version>
+		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
 	</properties>
 
 	<dependencies>
