@@ -12,35 +12,35 @@ pipeline {
 
 		CHANGES_MVN_PARENT = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'mvn-parent/*') -- .maven-parent/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh .maven-parent/ mvn-parent'
 			)}"""
 		CHANGES_JAVA_UTILS_ASYNC = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-async/*') -- java-utils-async/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-async/ java-utils-async'
 			)}"""
 		CHANGES_JAVA_UTILS_BOM = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-bom/*') -- java-utils-bom/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-bom/ java-utils-bom'
 			)}"""
 		CHANGES_JAVA_UTILS_CHAIN = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-chain/*') -- java-utils-chain/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-chain/ java-utils-chain'
 			)}"""
 		CHANGES_JAVA_UTILS_COMMON = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-common/*') -- java-utils-common/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-common/ java-utils-common'
 			)}"""
 		CHANGES_JAVA_UTILS_ERRORS = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-errors/*') -- java-utils-errors/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-errors/ java-utils-errors'
 			)}"""
 		CHANGES_JAVA_UTILS_LOGGING = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-logging/*') -- java-utils-logging/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-logging/ java-utils-logging'
 			)}"""
 		CHANGES_JAVA_UTILS_SCANNER = """${sh(
 				returnStdout: true,
-				script: "if git diff --quiet HEAD \$(git describe --tags --abbrev=0 origin/master --match 'java-utils-scanner/*') -- java-utils-scanner/; then printf 0; else printf 1; fi;"
+				script: '.build/check-for-change.sh java-utils-scanner/ java-utils-scanner'
 			)}"""
 	}
 	stages {
