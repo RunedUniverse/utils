@@ -139,7 +139,7 @@ pipeline {
 				}
 				stage('Java Error Handling Library') {
 					steps {
-						dir(path: 'java-utils-error-handling') {
+						dir(path: 'java-utils-errors') {
 							sh 'mvn -P ${REPOS},install --non-recursive'
 							sh 'ls -l target'
 						}
@@ -225,7 +225,7 @@ pipeline {
 							sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn -P dist-repo-development,deploy,gen-eff-pom'
 						}
-						dir(path: 'java-utils-error-handling') {
+						dir(path: 'java-utils-errors') {
 							sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn -P dist-repo-development,deploy,gen-eff-pom'
 						}
@@ -264,7 +264,7 @@ pipeline {
 							sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
 						}
-						dir(path: 'java-utils-error-handling') {
+						dir(path: 'java-utils-errors') {
 							sh 'mvn -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
 						}
@@ -326,7 +326,7 @@ pipeline {
 			parallel {
 				stage('Development') {
 					stages {
-						stage('') {
+						stage('mvn-parent') {
 							when {
 								environment name: 'CHANGES_MVN_PARENT', value: '1'
 							}
@@ -336,7 +336,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-bom') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 							}
@@ -346,7 +346,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-logging') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
 							}
@@ -356,7 +356,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-errors') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 							}
@@ -366,7 +366,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-common') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 							}
@@ -376,7 +376,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-async') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 							}
@@ -386,7 +386,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-scanner') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 							}
@@ -396,7 +396,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-chain') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
 							}
@@ -413,7 +413,7 @@ pipeline {
 						branch 'master'
 					}
 					stages {
-						stage('') {
+						stage('mvn-parent') {
 							when {
 								environment name: 'CHANGES_MVN_PARENT', value: '1'
 							}
@@ -423,7 +423,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-bom') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 							}
@@ -433,7 +433,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-logging') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
 							}
@@ -443,7 +443,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-errors') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 							}
@@ -453,7 +453,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-common') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 							}
@@ -463,7 +463,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-async') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 							}
@@ -473,7 +473,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-scanner') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 							}
@@ -483,7 +483,7 @@ pipeline {
 								}
 							}
 						}
-						stage('') {
+						stage('java-utils-chain') {
 							when {
 								environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
 							}
@@ -511,7 +511,7 @@ pipeline {
 			}
 			stages {
 				// never add : -P ${REPOS} => this is ment to fail here
-				stage('') {
+				stage('mvn-parent') {
 					when {
 						environment name: 'CHANGES_MVN_PARENT', value: '1'
 					}
@@ -521,7 +521,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-bom') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 					}
@@ -531,7 +531,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-logging') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
 					}
@@ -541,7 +541,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-errors') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 					}
@@ -551,7 +551,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-common') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 					}
@@ -561,7 +561,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-async') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 					}
@@ -571,7 +571,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-scanner') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					}
@@ -581,7 +581,7 @@ pipeline {
 						}
 					}
 				}
-				stage('') {
+				stage('java-utils-chain') {
 					when {
 						environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
 					}
