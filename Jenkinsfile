@@ -9,16 +9,62 @@ pipeline {
 				returnStdout: true,
 				script: 'REPOS=repo-releases; if [ $GIT_BRANCH != master ]; then REPOS=$REPOS,repo-development; fi; printf $REPOS'
 			)}"""
+
+		CHANGES_MVN_PARENT = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'mvn-parent/*') -- .maven-parent/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_ASYNC = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-async/*') -- java-utils-async/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_BOM = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-bom/*') -- java-utils-bom/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_CHAIN = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-chain/*') -- java-utils-chain/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_COMMON = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-common/*') -- java-utils-common/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_ERRORS = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-errors/*') -- java-utils-errors/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_LOGGING = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-logging/*') -- java-utils-logging/; then printf 0; else printf 1; fi;'
+			)}"""
+		CHANGES_JAVA_UTILS_SCANNER = """${sh(
+				returnStdout: true,
+				script: 'if git diff --quiet HEAD $(git describe --tags --abbrev=0 origin/master --match 'java-utils-scanner/*') -- java-utils-scanner/; then printf 0; else printf 1; fi;'
+			)}"""
 	}
 	stages {
 		stage('Initialize') {
 			steps {
 				sh 'echo "PATH = ${PATH}"'
 				sh 'echo "M2_HOME = ${M2_HOME}"'
+				sh './.build/scan-changes.sh'
 				sh 'printenv | sort'
 			}
 		}
 		stage('Update Maven Repo') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			steps {
 				dir(path: '.maven-parent') {
 					sh 'mvn -P ${REPOS} dependency:resolve --non-recursive'
@@ -29,6 +75,18 @@ pipeline {
 		}
 		
 		stage('License Check') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			steps {
 				dir(path: '.maven-parent') {
 					sh 'mvn -P ${REPOS},license-check,license-prj-utils-approve,license-apache2-approve'
@@ -37,6 +95,18 @@ pipeline {
 		}
 		
 		stage('Install - Bill of Materials') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			steps {
 				dir(path: 'java-utils-bom') {
 					sh 'mvn -P ${REPOS},install --non-recursive'
@@ -46,6 +116,18 @@ pipeline {
 		}
 
 		stage('Build [1st Level]') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			parallel {
 				stage('Java Logging Tools') {
 					steps {
@@ -83,6 +165,18 @@ pipeline {
 		}
 		
 		stage('Build [2nd Level]') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			parallel {
 				stage('Java Scanner') {
 					steps {
@@ -104,6 +198,18 @@ pipeline {
 		}
 		
 		stage ('Tracing-Data'){
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			parallel {
 				stage('Development') {
 					steps {
@@ -189,6 +295,18 @@ pipeline {
 		}
 
 		stage('Test') {
+			when {
+				anyOf {
+					environment name: 'CHANGES_MVN_PARENT', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+				}
+			}
 			steps {
 				dir(path: '.maven-parent') {
 					sh 'mvn -P ${REPOS},test-junit-jupiter'
@@ -199,7 +317,7 @@ pipeline {
 					junit '*/target/surefire-reports/*.xml'
 				}
 				failure {
-				    archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
+					archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
 				}
 			}
 		}
@@ -207,30 +325,86 @@ pipeline {
 		stage('Deploy') {
 			parallel {
 				stage('Development') {
-					steps {
-						dir(path: '.maven-parent') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+					stages {
+						stage() {
+							when {
+								environment name: 'CHANGES_MVN_PARENT', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy-pom --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-bom') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-bom') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy-pom --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-logging') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-logging') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-error-handling') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-errors') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-common') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-common') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-async') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-async') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-scanner') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-scanner') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-chain') {
-							sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-chain') {
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
+								}
+							}
 						}
 					}
 				}
@@ -238,30 +412,86 @@ pipeline {
 					when {
 						branch 'master'
 					}
-					steps {
-						dir(path: '.maven-parent') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
+					stages {
+						stage() {
+							when {
+								environment name: 'CHANGES_MVN_PARENT', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-bom') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-bom') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-pom-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-logging') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-logging') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-error-handling') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-errors') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-common') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-common') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-async') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-async') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-scanner') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-scanner') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
-						dir(path: 'java-utils-chain') {
-							sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+						stage() {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+							}
+							steps {
+								dir(path: 'java-utils-chain') {
+									sh 'mvn -P ${REPOS},dist-repo-releases,deploy-signed --non-recursive'
+								}
+							}
 						}
 					}
 				}
@@ -279,31 +509,87 @@ pipeline {
 			when {
 				branch 'master'
 			}
-			steps {
+			stages {
 				// never add : -P ${REPOS} => this is ment to fail here
-				dir(path: '.maven-parent') {
-					sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_MVN_PARENT', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-bom') {
-					sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-bom') {
+							sh 'mvn -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-logging') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-logging') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-error-handling') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-errors') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-common') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-common') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-async') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-async') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-scanner') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-scanner') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
-				dir(path: 'java-utils-chain') {
-					sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+				stage() {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					}
+					steps {
+						dir(path: 'java-utils-chain') {
+							sh 'mvn -P dist-repo-maven-central,deploy-signed --non-recursive'
+						}
+					}
 				}
 			}
 		}
