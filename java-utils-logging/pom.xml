@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>utils-logging</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 
 	<name>Java Logging Tools</name>
 
@@ -84,10 +84,12 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

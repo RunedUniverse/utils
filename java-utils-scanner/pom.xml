@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>utils-scanner</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 
 	<name>Java Scanner</name>
 
@@ -92,10 +92,12 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
