@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
