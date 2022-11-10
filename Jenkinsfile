@@ -49,6 +49,16 @@ pipeline {
 				sh 'echo "PATH = ${PATH}"'
 				sh 'echo "M2_HOME = ${M2_HOME}"'
 				sh 'printenv | sort'
+				sh '''
+					echo CHANGES_MVN_PARENT=$(.build/check-for-change.sh .maven-parent/ mvn-parent)
+					echo CHANGES_JAVA_UTILS_ASYNC=$(.build/check-for-change.sh java-utils-async/ java-utils-async)
+					echo CHANGES_JAVA_UTILS_BOM=$(.build/check-for-change.sh java-utils-bom/ java-utils-bom)
+					echo CHANGES_JAVA_UTILS_CHAIN=$(.build/check-for-change.sh java-utils-chain/ java-utils-chain)
+					echo CHANGES_JAVA_UTILS_COMMON=$(.build/check-for-change.sh java-utils-common/ java-utils-common)
+					echo CHANGES_JAVA_UTILS_ERRORS=$(.build/check-for-change.sh java-utils-errors/ java-utils-errors)
+					echo CHANGES_JAVA_UTILS_LOGGING=$(.build/check-for-change.sh java-utils-logging/ java-utils-logging)
+					echo CHANGES_JAVA_UTILS_SCANNER=$(.build/check-for-change.sh java-utils-scanner/ java-utils-scanner)
+				'''
 			}
 		}
 		stage('Update Maven Repo') {
