@@ -21,12 +21,12 @@
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>UTILS - Bill of Materials</name>
@@ -71,12 +71,12 @@
 	<properties>
 		<project-packaging>${project.packaging}</project-packaging>
 		<!-- ARTIFACT VERSIONS -->
-		<min-utils-async-version>2.1.0</min-utils-async-version>
-		<min-utils-chain-version>1.0.0</min-utils-chain-version>
-		<min-utils-common-version>1.0.0</min-utils-common-version>
-		<min-utils-errors-version>1.0.0</min-utils-errors-version>
-		<min-utils-logging-version>1.0.0</min-utils-logging-version>
-		<min-utils-scanner-version>1.0.5</min-utils-scanner-version>
+		<min-utils-async-version>2.1.1</min-utils-async-version>
+		<min-utils-chain-version>1.0.1</min-utils-chain-version>
+		<min-utils-common-version>1.0.1</min-utils-common-version>
+		<min-utils-errors-version>1.0.1</min-utils-errors-version>
+		<min-utils-logging-version>1.0.1</min-utils-logging-version>
+		<min-utils-scanner-version>1.0.6</min-utils-scanner-version>
 	</properties>
 
 	<dependencyManagement>

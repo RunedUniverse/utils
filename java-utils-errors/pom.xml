@@ -21,12 +21,12 @@
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-errors</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 
 	<name>Error Handling Library</name>
 
@@ -77,17 +77,19 @@
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>1.0.0</runeduniverse-utils-bom-version>
+		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
