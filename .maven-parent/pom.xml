@@ -33,7 +33,7 @@
 	<modules>
 		<module>../java-utils-bom</module>
 		<module>../java-utils-logging</module>
-		<module>../java-utils-error-handling</module>
+		<module>../java-utils-errors</module>
 		<module>../java-utils-common</module>
 		<module>../java-utils-async</module>
 		<module>../java-utils-scanner</module>
