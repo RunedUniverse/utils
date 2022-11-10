@@ -341,7 +341,7 @@ pipeline {
 							}
 							steps {
 								dir(path: '.maven-parent') {
-									sh 'mvn -P ${REPOS},dist-repo-development,deploy-pom --non-recursive'
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
 								}
 							}
 						}
@@ -351,7 +351,7 @@ pipeline {
 							}
 							steps {
 								dir(path: 'java-utils-bom') {
-									sh 'mvn -P ${REPOS},dist-repo-development,deploy-pom --non-recursive'
+									sh 'mvn -P ${REPOS},dist-repo-development,deploy --non-recursive'
 								}
 							}
 						}
