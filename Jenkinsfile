@@ -539,7 +539,7 @@ pipeline {
 					}
 					steps {
 						dir(path: '.maven-parent') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed --non-recursive'
 						}
 					}
 				}
@@ -549,7 +549,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-bom') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-pom-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed --non-recursive'
 						}
 					}
 				}
@@ -559,7 +559,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-logging') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
@@ -569,7 +569,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-errors') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
@@ -579,7 +579,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-common') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
@@ -589,7 +589,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-async') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
@@ -599,7 +599,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-scanner') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
@@ -609,7 +609,7 @@ pipeline {
 					}
 					steps {
 						dir(path: 'java-utils-chain') {
-							sh 'mvn-dev -P dist-repo-maven-central,deploy-signed --non-recursive'
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed --non-recursive'
 						}
 					}
 				}
