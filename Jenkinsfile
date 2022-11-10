@@ -25,35 +25,35 @@ pipeline {
 
 		CHANGES_MVN_PARENT = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change .maven-parent/ mvn-parent'
+				script: '.build/git-check-for-change .maven-parent/ mvn-parent'
 			)}"""
 		CHANGES_JAVA_UTILS_ASYNC = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change java-utils-async/ java-utils-async'
+				script: '.build/git-check-for-change java-utils-async/ java-utils-async'
 			)}"""
 		CHANGES_JAVA_UTILS_BOM = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change java-utils-bom/ java-utils-bom'
+				script: '.build/git-check-for-change java-utils-bom/ java-utils-bom'
 			)}"""
 		CHANGES_JAVA_UTILS_CHAIN = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change java-utils-chain/ java-utils-chain'
+				script: '.build/git-check-for-change java-utils-chain/ java-utils-chain'
 			)}"""
 		CHANGES_JAVA_UTILS_COMMON = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change java-utils-common/ java-utils-common'
+				script: '.build/git-check-for-change java-utils-common/ java-utils-common'
 			)}"""
 		CHANGES_JAVA_UTILS_ERRORS = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change java-utils-errors/ java-utils-errors'
+				script: '.build/git-check-for-change java-utils-errors/ java-utils-errors'
 			)}"""
 		CHANGES_JAVA_UTILS_LOGGING = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change.sh java-utils-logging/ java-utils-logging'
+				script: '.build/git-check-for-change.sh java-utils-logging/ java-utils-logging'
 			)}"""
 		CHANGES_JAVA_UTILS_SCANNER = """${sh(
 				returnStdout: true,
-				script: 'git-check-for-change.sh java-utils-scanner/ java-utils-scanner'
+				script: '.build/git-check-for-change.sh java-utils-scanner/ java-utils-scanner'
 			)}"""
 	}
 	stages {
