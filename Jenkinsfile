@@ -333,7 +333,7 @@ pipeline {
 
 		stage('Deploy') {
 			parallel {
-				stage('Development') {
+				stage('Develop') {
 					stages {
 						stage('mvn-parent') {
 							when {
