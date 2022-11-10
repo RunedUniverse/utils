@@ -49,11 +49,11 @@ pipeline {
 			)}"""
 		CHANGES_JAVA_UTILS_LOGGING = """${sh(
 				returnStdout: true,
-				script: '.build/git-check-for-change.sh java-utils-logging/ java-utils-logging'
+				script: '.build/git-check-for-change java-utils-logging/ java-utils-logging'
 			)}"""
 		CHANGES_JAVA_UTILS_SCANNER = """${sh(
 				returnStdout: true,
-				script: '.build/git-check-for-change.sh java-utils-scanner/ java-utils-scanner'
+				script: '.build/git-check-for-change java-utils-scanner/ java-utils-scanner'
 			)}"""
 	}
 	stages {
