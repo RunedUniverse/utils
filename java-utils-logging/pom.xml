@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+    Copyright © 2023 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -111,5 +111,29 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.mycila</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<configuration>
+						<properties>
+							<year>2023</year>
+							<owner>VenaNocta</owner>
+							<email>venanocta@gmail.com</email>
+						</properties>
+						<licenseSets>
+							<licenseSet>
+								<header>${project.basedir}/../.licenses/apache2-header.txt</header>
+								<excludes>
+									<exclude>**/resources/**</exclude>
+									<exclude>**/.licenses/**</exclude>
+								</excludes>
+							</licenseSet>
+						</licenseSets>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
