@@ -26,9 +26,25 @@
 	</parent>
 
 	<artifactId>utils-logging</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
+	<packaging>jar</packaging>
 
 	<name>Java Logging Tools</name>
+	<url>https://github.com/RunedUniverse/utils</url>
+	<inceptionYear>2021</inceptionYear>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- ACTIVITIONS -->
+		<license-enforce>true</license-enforce>
+		<!-- ACTIVITIONS - LICENSES -->
+		<license-prj-utils-approve>true</license-prj-utils-approve>
+		<license-apache2-approve>true</license-apache2-approve>
+		<!-- VERSIONS -->
+		<java-source-version>1.8</java-source-version>
+		<!-- ARTIFACT VERSIONS -->
+		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
+	</properties>
 
 	<licenses>
 		<license>
@@ -44,9 +60,9 @@
 
 	<developers>
 		<developer>
-			<id>pl4yingnight</id>
-			<name>Pl4yingNight</name>
-			<email>pl4yingnight@gmail.com</email>
+			<id>venanocta</id>
+			<name>VenaNocta</name>
+			<email>venanocta@gmail.com</email>
 			<organization>RunedUniverse</organization>
 			<organizationUrl>https://www.runeduniverse.net</organizationUrl>
 			<timezone>Europe/Vienna</timezone>
@@ -66,19 +82,6 @@
 		<system>GitHub Issues</system>
 		<url>https://github.com/RunedUniverse/utils/issues</url>
 	</issueManagement>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- ACTIVITIONS -->
-		<license-enforce>true</license-enforce>
-		<!-- ACTIVITIONS - LICENSES -->
-		<license-prj-utils-approve>true</license-prj-utils-approve>
-		<license-apache2-approve>true</license-apache2-approve>
-		<!-- VERSIONS -->
-		<java-source-version>1.8</java-source-version>
-		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
-	</properties>
 
 	<dependencies>
 		<dependency>
