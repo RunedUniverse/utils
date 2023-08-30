@@ -22,11 +22,17 @@ Each artifact starts with the name of the programming language followed by its r
 [![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-bom.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-bom%22)
 
 ```xml
-<dependency>
-  <groupId>net.runeduniverse.lib.utils</groupId>
-  <artifactId>utils-bom</artifactId>
-  <version>1.0.1</version>
-</dependency>
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>net.runeduniverse.lib.utils</groupId>
+      <artifactId>utils-bom</artifactId>
+      <version>2.0.0</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
 ```
 
 #### [Maven] Java Utils Async
