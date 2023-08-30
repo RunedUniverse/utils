@@ -164,7 +164,7 @@
 			<id>test-junit-jupiter</id>
 			<build>
 				<defaultGoal>
-					junit-jupiter/[initialize],[test]
+					junit-jupiter/[initialize] junit-jupiter/[test]
 				</defaultGoal>
 			</build>
 		</profile>
