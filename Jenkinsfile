@@ -2,7 +2,6 @@ pipeline {
 	agent any
 	tools {
 		maven 'maven-latest'
-		jdk 'java-1.8.0'
 	}
 	environment {
 		PATH = """${sh(
@@ -711,6 +710,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed -pl=.'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag maven-parent .)'
+							}
 						}
 					}
 				}
@@ -721,6 +723,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed -pl=../java-utils-bom'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-bom ../java-utils-bom)'
+							}
 						}
 					}
 				}
@@ -731,6 +736,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-logging'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-logging ../java-utils-logging)'
+							}
 						}
 					}
 				}
@@ -741,6 +749,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-errors'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-errors ../java-utils-errors)'
+							}
 						}
 					}
 				}
@@ -751,6 +762,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-common'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-common ../java-utils-common)'
+							}
 						}
 					}
 				}
@@ -761,6 +775,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-async'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-async ../java-utils-async)'
+							}
 						}
 					}
 				}
@@ -771,6 +788,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-scanner'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-scanner ../java-utils-scanner)'
+							}
 						}
 					}
 				}
@@ -781,6 +801,9 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-chain'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-chain ../java-utils-chain)'
+							}
 						}
 					}
 				}
