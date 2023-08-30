@@ -89,6 +89,91 @@ pipeline {
 				}
 			}
 		}
+
+		stage('License Check') {
+			parallel {
+			    stage('Maven Parent'){
+					when {
+						environment name: 'CHANGES_MVN_PARENT', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=.'
+						}
+					}
+			    }
+			    stage('Bill of Materials'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-bom'
+						}
+					}
+			    }
+			    stage('Java Utils Async'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-async'
+						}
+					}
+			    }
+			    stage('Java Chain Library'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-chain'
+						}
+					}
+			    }
+			    stage('Java Utils Common'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-common'
+						}
+					}
+			    }
+			    stage('Java Error Handling Library'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-errors'
+						}
+					}
+			    }
+			    stage('Java Logging Tools'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-logging'
+						}
+					}
+			    }
+			    stage('Java Scanner'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-scanner'
+						}
+					}
+			    }
+			}
+		}
 		stage('Install Maven Parent') {
 			when {
 				environment name: 'CHANGES_MVN_PARENT', value: '1'
@@ -106,26 +191,6 @@ pipeline {
 						archiveArtifacts artifacts: '*.asc', fingerprint: true
 						sh 'cp *.pom *.asc ../../target/result/'
 					}
-				}
-			}
-		}
-
-		stage('License Check') {
-			when {
-				anyOf {
-					environment name: 'CHANGES_MVN_PARENT', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
-				}
-			}
-			steps {
-				dir(path: '.maven-parent') {
-					sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve'
 				}
 			}
 		}

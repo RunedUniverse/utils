@@ -30,8 +30,8 @@
 	<inceptionYear>2021</inceptionYear>
 
 	<modules>
-		<module>../java-utils-async</module>
 		<module>../java-utils-bom</module>
+		<module>../java-utils-async</module>
 		<module>../java-utils-chain</module>
 		<module>../java-utils-common</module>
 		<module>../java-utils-errors</module>
