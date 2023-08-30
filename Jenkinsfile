@@ -203,7 +203,7 @@ pipeline {
 			}
 			steps {
 				dir(path: '.maven-parent') {
-					sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install --non-recursive -pl=../java-utils-bom'
+					sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install -pl=../java-utils-bom'
 				}
 			}
 			post {
@@ -250,7 +250,7 @@ pipeline {
 					}
 					steps {
 						dir(path: '.maven-parent') {
-							sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install --non-recursive -pl=../java-utils-errors'
+							sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install -pl=../java-utils-errors'
 						}
 					}
 					post {
