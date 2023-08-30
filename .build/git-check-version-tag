@@ -3,8 +3,8 @@
 #git-check-version-tag <tag-name> <maven-module>
 #git-check-version-tag java-utils-bom ../java-utils-bom
 
-TAG=$1/v$(mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl $2)
 pushd .maven-parent > /dev/null
+TAG=$1/v$(mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=$2)
 if git describe --tags --abbrev=0 remotes/origin/master --match $TAG &>/dev/null
 then
   printf 0;
