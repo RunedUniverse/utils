@@ -15,18 +15,20 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.1</version>
+		<version>2.0.0</version>
 		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
-	<version>1.0.1</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>UTILS - Bill of Materials</name>
@@ -45,9 +47,9 @@
 
 	<developers>
 		<developer>
-			<id>pl4yingnight</id>
-			<name>Pl4yingNight</name>
-			<email>pl4yingnight@gmail.com</email>
+			<id>venanocta</id>
+			<name>VenaNocta</name>
+			<email>venanocta@gmail.com</email>
 			<organization>RunedUniverse</organization>
 			<organizationUrl>https://www.runeduniverse.net</organizationUrl>
 			<timezone>Europe/Vienna</timezone>
@@ -71,12 +73,12 @@
 	<properties>
 		<project-packaging>${project.packaging}</project-packaging>
 		<!-- ARTIFACT VERSIONS -->
-		<min-utils-async-version>2.1.1</min-utils-async-version>
-		<min-utils-chain-version>1.0.1</min-utils-chain-version>
-		<min-utils-common-version>1.0.1</min-utils-common-version>
-		<min-utils-errors-version>1.0.1</min-utils-errors-version>
-		<min-utils-logging-version>1.0.1</min-utils-logging-version>
-		<min-utils-scanner-version>1.0.6</min-utils-scanner-version>
+		<min-utils-async-version>[2.1.1,)</min-utils-async-version>
+		<min-utils-chain-version>[1.0.1,)</min-utils-chain-version>
+		<min-utils-common-version>[1.0.1,)</min-utils-common-version>
+		<min-utils-errors-version>[1.0.1,)</min-utils-errors-version>
+		<min-utils-logging-version>[1.0.1,)</min-utils-logging-version>
+		<min-utils-scanner-version>[1.0.6,)</min-utils-scanner-version>
 	</properties>
 
 	<dependencyManagement>
@@ -84,32 +86,32 @@
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-async</artifactId>
-				<version>[${min-utils-async-version},)</version>
+				<version>${min-utils-async-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-chain</artifactId>
-				<version>[${min-utils-chain-version},)</version>
+				<version>${min-utils-chain-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-common</artifactId>
-				<version>[${min-utils-common-version},)</version>
+				<version>${min-utils-common-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-errors</artifactId>
-				<version>[${min-utils-errors-version},)</version>
+				<version>${min-utils-errors-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-logging</artifactId>
-				<version>[${min-utils-logging-version},)</version>
+				<version>${min-utils-logging-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-scanner</artifactId>
-				<version>[${min-utils-scanner-version},)</version>
+				<version>${min-utils-scanner-version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
