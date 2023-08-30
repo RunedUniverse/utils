@@ -688,9 +688,7 @@ pipeline {
 			}
 			post {
 				always {
-					archiveArtifacts artifacts: '*/target/*.pom', fingerprint: true
-					archiveArtifacts artifacts: '*/target/*.jar', fingerprint: true
-					archiveArtifacts artifacts: '*/target/*.asc', fingerprint: true
+					archiveArtifacts artifacts: '*/target/*.pom','*/target/*.jar','*/target/*.asc' fingerprint: true
 				}
 			}
 		}
