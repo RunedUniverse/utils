@@ -459,8 +459,6 @@ pipeline {
 		stage('Test') {
 			when {
 				anyOf {
-					environment name: 'CHANGES_MVN_PARENT', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
@@ -471,7 +469,7 @@ pipeline {
 			}
 			steps {
 				dir(path: '.maven-parent') {
-					sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,test-junit-jupiter'
+					sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,test-junit-jupiter -X'
 				}
 			}
 			post {
