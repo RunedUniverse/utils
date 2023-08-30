@@ -219,6 +219,18 @@
 			<lifecycles>
 				<lifecycle id="default">
 					<phases>
+						<phase id="process-resources">
+							<goals>
+								<goal id="resources">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
 						<phase id="compile">
 							<goals>
 								<goal id="compile">
@@ -228,6 +240,18 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="process-test-resources">
+							<goals>
+								<goal id="testResources">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>
@@ -342,30 +366,6 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-toolchains-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="process-resources">
-							<goals>
-								<goal id="resources">
-									<modes>
-										<install />
-										<junit-jupiter />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-resources-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="process-test-resources">
-							<goals>
-								<goal id="testResources">
-									<modes>
-										<install />
-										<junit-jupiter />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-resources-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>

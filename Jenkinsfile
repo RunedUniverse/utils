@@ -471,7 +471,7 @@ pipeline {
 			}
 			steps {
 				dir(path: '.maven-parent') {
-					sh 'mvn-dev -P ${REPOS}toolchain-openjdk-1-8-0,test-junit-jupiter'
+					sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,test-junit-jupiter'
 				}
 			}
 			post {
