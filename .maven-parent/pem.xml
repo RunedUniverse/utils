@@ -1,0 +1,421 @@
+<!--
+
+    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project-execution-model
+	xmlns="https://api.runeduniverse.net/runes4tools/r4m-pem"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://api.runeduniverse.net/runes4tools/r4m-pem 
+	https://api.runeduniverse.net/runes4tools/r4m-pem-v1_0_0.xsd">
+	<modelVersion>1.0.0</modelVersion>
+	<executions>
+
+		<execution id="default" source="override">
+			<triggers>
+				<active-profile id="license-check" />
+			</triggers>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="validate">
+							<goals>
+								<goal id="check">
+									<modes>
+										<default />
+									</modes>
+									<groupId>com.mycila</groupId>
+									<artifactId>license-maven-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="default" source="override">
+			<triggers>
+				<active-profile id="dev-install" />
+				<active-profile id="license-update" />
+				<missing-profile id="install" />
+				<missing-profile id="test-junit-jupiter" />
+				<missing-profile id="deploy" />
+				<missing-profile id="deploy-signed" />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="process-resources">
+							<goals>
+								<goal id="resources">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="compile">
+							<goals>
+								<goal id="compile">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="process-test-resources">
+							<goals>
+								<goal id="testResources">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test-compile">
+							<goals>
+								<goal id="testCompile">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test">
+							<goals>
+								<goal id="test">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-surefire-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="package">
+							<goals>
+								<goal id="jar">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-jar-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="default" source="override">
+			<triggers>
+				<active-profile id="dev-install" />
+				<active-profile id="license-update" />
+				<missing-profile id="install" />
+				<missing-profile id="test-junit-jupiter" />
+				<missing-profile id="deploy" />
+				<missing-profile id="deploy-signed" />
+			</triggers>
+			<lifecycles>
+				<lifecycle id="clean">
+					<phases>
+						<phase id="clean">
+							<goals>
+								<goal id="clean">
+									<modes>
+										<default />
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-clean-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+				<lifecycle id="default">
+					<phases>
+						<phase id="validate">
+							<goals>
+								<goal id="format">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>net.revelc.code.formatter</groupId>
+									<artifactId>formatter-maven-plugin</artifactId>
+								</goal>
+								<goal id="format">
+									<modes>
+										<default />
+										<dev />
+									</modes>
+									<groupId>com.mycila</groupId>
+									<artifactId>license-maven-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="initialize">
+							<goals>
+								<goal id="toolchain">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-toolchains-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="install">
+							<goals>
+								<goal id="install">
+									<modes>
+										<dev />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-install-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="pipeline" source="override">
+			<triggers>
+				<active-profile id="install" />
+				<active-profile id="test-junit-jupiter" />
+				<active-profile id="deploy" />
+				<active-profile id="deploy-signed" />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="compile">
+							<goals>
+								<goal id="compile">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test-compile">
+							<goals>
+								<goal id="testCompile">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test">
+							<goals>
+								<goal id="test">
+									<modes>
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-surefire-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="package">
+							<goals>
+								<goal id="jar">
+									<modes>
+										<install />
+										<deploy />
+										<deploy-signed />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-jar-plugin</artifactId>
+								</goal>
+								<goal id="test-jar">
+									<modes>
+										<install-test />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-jar-plugin</artifactId>
+								</goal>
+								<goal id="jar-no-fork">
+									<modes>
+										<install />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-source-plugin</artifactId>
+								</goal>
+								<goal id="test-jar-no-fork">
+									<modes>
+										<install-test />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-source-plugin</artifactId>
+								</goal>
+								<goal id="jar">
+									<modes>
+										<install />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-javadoc-plugin</artifactId>
+								</goal>
+								<goal id="test-jar">
+									<modes>
+										<install-test />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-javadoc-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="pipeline" source="override">
+			<triggers>
+				<active-profile id="install" />
+				<active-profile id="test-junit-jupiter" />
+				<active-profile id="deploy" />
+				<active-profile id="deploy-signed" />
+			</triggers>
+			<lifecycles>
+				<lifecycle id="clean">
+					<phases>
+						<phase id="clean">
+							<goals>
+								<goal id="clean">
+									<modes>
+										<default />
+										<install />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-clean-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+				<lifecycle id="default">
+					<phases>
+						<phase id="initialize">
+							<goals>
+								<goal id="toolchain">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-toolchains-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="process-resources">
+							<goals>
+								<goal id="resources">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="process-test-resources">
+							<goals>
+								<goal id="testResources">
+									<modes>
+										<install />
+										<junit-jupiter />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-resources-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="verify">
+							<goals>
+								<goal id="sign">
+									<modes>
+										<install />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-gpg-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="install">
+							<goals>
+								<goal id="install">
+									<modes>
+										<install />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-install-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="deploy">
+							<goals>
+								<!-- attach-artifact could be removed -->
+								<!-- if maven could cache more effective -->
+								<goal id="attach-artifact">
+									<modes>
+										<deploy-signed />
+									</modes>
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>build-helper-maven-plugin</artifactId>
+								</goal>
+								<goal id="deploy">
+									<modes>
+										<deploy />
+										<deploy-signed />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-deploy-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+	</executions>
+</project-execution-model>

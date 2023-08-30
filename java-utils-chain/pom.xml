@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+    Copyright © 2023 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@
 	<packaging>jar</packaging>
 
 	<name>Chain Library</name>
+	<url>https://github.com/RunedUniverse/utils</url>
+	<inceptionYear>2021</inceptionYear>
 
 	<licenses>
 		<license>
@@ -74,9 +76,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- ACTIVITIONS -->
 		<license-enforce>true</license-enforce>
-		<!-- ACTIVITIONS - LICENSES -->
-		<license-prj-utils-approve>true</license-prj-utils-approve>
-		<license-apache2-approve>true</license-apache2-approve>
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
@@ -123,5 +122,27 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 </project>
