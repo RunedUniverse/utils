@@ -49,7 +49,7 @@
 		<execution id="default" source="override">
 			<triggers>
 				<active-profile id="dev-install" />
-				<active-profile id="license-update" />
+				<active-profile id="format" />
 				<missing-profile id="install" />
 				<missing-profile id="test-junit-jupiter" />
 				<missing-profile id="deploy" />
@@ -135,7 +135,7 @@
 		<execution id="default" source="override">
 			<triggers>
 				<active-profile id="dev-install" />
-				<active-profile id="license-update" />
+				<active-profile id="format" />
 				<missing-profile id="install" />
 				<missing-profile id="test-junit-jupiter" />
 				<missing-profile id="deploy" />
@@ -164,6 +164,7 @@
 							<goals>
 								<goal id="format">
 									<modes>
+										<default />
 										<dev />
 									</modes>
 									<groupId>net.revelc.code.formatter</groupId>

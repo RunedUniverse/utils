@@ -153,6 +153,12 @@
 				</pluginManagement>
 			</build>
 		</profile>
+		<profile>
+			<id>format</id>
+			<build>
+				<defaultGoal>default/validate</defaultGoal>
+			</build>
+		</profile>
 		<!-- PIPELINE -->
 		<profile>
 			<id>install</id>
@@ -257,12 +263,6 @@
 			<id>license-check</id>
 			<build>
 				<defaultGoal>license:check</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>license-update</id>
-			<build>
-				<defaultGoal>default/validate</defaultGoal>
 			</build>
 		</profile>
 		<profile>
