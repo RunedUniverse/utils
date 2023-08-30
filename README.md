@@ -6,18 +6,9 @@ Each artifact starts with the name of the programming language followed by its r
 ## Distribution
 
 ### Maven Repository
-#### RunedUniverse: Releases
-> This contains our locally hosted release artifacts.<br>
-> These same artifacts are deployed to Maven Central (Sonatype)
-
-```xml
-<repository>
-  <id>runeduniverse-releases</id>
-  <url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
-</repository>
-```
-
 #### RunedUniverse: Development
+> This contains our locally hosted development artifacts.<br>
+
 ```xml
 <repository>
   <id>runeduniverse-development</id>
@@ -91,7 +82,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-logging</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -107,3 +98,4 @@ Each artifact starts with the name of the programming language followed by its r
   <version>1.0.6</version>
 </dependency>
 ```
+
