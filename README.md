@@ -69,7 +69,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-common</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
