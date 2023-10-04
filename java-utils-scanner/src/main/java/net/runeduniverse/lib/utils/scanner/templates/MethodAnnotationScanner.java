@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2023 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,11 +53,11 @@ public class MethodAnnotationScanner<M extends MethodPattern> extends MethodScan
 	}
 
 	public static MethodAnnotationScanner<MethodPattern> DEFAULT(Class<? extends Annotation> anno) {
-		return new MethodAnnotationScanner<MethodPattern>(MethodScanner::createPattern, anno);
+		return new MethodAnnotationScanner<>(MethodScanner::createPattern, anno);
 	}
 
 	public static MethodAnnotationScanner<MethodPattern> DEFAULT(Class<? extends Annotation> anno, ScanOrder order) {
-		return new MethodAnnotationScanner<MethodPattern>(MethodScanner::createPattern, anno, order);
+		return new MethodAnnotationScanner<>(MethodScanner::createPattern, anno, order);
 	}
 
 }

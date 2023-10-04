@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2023 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 import net.runeduniverse.lib.utils.scanner.*;
+import net.runeduniverse.lib.utils.scanner.api.ITypeScanner;
 import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
@@ -73,4 +74,5 @@ public class PackageScannerTest {
 		System.out.println(tree.toString());
 		assertEquals(foundTypes.size(), 3, "Too many/few Classes found!");
 	}
+
 }

@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.test.model;
+package net.runeduniverse.lib.utils.common;
 
-public class Frank extends APerson {
+import java.util.LinkedHashMap;
+
+public class LinkedDataHashMap<K, V, D> extends DataHashMap<K, V, D> {
+
+	public LinkedDataHashMap() {
+		super(new LinkedHashMap<>());
+	}
 
 }

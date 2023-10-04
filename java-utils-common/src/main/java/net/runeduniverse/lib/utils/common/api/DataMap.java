@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2023 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.common;
+package net.runeduniverse.lib.utils.common.api;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
 
 public interface DataMap<K, V, D> {
+
 	V put(K key, V value);
 
 	V put(K key, V value, D data);
 
 	V get(K key);
+
+	V remove(K key);
+
+	void clear();
 
 	void setData(K key, D data);
 
@@ -50,8 +55,11 @@ public interface DataMap<K, V, D> {
 	Set<Value<V, D>> valueSet();
 
 	public interface Value<V, M> {
+
 		public V getValue();
 
 		public M getData();
+
 	}
+
 }
