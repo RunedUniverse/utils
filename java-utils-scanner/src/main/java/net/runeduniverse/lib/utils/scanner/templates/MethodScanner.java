@@ -17,8 +17,8 @@ package net.runeduniverse.lib.utils.scanner.templates;
 
 import java.lang.reflect.Method;
 
-import net.runeduniverse.lib.utils.scanner.IMethodScanner;
 import net.runeduniverse.lib.utils.scanner.ScanOrder;
+import net.runeduniverse.lib.utils.scanner.api.IMethodScanner;
 import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
 
@@ -53,11 +53,11 @@ public class MethodScanner<M extends MethodPattern> implements IMethodScanner<M>
 	}
 
 	public static MethodScanner<MethodPattern> DEFAULT() {
-		return new MethodScanner<MethodPattern>(MethodScanner::createPattern);
+		return new MethodScanner<>(MethodScanner::createPattern);
 	}
 
 	public static MethodScanner<MethodPattern> DEFAULT(ScanOrder order) {
-		return new MethodScanner<MethodPattern>(MethodScanner::createPattern, order);
+		return new MethodScanner<>(MethodScanner::createPattern, order);
 	}
 
 }

@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+
 import lombok.Data;
 
 @Data
@@ -107,4 +108,5 @@ public class FieldPattern {
 	public <A extends Annotation> A getAnno(Class<A> annoType) {
 		return this.field.getAnnotation(annoType);
 	}
+
 }

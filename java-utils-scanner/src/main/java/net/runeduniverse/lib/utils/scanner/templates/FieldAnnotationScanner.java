@@ -54,11 +54,11 @@ public class FieldAnnotationScanner<F extends FieldPattern> extends FieldScanner
 	}
 
 	public static FieldAnnotationScanner<FieldPattern> DEFAULT(Class<? extends Annotation> anno) {
-		return new FieldAnnotationScanner<FieldPattern>(FieldScanner::createPattern, anno);
+		return new FieldAnnotationScanner<>(FieldScanner::createPattern, anno);
 	}
 
 	public static FieldAnnotationScanner<FieldPattern> DEFAULT(Class<? extends Annotation> anno, ScanOrder order) {
-		return new FieldAnnotationScanner<FieldPattern>(FieldScanner::createPattern, anno, order);
+		return new FieldAnnotationScanner<>(FieldScanner::createPattern, anno, order);
 	}
 
 }

@@ -83,4 +83,5 @@ public class TypePattern<F extends FieldPattern, M extends MethodPattern> {
 		MethodPattern method = this.methods.get(anno);
 		return (obj == null || method == null) ? false : method.invoke(obj, args);
 	}
+
 }

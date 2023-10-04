@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner;
+package net.runeduniverse.lib.utils.scanner.debug.api;
 
-import java.lang.reflect.Method;
+import java.net.URL;
 
-import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
-import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
+public interface IIntercepter {
 
-public interface IMethodScanner<M extends MethodPattern> {
-	void scan(Method method, Class<?> type, TypePattern<?, M> pattern) throws Exception;
+	public URL intercept(URL url);
+
+	public String intercept(String s);
+
+	public ClassLoader intercept(ClassLoader loader);
 
 }

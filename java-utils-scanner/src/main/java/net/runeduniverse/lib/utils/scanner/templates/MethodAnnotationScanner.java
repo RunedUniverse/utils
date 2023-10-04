@@ -53,11 +53,11 @@ public class MethodAnnotationScanner<M extends MethodPattern> extends MethodScan
 	}
 
 	public static MethodAnnotationScanner<MethodPattern> DEFAULT(Class<? extends Annotation> anno) {
-		return new MethodAnnotationScanner<MethodPattern>(MethodScanner::createPattern, anno);
+		return new MethodAnnotationScanner<>(MethodScanner::createPattern, anno);
 	}
 
 	public static MethodAnnotationScanner<MethodPattern> DEFAULT(Class<? extends Annotation> anno, ScanOrder order) {
-		return new MethodAnnotationScanner<MethodPattern>(MethodScanner::createPattern, anno, order);
+		return new MethodAnnotationScanner<>(MethodScanner::createPattern, anno, order);
 	}
 
 }

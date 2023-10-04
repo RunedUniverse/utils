@@ -21,9 +21,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
-import net.runeduniverse.lib.utils.scanner.IFieldScanner;
-import net.runeduniverse.lib.utils.scanner.IMethodScanner;
-import net.runeduniverse.lib.utils.scanner.ITypeScanner;
+import net.runeduniverse.lib.utils.scanner.api.IFieldScanner;
+import net.runeduniverse.lib.utils.scanner.api.IMethodScanner;
+import net.runeduniverse.lib.utils.scanner.api.ITypeScanner;
 import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
@@ -42,7 +42,7 @@ public class TypeScanner<F extends FieldPattern, M extends MethodPattern, T exte
 
 	protected static TypePattern<FieldPattern, MethodPattern> createPattern(Class<?> type, ClassLoader loader,
 			String pkg) {
-		return new TypePattern<FieldPattern, MethodPattern>(pkg, loader, type);
+		return new TypePattern<>(pkg, loader, type);
 	}
 
 	public TypeScanner<F, M, T> addFieldScanner(IFieldScanner<F> fieldScanner) {
@@ -105,4 +105,5 @@ public class TypeScanner<F extends FieldPattern, M extends MethodPattern, T exte
 			ResultConsumer<FieldPattern, MethodPattern, TypePattern<FieldPattern, MethodPattern>> consumer) {
 		return new TypeScanner<>(TypeScanner::createPattern, consumer);
 	}
+
 }

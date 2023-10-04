@@ -21,8 +21,10 @@ import java.util.Map;
 import java.util.Set;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
+import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
 
 public class Intercepter implements IIntercepter {
+
 	private final boolean active;
 	private IntercepterSection baseSection;
 	private Map<String, IntercepterSection> sections = new HashMap<>();
@@ -71,4 +73,5 @@ public class Intercepter implements IIntercepter {
 	public ClassLoader intercept(ClassLoader loader) {
 		return this.baseSection.intercept(loader);
 	}
+
 }

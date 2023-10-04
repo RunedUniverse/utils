@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.debug;
+package net.runeduniverse.lib.utils.scanner.api;
 
-import java.net.URL;
+public interface ITypeScanner {
 
-public interface IIntercepter {
+	void scan(Class<?> type, ClassLoader loader, String pkg) throws Exception;
 
-	public URL intercept(URL url);
-
-	public String intercept(String s);
-	
-	public ClassLoader intercept(ClassLoader loader);
 }

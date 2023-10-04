@@ -43,4 +43,5 @@ public class TypeAnnotationScanner<F extends FieldPattern, M extends MethodPatte
 			ResultConsumer<FieldPattern, MethodPattern, TypePattern<FieldPattern, MethodPattern>> consumer) {
 		return new TypeAnnotationScanner<>(anno, TypeScanner::createPattern, consumer);
 	}
+
 }

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 import net.runeduniverse.lib.utils.scanner.*;
+import net.runeduniverse.lib.utils.scanner.api.ITypeScanner;
 import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
@@ -36,7 +37,7 @@ public class PackageScannerTest {
 	public static final String MODEL_PKG = "net.runeduniverse.lib.utils.scanner.test.model";
 
 	private static PackageScanner SEEDED_SCANNER() {
-		return new PackageScanner().enableDebugMode(true)
+		return new PackageScanner().enableDebugMode(true)README.md
 				.includeClassLoader(PackageScannerTest.class.getClassLoader())
 				.includePackages(MODEL_PKG)
 				.includeSubPkgs();
@@ -73,4 +74,5 @@ public class PackageScannerTest {
 		System.out.println(tree.toString());
 		assertEquals(foundTypes.size(), 3, "Too many/few Classes found!");
 	}
+
 }

@@ -32,10 +32,11 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 
 import lombok.NoArgsConstructor;
-import net.runeduniverse.lib.utils.common.DataHashMap;
-import net.runeduniverse.lib.utils.common.DataMap;
-import net.runeduniverse.lib.utils.scanner.debug.IIntercepter;
+import net.runeduniverse.lib.utils.common.LinkedDataHashMap;
+import net.runeduniverse.lib.utils.common.api.DataMap;
+import net.runeduniverse.lib.utils.scanner.api.ITypeScanner;
 import net.runeduniverse.lib.utils.scanner.debug.Intercepter;
+import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
 
 @NoArgsConstructor
 public class PackageScanner {
@@ -115,7 +116,7 @@ public class PackageScanner {
 		if (this.loader.isEmpty())
 			this.loader.add(PackageScanner.class.getClassLoader());
 
-		DataMap<Class<?>, ClassLoader, String> classes = new DataHashMap<>();
+		DataMap<Class<?>, ClassLoader, String> classes = new LinkedDataHashMap<>();
 		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
 		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
 		IIntercepter iClass = i.addSection("CLASS", "Classes");
@@ -253,6 +254,9 @@ public class PackageScanner {
 	}
 
 	public static interface Validator {
+
 		public void validate() throws Exception;
+
 	}
+
 }

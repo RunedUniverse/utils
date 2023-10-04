@@ -17,10 +17,12 @@ package net.runeduniverse.lib.utils.scanner.pattern;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import lombok.Data;
 
 @Data
 public class MethodPattern {
+
 	private final Method method;
 
 	public MethodPattern(Method method) {
@@ -37,4 +39,5 @@ public class MethodPattern {
 			return false;
 		}
 	}
+
 }
