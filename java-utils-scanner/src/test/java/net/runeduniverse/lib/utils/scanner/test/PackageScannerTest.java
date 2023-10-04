@@ -37,7 +37,7 @@ public class PackageScannerTest {
 	public static final String MODEL_PKG = "net.runeduniverse.lib.utils.scanner.test.model";
 
 	private static PackageScanner SEEDED_SCANNER() {
-		return new PackageScanner().enableDebugMode(true)README.md
+		return new PackageScanner().enableDebugMode(true)
 				.includeClassLoader(PackageScannerTest.class.getClassLoader())
 				.includePackages(MODEL_PKG)
 				.includeSubPkgs();
