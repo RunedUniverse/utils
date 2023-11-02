@@ -80,6 +80,7 @@
 		<utils-common-version>1.0.1</utils-common-version>
 		<utils-errors-version>1.0.1</utils-errors-version>
 		<utils-logging-version>1.0.2</utils-logging-version>
+		<utils-maven-version>1.0.0</utils-maven-version>
 		<utils-scanner-version>1.0.6</utils-scanner-version>
 	</properties>
 
@@ -109,6 +110,11 @@
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-logging</artifactId>
 				<version>${utils-logging-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-maven</artifactId>
+				<version>${utils-maven-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>

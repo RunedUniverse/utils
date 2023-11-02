@@ -34,7 +34,7 @@ public class SessionContextUtils {
 
 	@SuppressWarnings("unchecked")
 	public static <R> Map<String, R> getSessionContext(final MavenSession mvnSession, final Class<R> role) {
-		Object obj = mvnSession.getCurrentProject()
+		final Object obj = mvnSession.getCurrentProject()
 				.getContextValue(role.getCanonicalName());
 		if (obj == null)
 			return null;
@@ -46,24 +46,26 @@ public class SessionContextUtils {
 	}
 
 	public static <R> Map<String, R> putSessionContext(final MavenSession mvnSession, final Class<R> role,
-			Map<String, R> context) {
-		Map<String, R> oldContext = getSessionContext(mvnSession, role);
+			final Map<String, R> context) {
+		final Map<String, R> oldContext = getSessionContext(mvnSession, role);
 		mvnSession.getCurrentProject()
 				.setContextValue(role.getCanonicalName(), context);
 		return oldContext;
 	}
 
 	public static <R> void releaseSessionContext(final MavenSession mvnSession, final Class<R> role) {
-		Map<String, R> context = getSessionContext(mvnSession, role);
-		if (context != null)
-			for (R component : context.values())
+		final Map<String, R> context = getSessionContext(mvnSession, role);
+		if (context != null) {
+			for (R component : context.values()) {
 				SessionContextUtils.releaseSessionComponent(mvnSession, role, component);
-		mvnSession.getCurrentProject()
-				.setContextValue(role.getCanonicalName(), null);
+			}
+			mvnSession.getCurrentProject()
+					.setContextValue(role.getCanonicalName(), null);
+		}
 	}
 
 	public static <R> R loadSessionComponent(final MavenSession mvnSession, final Class<R> role) {
-		Map<String, R> map = getSessionContext(mvnSession, role);
+		final Map<String, R> map = getSessionContext(mvnSession, role);
 		if (map == null)
 			return null;
 		R val = map.get(DEFAULT_HINT);
@@ -79,19 +81,19 @@ public class SessionContextUtils {
 	}
 
 	public static <R> R loadSessionComponent(final MavenSession mvnSession, final Class<R> role, final String hint) {
-		Map<String, R> map = getSessionContext(mvnSession, role);
+		final Map<String, R> map = getSessionContext(mvnSession, role);
 		if (map == null)
 			return null;
 		return map.get(hint);
 	}
 
 	public static <R, T extends R> void putSessionComponent(final MavenSession mvnSession, final Class<R> role,
-			T component) {
+			final T component) {
 		putSessionComponent(mvnSession, role, "default", component);
 	}
 
 	public static <R, T extends R> void putSessionComponent(final MavenSession mvnSession, final Class<R> role,
-			final String hint, T component) {
+			final String hint, final T component) {
 		Map<String, R> map = getSessionContext(mvnSession, role);
 		if (map == null) {
 			map = new LinkedHashMap<>();
@@ -101,8 +103,8 @@ public class SessionContextUtils {
 	}
 
 	public static <R, T extends R> void releaseSessionComponent(final MavenSession mvnSession, final Class<R> role,
-			T component) {
-		Map<String, R> map = getSessionContext(mvnSession, role);
+			final T component) {
+		final Map<String, R> map = getSessionContext(mvnSession, role);
 		if (component != null) {
 			if (component instanceof Startable)
 				try {
