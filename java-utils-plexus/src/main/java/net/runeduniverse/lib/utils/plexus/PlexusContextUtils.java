@@ -31,10 +31,10 @@ public class PlexusContextUtils {
 	}
 
 	public static <T> List<ComponentDescriptor<T>> getPlexusComponentDescriptorList(final PlexusContainer container,
-			final ClassRealm realm, Class<T> type, String role) {
+			final ClassRealm realm, final Class<T> type, final String role) {
 		synchronized (container) {
-			ClassRealm oldLookupRealm = container.setLookupRealm(realm);
-			ClassLoader oldClassLoader = Thread.currentThread()
+			final ClassRealm oldLookupRealm = container.setLookupRealm(realm);
+			final ClassLoader oldClassLoader = Thread.currentThread()
 					.getContextClassLoader();
 			Thread.currentThread()
 					.setContextClassLoader(realm);
@@ -49,10 +49,10 @@ public class PlexusContextUtils {
 	}
 
 	public static <T> Map<String, ComponentDescriptor<T>> getPlexusComponentDescriptorMap(
-			final PlexusContainer container, final ClassRealm realm, Class<T> type, String role) {
+			final PlexusContainer container, final ClassRealm realm, final Class<T> type, final String role) {
 		synchronized (container) {
-			ClassRealm oldLookupRealm = container.setLookupRealm(realm);
-			ClassLoader oldClassLoader = Thread.currentThread()
+			final ClassRealm oldLookupRealm = container.setLookupRealm(realm);
+			final ClassLoader oldClassLoader = Thread.currentThread()
 					.getContextClassLoader();
 			Thread.currentThread()
 					.setContextClassLoader(realm);
@@ -66,9 +66,9 @@ public class PlexusContextUtils {
 		}
 	}
 
-	public static boolean hasPlexusComponent(final PlexusContainer container, final ClassRealm realm, Class<?> type,
-			ClassRealm... excludedRealms) {
-		Set<ComponentDescriptor<?>> excluded = new LinkedHashSet<>();
+	public static boolean hasPlexusComponent(final PlexusContainer container, final ClassRealm realm,
+			final Class<?> type, final ClassRealm... excludedRealms) {
+		final Set<ComponentDescriptor<?>> excluded = new LinkedHashSet<>();
 		for (ClassRealm excludedRealm : excludedRealms) {
 			if (realm == excludedRealm)
 				return false;
@@ -77,11 +77,11 @@ public class PlexusContextUtils {
 		return !excluded.containsAll(getPlexusComponentDescriptorList(container, realm, type, null));
 	}
 
-	public static <T> T loadPlexusComponent(final PlexusContainer container, ComponentDescriptor<T> descriptor)
+	public static <T> T loadPlexusComponent(final PlexusContainer container, final ComponentDescriptor<T> descriptor)
 			throws ComponentLookupException {
 		synchronized (container) {
-			ClassRealm oldLookupRealm = container.setLookupRealm(descriptor.getRealm());
-			ClassLoader oldClassLoader = Thread.currentThread()
+			final ClassRealm oldLookupRealm = container.setLookupRealm(descriptor.getRealm());
+			final ClassLoader oldClassLoader = Thread.currentThread()
 					.getContextClassLoader();
 			Thread.currentThread()
 					.setContextClassLoader(descriptor.getRealm());
@@ -96,11 +96,11 @@ public class PlexusContextUtils {
 		}
 	}
 
-	public static <T> void loadPlexusComponent(final PlexusContainer container, ComponentDescriptor<T> descriptor,
-			ComponentHandler<T> handler) throws ComponentLookupException {
+	public static <T> void loadPlexusComponent(final PlexusContainer container, final ComponentDescriptor<T> descriptor,
+			final ComponentHandler<T> handler) throws ComponentLookupException {
 		synchronized (container) {
-			ClassRealm oldLookupRealm = container.setLookupRealm(descriptor.getRealm());
-			ClassLoader oldClassLoader = Thread.currentThread()
+			final ClassRealm oldLookupRealm = container.setLookupRealm(descriptor.getRealm());
+			final ClassLoader oldClassLoader = Thread.currentThread()
 					.getContextClassLoader();
 			Thread.currentThread()
 					.setContextClassLoader(descriptor.getRealm());

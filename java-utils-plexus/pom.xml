@@ -77,7 +77,8 @@
 		<license-enforce>true</license-enforce>
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
-		<maven-version>3.8.4</maven-version>
+		<plexus-classworlds-version>2.6.0</plexus-classworlds-version>
+		<eclipse-sisu-plexus-version>0.3.5</eclipse-sisu-plexus-version>
 		<lombok-version>1.18.12</lombok-version>
 		<!-- ARTIFACT VERSIONS -->
 		<runeduniverse-utils-bom-version>2.0.0</runeduniverse-utils-bom-version>
@@ -87,12 +88,12 @@
 		<dependency>
 			<groupId>org.codehaus.plexus</groupId>
 			<artifactId>plexus-classworlds</artifactId>
-			<version>2.6.0</version>
+			<version>${plexus-classworlds-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.sisu</groupId>
 			<artifactId>org.eclipse.sisu.plexus</artifactId>
-			<version>0.3.5</version>
+			<version>${eclipse-sisu-plexus-version}</version>
 		</dependency>
 
 		<!-- logging utilities-->

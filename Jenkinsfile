@@ -54,6 +54,10 @@ pipeline {
 				returnStdout: true,
 				script: '.build/git-check-version-tag java-utils-logging ../java-utils-logging'
 			)}"""
+		CHANGES_JAVA_UTILS_PLEXUS = """${sh(
+				returnStdout: true,
+				script: '.build/git-check-version-tag java-utils-plexus ../java-utils-plexus'
+			)}"""
 		CHANGES_JAVA_UTILS_SCANNER = """${sh(
 				returnStdout: true,
 				script: '.build/git-check-version-tag java-utils-scanner ../java-utils-scanner'
@@ -78,6 +82,7 @@ pipeline {
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
 				}
 			}
 			steps {
@@ -158,6 +163,16 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-logging'
+						}
+					}
+			    }
+			    stage('Java Plexus Tools'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-plexus'
 						}
 					}
 			    }
@@ -356,6 +371,28 @@ pipeline {
 						}
 					}
 				}
+				stage('Java Plexus Utils') {
+					when {
+						anyOf {
+							environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+						}
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install -pl=../java-utils-plexus'
+						}
+					}
+					post {
+						always {
+							dir(path: 'java-utils-plexus/target') {
+								sh 'ls -l'
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
+							}
+						}
+					}
+				}
 			}
 		}
 		
@@ -370,6 +407,7 @@ pipeline {
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
 				}
 			}
 			parallel {
@@ -404,6 +442,10 @@ pipeline {
 							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
 						}
 						dir(path: 'java-utils-chain') {
+							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
+							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
+						}
+						dir(path: 'java-utils-plexus') {
 							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
 						}
@@ -446,6 +488,10 @@ pipeline {
 							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
 						}
+						dir(path: 'java-utils-plexus') {
+							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
+							sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
+						}
 					}
 				}
 			}
@@ -465,6 +511,7 @@ pipeline {
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
 				}
 			}
 			steps {
@@ -493,6 +540,7 @@ pipeline {
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
 				}
 			}
 			steps {
@@ -596,6 +644,16 @@ pipeline {
 								}
 							}
 						}
+						stage('java-utils-plexus') {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn-dev -P ${REPOS},dist-repo-development,deploy -pl=../java-utils-plexus'
+								}
+							}
+						}
 					}
 				}
 				stage('Release') {
@@ -680,6 +738,16 @@ pipeline {
 							steps {
 								dir(path: '.maven-parent') {
 									sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=../java-utils-chain'
+								}
+							}
+						}
+						stage('java-utils-plexus') {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=../java-utils-plexus'
 								}
 							}
 						}
@@ -799,6 +867,19 @@ pipeline {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-chain'
 							sshagent (credentials: ['RunedUniverse-Jenkins']) {
 								sh 'git push origin $(git-create-version-tag java-utils-chain ../java-utils-chain)'
+							}
+						}
+					}
+				}
+				stage('java-utils-plexus') {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-plexus'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-plexus ../java-utils-plexus)'
 							}
 						}
 					}
