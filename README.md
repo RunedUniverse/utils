@@ -103,6 +103,17 @@ Each artifact starts with the name of the programming language followed by its r
 </dependency>
 ```
 
+#### [Maven] Java Plexus Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-plexus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-plexus%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-plexus</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
 #### [Maven] Java Scanner
 > Provides a versatile PackageScanner for collecting Classes
 

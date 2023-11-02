@@ -37,6 +37,7 @@
 		<module>../java-utils-errors</module>
 		<module>../java-utils-logging</module>
 		<module>../java-utils-maven</module>
+		<module>../java-utils-plexus</module>
 		<module>../java-utils-scanner</module>
 	</modules>
 
