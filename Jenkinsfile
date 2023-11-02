@@ -30,13 +30,13 @@ pipeline {
 				returnStdout: true,
 				script: '.build/git-check-version-tag mvn-parent .'
 			)}"""
-		CHANGES_JAVA_UTILS_ASYNC = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-async ../java-utils-async'
-			)}"""
 		CHANGES_JAVA_UTILS_BOM = """${sh(
 				returnStdout: true,
 				script: '.build/git-check-version-tag java-utils-bom ../java-utils-bom'
+			)}"""
+		CHANGES_JAVA_UTILS_ASYNC = """${sh(
+				returnStdout: true,
+				script: '.build/git-check-version-tag java-utils-async ../java-utils-async'
 			)}"""
 		CHANGES_JAVA_UTILS_CHAIN = """${sh(
 				returnStdout: true,
@@ -53,6 +53,10 @@ pipeline {
 		CHANGES_JAVA_UTILS_LOGGING = """${sh(
 				returnStdout: true,
 				script: '.build/git-check-version-tag java-utils-logging ../java-utils-logging'
+			)}"""
+		CHANGES_JAVA_UTILS_MAVEN = """${sh(
+				returnStdout: true,
+				script: '.build/git-check-version-tag java-utils-maven ../java-utils-maven'
 			)}"""
 		CHANGES_JAVA_UTILS_SCANNER = """${sh(
 				returnStdout: true,
@@ -72,12 +76,13 @@ pipeline {
 				anyOf {
 					environment name: 'CHANGES_MVN_PARENT', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 				}
 			}
 			steps {
@@ -158,6 +163,16 @@ pipeline {
 					steps {
 						dir(path: '.maven-parent') {
 							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-logging'
+						}
+					}
+			    }
+			    stage('Java Maven Utils'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},license-check,license-apache2-approve -pl=../java-utils-maven'
 						}
 					}
 			    }
@@ -334,6 +349,28 @@ pipeline {
 						}
 					}
 				}
+				stage('Java Maven Utils') {
+					when {
+						anyOf {
+							environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+						}
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install -pl=../java-utils-maven'
+						}
+					}
+					post {
+						always {
+							dir(path: 'java-utils-maven/target') {
+								sh 'ls -l'
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
+							}
+						}
+					}
+				}
 				stage('Java Chain Library') {
 					when {
 						anyOf {
@@ -365,6 +402,7 @@ pipeline {
 					environment name: 'CHANGES_MVN_PARENT', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
@@ -384,6 +422,10 @@ pipeline {
 							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
 						}
 						dir(path: 'java-utils-logging') {
+							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
+							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
+						}
+						dir(path: 'java-utils-maven') {
 							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn-dev -P dist-repo-development,deploy,gen-eff-pom'
 						}
@@ -426,6 +468,10 @@ pipeline {
 							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
 						}
+						dir(path: 'java-utils-maven') {
+							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
+							sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
+						}
 						dir(path: 'java-utils-errors') {
 							sh 'mvn-dev -P ${REPOS},test-junit-jupiter,gen-eff-pom'
 							sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed,gen-eff-pom'
@@ -460,6 +506,7 @@ pipeline {
 			when {
 				anyOf {
 					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					// environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
@@ -487,12 +534,13 @@ pipeline {
 				anyOf {
 					environment name: 'CHANGES_MVN_PARENT', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
-					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 					environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+					environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
 				}
 			}
 			steps {
@@ -543,6 +591,16 @@ pipeline {
 							steps {
 								dir(path: '.maven-parent') {
 									sh 'mvn-dev -P ${REPOS},dist-repo-development,deploy -pl=../java-utils-logging'
+								}
+							}
+						}
+						stage('java-utils-maven') {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn-dev -P ${REPOS},dist-repo-development,deploy -pl=../java-utils-maven'
 								}
 							}
 						}
@@ -630,6 +688,16 @@ pipeline {
 							steps {
 								dir(path: '.maven-parent') {
 									sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=../java-utils-logging'
+								}
+							}
+						}
+						stage('java-utils-maven') {
+							when {
+								environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+							}
+							steps {
+								dir(path: '.maven-parent') {
+									sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=../java-utils-maven'
 								}
 							}
 						}
@@ -734,6 +802,19 @@ pipeline {
 							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-logging'
 							sshagent (credentials: ['RunedUniverse-Jenkins']) {
 								sh 'git push origin $(git-create-version-tag java-utils-logging ../java-utils-logging)'
+							}
+						}
+					}
+				}
+				stage('java-utils-maven') {
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+					}
+					steps {
+						dir(path: '.maven-parent') {
+							sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=../java-utils-maven'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag java-utils-maven ../java-utils-maven)'
 							}
 						}
 					}
