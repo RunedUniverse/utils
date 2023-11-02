@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2023 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,34 +23,55 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 import lombok.Data;
+import net.runeduniverse.lib.utils.common.api.DataMap;
+import net.runeduniverse.lib.utils.common.api.TriConsumer;
 
 public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
-	private Map<K, MEntry<V, D>> map = new HashMap<>();
+	protected final Map<K, MEntry<V, D>> map;
+
+	public DataHashMap() {
+		this.map = new HashMap<>();
+	}
+
+	protected DataHashMap(final Map<K, MEntry<V, D>> map) {
+		this.map = map;
+	}
 
 	@Override
-	public V put(K key, V value) {
+	public V put(final K key, final V value) {
 		return MEntry.getValue(this.map.put(key, new MEntry<>(value)));
 	}
 
 	@Override
-	public V put(K key, V value, D data) {
+	public V put(final K key, final V value, final D data) {
 		return MEntry.getValue(this.map.put(key, new MEntry<>(value, data)));
 	}
 
 	@Override
-	public V get(K key) {
+	public V get(final K key) {
 		return MEntry.getValue(this.map.get(key));
 	}
 
 	@Override
-	public void setData(K key, D data) {
-		this.map.get(key)
-				.setData(data);
+	public V remove(final K key) {
+		return MEntry.getValue(this.map.remove(key));
 	}
 
 	@Override
-	public D getData(K key) {
+	public void clear() {
+		this.map.clear();
+	}
+
+	@Override
+	public void setData(final K key, final D data) {
+		final MEntry<V, D> entry = this.map.get(key);
+		if (entry != null)
+			entry.setData(data);
+	}
+
+	@Override
+	public D getData(final K key) {
 		return MEntry.getData(this.map.get(key));
 	}
 
@@ -60,54 +81,64 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
-	public boolean containsKey(K key) {
+	public boolean containsKey(final K key) {
 		return this.map.containsKey(key);
 	}
 
 	@Override
-	public boolean containsKey(K key, D data) {
-		MEntry<V, D> entry = this.map.get(key);
-		if (entry == null || entry.getData() == null)
+	public boolean containsKey(final K key, final D data) {
+		final MEntry<V, D> entry = this.map.get(key);
+		if (entry == null)
 			return false;
-		return entry.getData()
-				.equals(data);
+		final D eData = entry.getData();
+		if (eData == null)
+			return false;
+		return eData.equals(data);
 	}
 
 	@Override
-	public boolean containsValue(V value) {
-		for (MEntry<V, D> me : this.map.values())
-			if (me.getValue()
-					.equals(value))
+	public boolean containsValue(final V value) {
+		for (MEntry<V, D> entry : this.map.values()) {
+			final V eValue = entry.getValue();
+			if (eValue != null && eValue.equals(value))
 				return true;
+		}
 		return false;
 	}
 
 	@Override
-	public boolean containsValue(V value, D data) {
-		for (MEntry<V, D> me : this.map.values())
-			if (me.getData() != null && me.getData()
-					.equals(data) && me.getValue()
-							.equals(value))
-				return true;
+	public boolean containsValue(final V value, final D data) {
+		for (MEntry<V, D> entry : this.map.values()) {
+			final D eData = entry.getData();
+			if (eData != null && eData.equals(data)) {
+				final V meValue = entry.getValue();
+				if (meValue != null && meValue.equals(value))
+					return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
-	public void forEach(BiConsumer<K, V> action) {
+	public void forEach(final BiConsumer<K, V> action) {
 		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
 	}
 
 	@Override
-	public void forEach(D modifier, BiConsumer<K, V> action) {
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
-			if (MEntry.getData(entry.getValue())
-					.equals(modifier))
+	public void forEach(final D modifier, final BiConsumer<K, V> action) {
+		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet()) {
+			final D eData = MEntry.getData(entry.getValue());
+			if (eData == null) {
+				if (modifier == null)
+					action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
+			} else if (eData.equals(modifier))
 				action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
+		}
 	}
 
 	@Override
-	public void forEach(TriConsumer<K, V, D> action) {
+	public void forEach(final TriConsumer<K, V, D> action) {
 		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()), MEntry.getData(entry.getValue()));
 	}
@@ -124,6 +155,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Data
 	protected static class MEntry<V, D> implements DataMap.Value<V, D> {
+
 		private V value;
 		private D data;
 
@@ -144,6 +176,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 		public static <V, D> D getData(MEntry<V, D> entry) {
 			return entry == null ? null : entry.getData();
 		}
+
 	}
 
 }

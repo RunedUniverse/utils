@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2023 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.debug;
+package net.runeduniverse.lib.utils.scanner.api;
 
-import java.net.URL;
+import java.lang.reflect.Field;
 
-public interface IIntercepter {
+import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
 
-	public URL intercept(URL url);
+public interface IFieldScanner<F extends FieldPattern> {
 
-	public String intercept(String s);
-	
-	public ClassLoader intercept(ClassLoader loader);
+	void scan(Field field, Class<?> type, TypePattern<F, ?> pattern) throws Exception;
+
 }
