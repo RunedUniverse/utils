@@ -92,8 +92,8 @@ Each artifact starts with the name of the programming language followed by its r
 </dependency>
 ```
 
-#### [Maven] Java Maven Library
-[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-logging.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-maven%22)
+#### [Maven] Java Maven Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-maven.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-maven%22)
 
 ```xml
 <dependency>
