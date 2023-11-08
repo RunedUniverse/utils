@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+#git-check-version-tag <tag-name> <maven-module>
+#git-check-version-tag java-utils-bom ../java-utils-bom
+
+pushd .maven-parent > /dev/null
+TAG=$1/v$(mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=$2)
+if git describe --tags --abbrev=0 remotes/origin/master --match $TAG &>/dev/null
+then
+  printf 0;
+else
+  printf 1;
+fi
+popd > /dev/null
+
