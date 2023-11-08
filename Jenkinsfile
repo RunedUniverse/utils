@@ -99,16 +99,86 @@ pipeline {
 
 		stage('License Check') {
 			parallel {
-				mavenStage(name: 'Maven Parent',       envTrigger: 'CHANGES_MVN_PARENT',         modules: '.', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Bill of Materials',  envTrigger: 'CHANGES_JAVA_UTILS_BOM',     modules: '../java-utils-bom', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Utils Async',   envTrigger: 'CHANGES_JAVA_UTILS_ASYNC',   modules: '../java-utils-async', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Chain Library', envTrigger: 'CHANGES_JAVA_UTILS_CHAIN',   modules: '../java-utils-chain', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Utils Common',  envTrigger: 'CHANGES_JAVA_UTILS_COMMON',  modules: '../java-utils-common', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Error Handling Library',  envTrigger: 'CHANGES_JAVA_UTILS_ERRORS', modules: '../java-utils-errors', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Logging Tools', envTrigger: 'CHANGES_JAVA_UTILS_LOGGING', modules: '../java-utils-logging', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Maven Utils',   envTrigger: 'CHANGES_JAVA_UTILS_MAVEN',   modules: '../java-utils-maven', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Plexus Tools',  envTrigger: 'CHANGES_JAVA_UTILS_PLEXUS',  modules: '../java-utils-plexus', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
-				mavenStage(name: 'Java Scanner',       envTrigger: 'CHANGES_JAVA_UTILS_SCANNER', modules: '../java-utils-scanner', path: '.maven-parent', profiles: 'license-check,license-apache2-approve')
+			    stage('Maven Parent'){
+					when {
+						environment name: 'CHANGES_MVN_PARENT', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '.', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Bill of Materials'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-bom', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Utils Async'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ASYNC', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-async', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Chain Library'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_CHAIN', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-chain', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Utils Common'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_COMMON', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-common', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Error Handling Library'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_ERRORS', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-errors', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Logging Tools'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_LOGGING', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-logging', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Maven Utils'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_MAVEN', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-maven', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Plexus Tools'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_PLEXUS', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-plexus', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
+			    stage('Java Scanner'){
+					when {
+						environment name: 'CHANGES_JAVA_UTILS_SCANNER', value: '1'
+					}
+					steps {
+						mvnDev(path: '.maven-parent', modules: '../java-utils-scanner', profiles: 'license-check,license-apache2-approve')
+					}
+			    }
 			}
 		}
 		stage('Install Maven Parent') {
