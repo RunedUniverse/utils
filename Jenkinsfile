@@ -1,8 +1,5 @@
+@Library('runeduniverse-pipeline-library') _
 pipeline {
-	library identifier: 'pipeline-library@master', retriever: modernSCM([
-			$class: 'GitSCMSource',
-			remote: 'git@github.com:RunedUniverse/jenkins-pipeline-library.git'
-		])
 	agent any
 	tools {
 		maven 'maven-latest'
