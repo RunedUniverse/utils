@@ -82,7 +82,7 @@ pipeline {
 					parent.setPath(".maven-parent");
 					def v = parent.getVersion();
 					sh 'echo ${v}'
-					v = parent.getVersion("../java-utils-async";
+					v = parent.getVersion("../java-utils-async");
 					sh 'echo ${v}'
 				}
 			}
