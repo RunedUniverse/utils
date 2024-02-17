@@ -80,8 +80,10 @@ pipeline {
 				script {
 					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
 					parent.setPath(".maven-parent");
-					sh 'echo ${parent.getVersion()}'
-					sh 'echo ${parent.getVersion("../java-utils-async")}'
+					def v = parent.getVersion();
+					sh 'echo ${v}'
+					v = parent.getVersion("../java-utils-async";
+					sh 'echo ${v}'
 				}
 			}
 		}
