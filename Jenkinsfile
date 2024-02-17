@@ -79,7 +79,7 @@ pipeline {
 				sh 'printenv | sort'
 				script {
 					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
-					parent.setPath(.maven-parent);
+					parent.setPath(".maven-parent");
 					sh 'echo ${parent.getVersion()}'
 					sh 'echo ${parent.getVersion("java-utils-async")}'
 				}
