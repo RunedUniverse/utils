@@ -82,7 +82,7 @@ pipeline {
 					builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
 				
 					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
-					parent.setName("mvn-parent").setPath(".maven-parent");
+					parent.setId("mvn-parent").setName("mvn-parent").setPath(".maven-parent");
 					
 					parent.addModule(id: "java-utils-bom", name: "java-utils-bom", path: "java-utils-bom", modulePath: "../java-utils-bom");
 					parent.addModule(id: "java-utils-async", name: "java-utils-async", path: "java-utils-async", modulePath: "../java-utils-async");
