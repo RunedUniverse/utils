@@ -79,11 +79,23 @@ pipeline {
 				sh 'printenv | sort'
 				script {
 					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
-					parent.setPath(".maven-parent");
-					def v = parent.getVersion();
-					sh 'echo ${v}'
-					v = parent.getVersion("../java-utils-async");
-					sh 'echo ${v}'
+					parent.setName("mvn-parent").setPath(".maven-parent");
+					
+					parent.addModule(name: "java-utils-bom", path: "java-utils-bom", modulePath: "../java-utils-bom");
+					parent.addModule(name: "java-utils-async", path: "java-utils-async", modulePath: "../java-utils-async");
+					parent.addModule(name: "java-utils-chain", path: "java-utils-chain", modulePath: "../java-utils-chain");
+					parent.addModule(name: "java-utils-common", path: "java-utils-common", modulePath: "../java-utils-common");
+					parent.addModule(name: "java-utils-errors", path: "java-utils-errors", modulePath: "../java-utils-errors");
+					parent.addModule(name: "java-utils-logging", path: "java-utils-logging", modulePath: "../java-utils-logging");
+					parent.addModule(name: "java-utils-maven", path: "java-utils-maven", modulePath: "../java-utils-maven");
+					parent.addModule(name: "java-utils-plexus", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
+					parent.addModule(name: "java-utils-scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
+					
+					parent.info();
+					// parent.getVersion();
+					// parent.getVersion("../java-utils-async");
+					
+					
 				}
 			}
 		}
