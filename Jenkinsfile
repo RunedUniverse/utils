@@ -29,47 +29,6 @@ pipeline {
 				returnStdout: true,
 				script: 'REPOS=repo-releases; if [ $GIT_BRANCH != master ]; then REPOS=$REPOS,repo-development; fi; printf $REPOS'
 			)}"""
-
-		CHANGES_MVN_PARENT = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag mvn-parent .'
-			)}"""
-		CHANGES_JAVA_UTILS_BOM = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-bom ../java-utils-bom'
-			)}"""
-		CHANGES_JAVA_UTILS_ASYNC = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-async ../java-utils-async'
-			)}"""
-		CHANGES_JAVA_UTILS_CHAIN = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-chain ../java-utils-chain'
-			)}"""
-		CHANGES_JAVA_UTILS_COMMON = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-common ../java-utils-common'
-			)}"""
-		CHANGES_JAVA_UTILS_ERRORS = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-errors ../java-utils-errors'
-			)}"""
-		CHANGES_JAVA_UTILS_LOGGING = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-logging ../java-utils-logging'
-			)}"""
-		CHANGES_JAVA_UTILS_MAVEN = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-maven ../java-utils-maven'
-			)}"""
-		CHANGES_JAVA_UTILS_PLEXUS = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-plexus ../java-utils-plexus'
-			)}"""
-		CHANGES_JAVA_UTILS_SCANNER = """${sh(
-				returnStdout: true,
-				script: '.build/git-check-version-tag java-utils-scanner ../java-utils-scanner'
-			)}"""
 	}
 	stages {
 		stage('Initialize') {
@@ -78,12 +37,11 @@ pipeline {
 				sh 'echo "M2_HOME = ${M2_HOME}"'
 				sh 'printenv | sort'
 				script {
-				
 					builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
+					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this)
+					builder.addBuildTool(maven);
 				
-					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
-					parent.setId("mvn-parent").setName("mvn-parent").setPath(".maven-parent");
-					
+					def parent = maven.createProject(id: "mvn-parent", name: "mvn-parent", path: ".maven-parent");
 					parent.addModule(id: "java-utils-bom", name: "java-utils-bom", path: "java-utils-bom", modulePath: "../java-utils-bom");
 					parent.addModule(id: "java-utils-async", name: "java-utils-async", path: "java-utils-async", modulePath: "../java-utils-async");
 					parent.addModule(id: "java-utils-chain", name: "java-utils-chain", path: "java-utils-chain", modulePath: "../java-utils-chain");
@@ -97,13 +55,19 @@ pipeline {
 					parent.attachTo(builder);
 					
 					builder.checkChanges();
-					
-					parent.info();
-					// parent.getVersion();
-					// parent.getVersion("../java-utils-async");
-					
-					
+					builder.logProjects();
 				}
+			}
+		}
+		stage('Update Maven Repo') {
+			steps {
+				script {
+					when(builder.hasChangedProjects()) {
+						builder.purgeBuildCaches();
+						builder.resolveResources();
+					}
+				}
+				sh 'mkdir -p target/result/'
 			}
 		}
 	}
