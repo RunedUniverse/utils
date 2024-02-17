@@ -1,4 +1,7 @@
 @Library('runeduniverse-pipeline-library') _
+
+def builder = new net.runeduniverse.lib.tools.jenkins.PipelineBuilder(this);
+
 pipeline {
 	agent any
 	tools {
@@ -74,8 +77,15 @@ pipeline {
 				sh 'echo "PATH = ${PATH}"'
 				sh 'echo "M2_HOME = ${M2_HOME}"'
 				sh 'printenv | sort'
+				script {
+					def parent = new net.runeduniverse.lib.tools.jenkins.MavenProject(this);
+					parent.setPath(.maven-parent);
+					sh 'echo ${parent.getVersion()}'
+					sh 'echo ${parent.getVersion("java-utils-async")}'
+				}
 			}
 		}
+		/*
 		stage('Update Maven Repo') {
 			when {
 				anyOf {
@@ -943,7 +953,7 @@ pipeline {
 						}
 					}
 				}
-			}
+			}*/
 		}
 	}
 	post {
