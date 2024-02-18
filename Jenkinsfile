@@ -71,10 +71,9 @@ pipeline {
 			}
 		}
 		stage('License Check') {
-			when { -> false }
 			steps {
 				script {
-					parallel builder.forEachProject(when: { p -> p.isActive() && p.hasChanged() }) { project ->
+					parallel builder.forEachProject(when: { p -> false && p.isActive() && p.hasChanged() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 							project.execDev(profiles: [
 								"license-check",
