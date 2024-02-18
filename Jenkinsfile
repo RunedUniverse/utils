@@ -42,7 +42,7 @@ pipeline {
 					builder.addBuildTool(maven);
 				
 					def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
-					parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom");
+					parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true);
 					parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
 					parent.addModule(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain");
 					parent.addModule(id: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common");
