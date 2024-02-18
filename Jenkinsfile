@@ -76,11 +76,9 @@ pipeline {
 					parallel builder.collectProjects().collectEntries { project ->
 						[
 							(project.getName()): {
-								stage(project.getName()) {
-									when(project.hasChanged()) {
-										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											project.execDev(profiles: "license-check,license-apache2-approve");
-										}
+								when(project.hasChanged()) {
+									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+										project.execDev(profiles: "license-check,license-apache2-approve", module: ".");
 									}
 								}
 							}
