@@ -38,7 +38,7 @@ pipeline {
 				sh 'printenv | sort'
 				script {
 					builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
-					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this)
+					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
 					builder.addBuildTool(maven);
 				
 					def parent = maven.createProject(id: "mvn-parent", name: "mvn-parent", path: ".maven-parent");
@@ -68,6 +68,25 @@ pipeline {
 					}
 				}
 				sh 'mkdir -p target/result/'
+			}
+		}
+		stage('License Check') {
+			steps {
+				script {
+					parallel builder.collectProjects().collectEntries { project ->
+						[
+							(project): {
+								stage(project.getName()) {
+									when(project.hasChanged()) {
+										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+											project.execDev(profiles: "license-check,license-apache2-approve");
+										}
+									}
+								}
+							}
+						]
+					}
+				}
 			}
 		}
 	}
