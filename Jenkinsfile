@@ -73,16 +73,13 @@ pipeline {
 		stage('License Check') {
 			steps {
 				script {
-					parallel builder.collectProjects().collectEntries { project ->
-						[
-							(project.getName()): {
-								when(project.hasChanged()) {
-									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-										project.execDev(profiles: ["license-check","license-apache2-approve"], modules: ["."]);
-									}
-								}
-							}
-						]
+					parallel builder.forEachProject(when: { p -> p.isActive() && p.hasChanged() }, name: { p -> "[C]" + p.getName() }) { project ->
+						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+							project.execDev(profiles: [
+								"license-check",
+								"license-apache2-approve"
+							], modules: ["."]);
+						}
 					}
 				}
 			}
