@@ -75,7 +75,7 @@ pipeline {
 				script {
 					parallel builder.collectProjects().collectEntries { project ->
 						[
-							(project): {
+							(project.getName()): {
 								stage(project.getName()) {
 									when(project.hasChanged()) {
 										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
