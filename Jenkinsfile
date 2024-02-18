@@ -49,7 +49,7 @@ pipeline {
 					parent.addModule(id: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors");
 					parent.addModule(id: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging");
 					parent.addModule(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven");
-					parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
+					parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus", active: false);
 					parent.addModule(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
 					
 					parent.attachTo(builder);
@@ -73,7 +73,7 @@ pipeline {
 		stage('License Check') {
 			steps {
 				script {
-					parallel builder.forEachProject(when: { p -> p.isActive() && !p.hasChanged() }, name: { p -> "[C]" + p.getName() }) { project ->
+					parallel builder.forEachProject(when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 							project.execDev(profiles: [
 								"license-check",
