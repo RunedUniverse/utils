@@ -133,6 +133,64 @@ pipeline {
 				}
 			}
 		}
+		
+		stage('Build [1st Level]') {
+			steps {
+				script {
+					parallel builder.forEachProject([
+							"java-utils-logging",
+							"java-utils-errors",
+							"java-utils-common",
+							"java-utils-async"
+						], when: { p -> p.isActive() && p.hasChanged() }) { project ->
+						try {
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+								project.execDev(profiles: [
+									"toolchain-openjdk-1-8-0",
+									"install"
+								], modules: ["."]);
+							}
+						} finally {
+							dir(path: "${project.getPath()}/target") {
+								sh 'ls -l'
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		stage('Build [2nd Level]') {
+			steps {
+				script {
+					parallel builder.forEachProject([
+							"java-utils-chain",
+							"java-utils-scanner",
+							"java-utils-plexus",
+							"java-utils-maven"
+						], when: { p -> p.isActive() && p.hasChanged() }) { project ->
+						try {
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+								project.execDev(profiles: [
+									"toolchain-openjdk-1-8-0",
+									"install"
+								], modules: ["."]);
+							}
+						} finally {
+							dir(path: "${project.getPath()}/target") {
+								sh 'ls -l'
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	post {
 		cleanup {
