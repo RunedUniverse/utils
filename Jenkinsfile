@@ -90,15 +90,14 @@ pipeline {
 				script {
 					parallel builder.forEachProject(filter: { p -> p.isParent() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-							project.execDev(profiles: [
-								"toolchain-openjdk-1-8-0",
-								"install"
-							], args: [
-								"--non-recursive"
-							], modules: ["."]);
-						}
-						post {
-							always {
+							try {
+								project.execDev(profiles: [
+									"toolchain-openjdk-1-8-0",
+									"install"
+								], args: [
+									"--non-recursive"
+								], modules: ["."]);
+							} finally {
 								dir(path: "${project.getPath()}/target") {
 									archiveArtifacts artifacts: '*.pom', fingerprint: true
 									archiveArtifacts artifacts: '*.asc', fingerprint: true
