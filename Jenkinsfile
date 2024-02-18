@@ -73,7 +73,7 @@ pipeline {
 		stage('License Check') {
 			steps {
 				script {
-					parallel builder.forEachProject(when: { p -> p.isActive() && p.hasChanged() }, name: { p -> "[C]" + p.getName() }) { project ->
+					parallel builder.forEachProject(when: { p -> p.isActive() && !p.hasChanged() }, name: { p -> "[C]" + p.getName() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 							project.execDev(profiles: [
 								"license-check",
