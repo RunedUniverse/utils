@@ -142,7 +142,9 @@ pipeline {
 							"java-utils-errors",
 							"java-utils-common",
 							"java-utils-async"
-						], when: { p -> p.isActive() && p.hasChanged() }) { project ->
+						], [
+							when: { p -> p.isActive() && p.hasChanged() }
+						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								project.execDev(profiles: [
@@ -171,7 +173,9 @@ pipeline {
 							"java-utils-scanner",
 							"java-utils-plexus",
 							"java-utils-maven"
-						], when: { p -> p.isActive() && p.hasChanged() }) { project ->
+						], [
+							when: { p -> p.isActive() && p.hasChanged() }
+						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								project.execDev(profiles: [
