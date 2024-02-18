@@ -41,16 +41,16 @@ pipeline {
 					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
 					builder.addBuildTool(maven);
 				
-					def parent = maven.createProject(id: "mvn-parent", name: "mvn-parent", path: ".maven-parent");
-					parent.addModule(id: "java-utils-bom", name: "java-utils-bom", path: "java-utils-bom", modulePath: "../java-utils-bom");
-					parent.addModule(id: "java-utils-async", name: "java-utils-async", path: "java-utils-async", modulePath: "../java-utils-async");
-					parent.addModule(id: "java-utils-chain", name: "java-utils-chain", path: "java-utils-chain", modulePath: "../java-utils-chain");
-					parent.addModule(id: "java-utils-common", name: "java-utils-common", path: "java-utils-common", modulePath: "../java-utils-common");
-					parent.addModule(id: "java-utils-errors", name: "java-utils-errors", path: "java-utils-errors", modulePath: "../java-utils-errors");
-					parent.addModule(id: "java-utils-logging", name: "java-utils-logging", path: "java-utils-logging", modulePath: "../java-utils-logging");
-					parent.addModule(id: "java-utils-maven", name: "java-utils-maven", path: "java-utils-maven", modulePath: "../java-utils-maven");
-					parent.addModule(id: "java-utils-plexus", name: "java-utils-plexus", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
-					parent.addModule(id: "java-utils-scanner", name: "java-utils-scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
+					def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
+					parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom");
+					parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
+					parent.addModule(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain");
+					parent.addModule(id: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common");
+					parent.addModule(id: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors");
+					parent.addModule(id: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging");
+					parent.addModule(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven");
+					parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
+					parent.addModule(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
 					
 					parent.attachTo(builder);
 					
@@ -78,7 +78,7 @@ pipeline {
 							(project.getName()): {
 								when(project.hasChanged()) {
 									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-										project.execDev(profiles: "license-check,license-apache2-approve", module: ".");
+										project.execDev(profiles: ["license-check","license-apache2-approve"], modules: ["."]);
 									}
 								}
 							}
