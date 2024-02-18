@@ -71,7 +71,7 @@ pipeline {
 			}
 		}
 		stage('License Check') {
-			when { true == false }
+			when { return false }
 			steps {
 				script {
 					parallel builder.forEachProject(when: { p -> p.isActive() && p.hasChanged() }) { project ->
