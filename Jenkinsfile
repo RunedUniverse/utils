@@ -89,20 +89,20 @@ pipeline {
 			steps {
 				script {
 					parallel builder.forEachProject(filter: { p -> p.isParent() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
-						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-							try {
+						try {
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								project.execDev(profiles: [
 									"toolchain-openjdk-1-8-0",
 									"install"
 								], args: [
 									"--non-recursive"
 								], modules: ["."]);
-							} finally {
-								dir(path: "${project.getPath()}/target") {
-									archiveArtifacts artifacts: '*.pom', fingerprint: true
-									archiveArtifacts artifacts: '*.asc', fingerprint: true
-									sh 'cp *.pom *.asc ../../target/result/'
-								}
+							}
+						} finally {
+							dir(path: "${project.getPath()}/target") {
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
 							}
 						}
 					}
@@ -114,20 +114,19 @@ pipeline {
 			steps {
 				script {
 					parallel builder.forEachProject(filter: { p -> p.isBOM() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
-						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-							project.execDev(profiles: [
-								"toolchain-openjdk-1-8-0",
-								"install"
-							], modules: ["."]);
-						}
-						post {
-							always {
-								dir(path: "${project.getPath()}/target") {
-									sh 'ls -l'
-									archiveArtifacts artifacts: '*.pom', fingerprint: true
-									archiveArtifacts artifacts: '*.asc', fingerprint: true
-									sh 'cp *.pom *.asc ../../target/result/'
-								}
+						try {
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+								project.execDev(profiles: [
+									"toolchain-openjdk-1-8-0",
+									"install"
+								], modules: ["."]);
+							}
+						} finally {
+							dir(path: "${project.getPath()}/target") {
+								sh 'ls -l'
+								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.asc', fingerprint: true
+								sh 'cp *.pom *.asc ../../target/result/'
 							}
 						}
 					}
