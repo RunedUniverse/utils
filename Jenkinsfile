@@ -206,13 +206,13 @@ pipeline {
 							filter: { p -> p.isParent() },
 							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() }}
 						]) { project ->
-                    		echo "project: ${project}"
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
-								List selected = project.getModules(
+								List selected = project.getModules([
+									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
-								);
+								]);
 								//echo "modules: ${selected.toString()}";
 								//echo "paths:   ${project.getModulePaths(filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
 								// process selected modules
