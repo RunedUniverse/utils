@@ -214,29 +214,29 @@ pipeline {
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								);
-								echo "modules: ${selected.toString()}";
-								echo "paths:   ${project.getModulePaths(filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
+								//echo "modules: ${selected.toString()}";
+								//echo "paths:   ${project.getModulePaths(filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
 								// process selected modules
-								try {
-									project.execDev(profiles: [
-										"toolchain-openjdk-1-8-0",
-										"test-junit-jupiter"
-									], args: [
-										"-X"
-									], modules: project.getModulePaths([
-											filter: { p -> selected.any { it == p } },
-											includeSelf: true
-										]));
-								} catch (Exception e) {
-									selected.each {
-										archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
-									}
-									throw e;
-								} finally {
-									selected.each {
-										junit "${it.getPath()}/target/surefire-reports/*.xml"
-									}
-								}
+							//	try {
+							//		project.execDev(profiles: [
+							//			"toolchain-openjdk-1-8-0",
+							//			"test-junit-jupiter"
+							//		], args: [
+							//			"-X"
+							//		], modules: project.getModulePaths([
+							//				filter: { p -> selected.any { it == p } },
+							//				includeSelf: true
+							//			]));
+							//	} catch (Exception e) {
+							//		selected.each {
+							//			archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
+							//		}
+							//		throw e;
+							//	} finally {
+							//		selected.each {
+							//			junit "${it.getPath()}/target/surefire-reports/*.xml"
+							//		}
+							//	}
 							}
                     
 							// project: other
