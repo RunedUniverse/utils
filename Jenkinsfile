@@ -133,7 +133,7 @@ pipeline {
 				}
 			}
 		}
-		
+
 		stage('Build [1st Level]') {
 			steps {
 				script {
@@ -157,14 +157,14 @@ pipeline {
 								sh 'ls -l'
 								archiveArtifacts artifacts: '*.pom', fingerprint: true
 								archiveArtifacts artifacts: '*.asc', fingerprint: true
-								sh 'cp *.pom *.asc ../../target/result/'
+								sh 'cp *.pom *.jar *.asc ../../target/result/'
 							}
 						}
 					}
 				}
 			}
 		}
-		
+
 		stage('Build [2nd Level]') {
 			steps {
 				script {
@@ -188,12 +188,73 @@ pipeline {
 								sh 'ls -l'
 								archiveArtifacts artifacts: '*.pom', fingerprint: true
 								archiveArtifacts artifacts: '*.asc', fingerprint: true
-								sh 'cp *.pom *.asc ../../target/result/'
+								sh 'cp *.pom *.jar *.asc ../../target/result/'
 							}
 						}
 					}
 				}
 			}
+		}
+
+		stage('Tracing-Data') {
+			when {
+				script {
+					builder.hasActiveProjects() && builder.hasChangedProjects()
+				}
+			}
+			parallel {
+				stage('Development') {
+					steps {
+						script {
+							builder.forEachProject([
+									when: { p -> p.isActive() && p.hasChanged() }
+								]) { project ->
+								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+									project.execDev(profiles: [
+										"test-junit-jupiter",
+										"gen-eff-pom"
+									], skipParent: true);
+									project.execDev(profiles: [
+										"dist-repo-development",
+										"deploy",
+										"gen-eff-pom"
+									], skipParent: true, skipRepos: true);
+								}
+							}.each { it.value() }
+						}
+					}				
+				}
+				stage('Release') {
+					when {
+						branch 'master'
+					}
+					steps {
+						script {
+							builder.forEachProject([
+									when: { p -> p.isActive() && p.hasChanged() }
+								]) { project ->
+								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+									project.execDev(profiles: [
+										"test-junit-jupiter",
+										"gen-eff-pom"
+									], skipParent: true);
+									project.execDev(profiles: [
+										"dist-repo-releases'",
+										"deploy-signed",
+										"gen-eff-pom"
+									], skipParent: true);
+								}
+							}.each { it.value() }
+						}
+					}				
+				}
+			}
+			post {
+				always {
+					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
+				}
+			}
+
 		}
 	}
 	post {
