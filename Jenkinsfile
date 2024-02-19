@@ -200,8 +200,8 @@ pipeline {
 			steps {
 				script {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						parallel [
-							"Development": {
+						parallel ([
+							Development: {
 								builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
@@ -218,7 +218,7 @@ pipeline {
 									}
 								}.each { it.value() }
 							},
-							"Release": {
+							Release: {
 								when(BRANCH_NAME.equals("master")) {
 									builder.forEachProject([
 											when: { p -> p.isActive() && p.hasChanged() }
@@ -237,7 +237,7 @@ pipeline {
 									}.each { it.value() }
 								}
 							}
-						]
+						]);
 					}
 				}
 			}
