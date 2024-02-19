@@ -199,12 +199,10 @@ pipeline {
 		stage('Tracing-Data') {
 			steps {
 				script {
-					echo "hasActiveProjects: ${builder.hasActiveProjects()}"
-					echo "hasChangedProjects: ${builder.hasChangedProjects()}"
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						parallel ([
+						parallel [
 							Development: {
-								builder.forEachProject([
+								parallel builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
 									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -218,11 +216,11 @@ pipeline {
 											"gen-eff-pom"
 										], skipParent: true, skipRepos: true);
 									}
-								}.each { (it.value as Closure)() }
+								}
 							},
 							Release: {
 								when(BRANCH_NAME.equals("master")) {
-									builder.forEachProject([
+									parallel builder.forEachProject([
 											when: { p -> p.isActive() && p.hasChanged() }
 									]) { project ->
 										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -236,10 +234,10 @@ pipeline {
 												"gen-eff-pom"
 											], skipParent: true);
 										}
-									}.each { (it.value as Closure)() }
+									}
 								}
 							}
-						]);
+						];
 					}
 				}
 			}
