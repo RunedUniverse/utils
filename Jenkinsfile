@@ -196,6 +196,33 @@ pipeline {
 			}
 		}
 
+		stage('Test') {
+			steps {
+				script {
+					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
+						parallel builder.forEachProject([
+								filter: { p -> p.isParent() },
+								when: { p -> p.isActive() && p.hasChanged() }
+							]) { project ->
+							try {
+								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+									project.execDev(profiles: [
+										"toolchain-openjdk-1-8-0",
+										"test-junit-jupiter"
+									], modules: ["."]);
+								}
+							} catch (Exception e) {
+								archiveArtifacts artifacts: "${project.getPath()}/target/surefire-reports/*.xml"
+								throw e;
+							} finally {
+								junit "${project.getPath()}/target/surefire-reports/*.xml"
+							}
+						}
+					}
+				}
+			}
+		}
+
 	}
 	post {
 		cleanup {
