@@ -200,7 +200,7 @@ pipeline {
 			steps {
 				script {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						parallel [
+						parallel ([
 							Development: {
 								parallel builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
@@ -237,7 +237,7 @@ pipeline {
 									}
 								}
 							}
-						];
+						]);
 					}
 				}
 			}
