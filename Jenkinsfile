@@ -202,11 +202,11 @@ pipeline {
 			steps {
 				script {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						parallel builder.forEachProject([
+						try {
+							parallel builder.forEachProject([
 								filter: { p -> p.isParent() },
-								when: { p -> p.isActive() && p.hasChanged() }
+								when: { p -> p.modules.any { it.isActive() && it.hasChanged() }}
 							]) { project ->
-							try {
 								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 									project.execDev(profiles: [
 										"toolchain-openjdk-1-8-0",
@@ -215,15 +215,12 @@ pipeline {
 										"-X"
 									], modules: ["."]);
 								}
-							} catch (Exception e) {
-								archiveArtifacts artifacts: "${project.getPath()}/target/surefire-reports/*.xml"
-								throw e;
-							} finally {
-								dir(path: "${project.getPath()}/target") {
-									sh 'tree'
-								}
-								junit "${project.getPath()}/target/surefire-reports/*.xml"
 							}
+						} catch (Exception e) {
+							archiveArtifacts artifacts: "*/target/surefire-reports/*.xml"
+							throw e;
+						} finally {
+							junit "*/target/surefire-reports/*.xml"
 						}
 					}
 				}
