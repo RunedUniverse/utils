@@ -219,7 +219,7 @@ pipeline {
 								}.each { it.value() }
 							},
 							('Release'): {
-								when(branch 'master') {
+								when(BRANCH_NAME.equals("master")) {
 									builder.forEachProject([
 											when: { p -> p.isActive() && p.hasChanged() }
 									]) { project ->
