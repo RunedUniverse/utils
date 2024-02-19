@@ -204,7 +204,7 @@ pipeline {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
 						parallel builder.forEachProject([
 							filter: { p -> p.isParent() },
-							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() }}
+							when: { p -> p.collectProjects( includeSelf: true ).any {  it.hasChanged() }}
 						]) { project ->
                     
 							// project: maven
