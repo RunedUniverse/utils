@@ -266,11 +266,9 @@ pipeline {
 								}
 							}.each {
 								stage(it.key) {
-									steps {
 										script {
 											it.value();
 										}
-									}
 								}
 							}
 						}
@@ -293,11 +291,9 @@ pipeline {
 								}
 							}.each {
 								stage(it.key) {
-									steps {
 										script {
 											it.value();
 										}
-									}
 								}
 							}
 						}
@@ -327,11 +323,9 @@ pipeline {
 						}
 					}.each {
 						stage(it.key) {
-							steps {
 								script {
 									it.value();
 								}
-							}
 						}
 					}
 				}
