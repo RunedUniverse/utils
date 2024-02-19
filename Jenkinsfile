@@ -211,7 +211,6 @@ pipeline {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
 								List selected = project.collectProjects(
-									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								);
 								//echo "modules: ${selected.toString()}";
