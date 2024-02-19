@@ -198,9 +198,7 @@ pipeline {
 
 		stage('Tracing-Data') {
 			when {
-				script {
-					builder.hasActiveProjects() && builder.hasChangedProjects()
-				}
+				builder.hasActiveProjects() && builder.hasChangedProjects()
 			}
 			parallel {
 				stage('Development') {
