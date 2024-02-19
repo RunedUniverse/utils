@@ -220,6 +220,7 @@ pipeline {
 							archiveArtifacts artifacts: "*/target/surefire-reports/*.xml"
 							throw e;
 						} finally {
+							sh 'tree'
 							junit "*/target/surefire-reports/*.xml"
 						}
 					}
