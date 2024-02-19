@@ -196,58 +196,6 @@ pipeline {
 			}
 		}
 
-		stage('Tracing-Data') {
-			steps {
-				script {
-					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						parallel ([
-							Development: {
-								parallel builder.forEachProject([
-									when: { p -> p.isActive() && p.hasChanged() }
-								]) { project ->
-									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-										project.execDev(profiles: [
-											"test-junit-jupiter",
-											"gen-eff-pom"
-										], skipParent: true);
-										project.execDev(profiles: [
-											"dist-repo-development",
-											"deploy",
-											"gen-eff-pom"
-										], skipParent: true, skipRepos: true);
-									}
-								}
-							},
-							Release: {
-								when(BRANCH_NAME.equals("master")) {
-									parallel builder.forEachProject([
-											when: { p -> p.isActive() && p.hasChanged() }
-									]) { project ->
-										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											project.execDev(profiles: [
-												"test-junit-jupiter",
-												"gen-eff-pom"
-											], skipParent: true);
-											project.execDev(profiles: [
-												"dist-repo-releases'",
-												"deploy-signed",
-												"gen-eff-pom"
-											], skipParent: true);
-										}
-									}
-								}
-							}
-						]);
-					}
-				}
-			}
-			post {
-				always {
-					archiveArtifacts artifacts: 'maven-build-trace/*.xml', fingerprint: true
-				}
-			}
-
-		}
 	}
 	post {
 		cleanup {
