@@ -216,12 +216,12 @@ pipeline {
 									], modules: ["."]);
 								}
 							} catch (Exception e) {
-								dir(path: "${project.getPath()}/target") {
-									sh 'tree'
-								}
 								archiveArtifacts artifacts: "${project.getPath()}/target/surefire-reports/*.xml"
 								throw e;
 							} finally {
+								dir(path: "${project.getPath()}/target") {
+									sh 'tree'
+								}
 								junit "${project.getPath()}/target/surefire-reports/*.xml"
 							}
 						}
