@@ -204,7 +204,7 @@ pipeline {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
 						parallel builder.forEachProject([
 							filter: { p -> p.isParent() },
-							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() && (it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject ? "jar".equals(it.getPackagingProcedure() : true) }}
+							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() }}
 						]) { project ->
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
