@@ -156,6 +156,7 @@ pipeline {
 							dir(path: "${project.getPath()}/target") {
 								sh 'ls -l'
 								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.jar', fingerprint: true
 								archiveArtifacts artifacts: '*.asc', fingerprint: true
 								sh 'cp *.pom *.jar *.asc ../../target/result/'
 							}
@@ -187,6 +188,7 @@ pipeline {
 							dir(path: "${project.getPath()}/target") {
 								sh 'ls -l'
 								archiveArtifacts artifacts: '*.pom', fingerprint: true
+								archiveArtifacts artifacts: '*.jar', fingerprint: true
 								archiveArtifacts artifacts: '*.asc', fingerprint: true
 								sh 'cp *.pom *.jar *.asc ../../target/result/'
 							}
@@ -209,6 +211,8 @@ pipeline {
 									project.execDev(profiles: [
 										"toolchain-openjdk-1-8-0",
 										"test-junit-jupiter"
+									], args: [
+										"-X"
 									], modules: ["."]);
 								}
 							} catch (Exception e) {
@@ -223,6 +227,69 @@ pipeline {
 			}
 		}
 
+		stage('Deploy') {
+			parallel {
+				stage('Develop') {
+					steps {
+						script {
+							stages builder.forEachProject([
+									when: { p -> p.isActive() && p.hasChanged() }
+								]) { project ->
+								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+									project.execDev(profiles: [
+										"dist-repo-development",
+										"deploy"
+									], modules: ["."]);
+								}
+							}
+						}
+					}
+				}
+				stage('Release') {
+					when {
+						branch 'master'
+					}
+					steps {
+						script {
+							stages builder.forEachProject([
+									when: { p -> p.isActive() && p.hasChanged() }
+								]) { project ->
+								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+									project.execDev(profiles: [
+										"dist-repo-releases",
+										"deploy-pom-signed"
+									], modules: ["."]);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('Stage at Maven-Central') {
+			when {
+				branch 'master'
+			}
+			steps {
+				script {
+					stages builder.forEachProject([
+							when: { p -> p.isActive() && p.hasChanged() }
+						]) { project ->
+						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+							// never add : -P ${REPOS} => this is ment to fail here
+							project.execDev(profiles: [
+								"repo-releases",
+								"dist-repo-maven-central",
+								"deploy-pom-signed"
+							], modules: ["."], skipRepos: true);
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh 'git push origin $(git-create-version-tag maven-parent .)'
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	post {
 		cleanup {
