@@ -197,54 +197,48 @@ pipeline {
 		}
 
 		stage('Tracing-Data') {
-			when {
-				builder.hasActiveProjects() && builder.hasChangedProjects()
-			}
-			parallel {
-				stage('Development') {
-					steps {
-						script {
-							builder.forEachProject([
+			steps {
+				script {
+					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
+						parallel [
+							('Development'): {
+								builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
-								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-									project.execDev(profiles: [
-										"test-junit-jupiter",
-										"gen-eff-pom"
-									], skipParent: true);
-									project.execDev(profiles: [
-										"dist-repo-development",
-										"deploy",
-										"gen-eff-pom"
-									], skipParent: true, skipRepos: true);
+									if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+										project.execDev(profiles: [
+											"test-junit-jupiter",
+											"gen-eff-pom"
+										], skipParent: true);
+										project.execDev(profiles: [
+											"dist-repo-development",
+											"deploy",
+											"gen-eff-pom"
+										], skipParent: true, skipRepos: true);
+									}
+								}.each { it.value() }
+							},
+							('Release'): {
+								when(branch 'master') {
+									builder.forEachProject([
+											when: { p -> p.isActive() && p.hasChanged() }
+									]) { project ->
+										if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+											project.execDev(profiles: [
+												"test-junit-jupiter",
+												"gen-eff-pom"
+											], skipParent: true);
+											project.execDev(profiles: [
+												"dist-repo-releases'",
+												"deploy-signed",
+												"gen-eff-pom"
+											], skipParent: true);
+										}
+									}.each { it.value() }
 								}
-							}.each { it.value() }
-						}
-					}				
-				}
-				stage('Release') {
-					when {
-						branch 'master'
+							}
+						]
 					}
-					steps {
-						script {
-							builder.forEachProject([
-									when: { p -> p.isActive() && p.hasChanged() }
-								]) { project ->
-								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-									project.execDev(profiles: [
-										"test-junit-jupiter",
-										"gen-eff-pom"
-									], skipParent: true);
-									project.execDev(profiles: [
-										"dist-repo-releases'",
-										"deploy-signed",
-										"gen-eff-pom"
-									], skipParent: true);
-								}
-							}.each { it.value() }
-						}
-					}				
 				}
 			}
 			post {
