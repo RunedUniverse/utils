@@ -254,7 +254,7 @@ pipeline {
 				stage('Develop') {
 					steps {
 						script {
-							stages builder.forEachProject([
+							builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
 								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -262,6 +262,14 @@ pipeline {
 										"dist-repo-development",
 										"deploy"
 									], modules: ["."]);
+								}
+							}.each {
+								stage(it.key) {
+									steps {
+										script {
+											it.value();
+										}
+									}
 								}
 							}
 						}
