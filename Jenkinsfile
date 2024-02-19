@@ -255,7 +255,7 @@ pipeline {
 				stage('Develop') {
 					steps {
 						script {
-							builder.forEachProject([
+							parallel builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
 								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -263,12 +263,6 @@ pipeline {
 										"dist-repo-development",
 										"deploy"
 									], modules: ["."]);
-								}
-							}.each {
-								stage(it.key) {
-										script {
-											(it.value as Closure).value();
-										}
 								}
 							}
 						}
@@ -280,7 +274,7 @@ pipeline {
 					}
 					steps {
 						script {
-							builder.forEachProject([
+							parallel builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
 								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -288,12 +282,6 @@ pipeline {
 										"dist-repo-releases",
 										"deploy-pom-signed"
 									], modules: ["."]);
-								}
-							}.each {
-								stage(it.key) {
-										script {
-											(it.value as Closure).value();
-										}
 								}
 							}
 						}
@@ -307,7 +295,7 @@ pipeline {
 			}
 			steps {
 				script {
-					builder.forEachProject([
+					parallel builder.forEachProject([
 							when: { p -> p.isActive() && p.hasChanged() }
 						]) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -320,12 +308,6 @@ pipeline {
 							sshagent (credentials: ['RunedUniverse-Jenkins']) {
 								sh 'git push origin $(git-create-version-tag maven-parent .)'
 							}
-						}
-					}.each {
-						stage(it.key) {
-								script {
-									(it.value as Closure).value();
-								}
 						}
 					}
 				}
