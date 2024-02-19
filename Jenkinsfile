@@ -267,7 +267,7 @@ pipeline {
 							}.each {
 								stage(it.key) {
 										script {
-											it.value();
+											(it.value as Closure).value();
 										}
 								}
 							}
@@ -292,7 +292,7 @@ pipeline {
 							}.each {
 								stage(it.key) {
 										script {
-											it.value();
+											(it.value as Closure).value();
 										}
 								}
 							}
@@ -324,7 +324,7 @@ pipeline {
 					}.each {
 						stage(it.key) {
 								script {
-									it.value();
+									(it.value as Closure).value();
 								}
 						}
 					}
