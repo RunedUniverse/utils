@@ -204,7 +204,7 @@ pipeline {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
 						parallel builder.forEachProject([
 							filter: { p -> p.isParent() },
-							when: { p -> p.collectProjects([ includeSelf: true ]).any { it.isActive() && it.hasChanged() }}
+							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() }}
 						]) { project ->
                     
 							// project: maven
@@ -215,7 +215,7 @@ pipeline {
 									includeSelf: true
 								);
 								echo "modules: ${selected.toString()}";
-								echo "paths:   ${project.getModulePaths([filter: { p -> selected.any { it == p } }, includeSelf: true]).toString()}";
+								echo "paths:   ${project.getModulePaths(filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
 								// process selected modules
 								try {
 									project.execDev(profiles: [
