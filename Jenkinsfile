@@ -210,7 +210,7 @@ pipeline {
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
-								def selected = project.getModules([
+								List selected = project.getModules([
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								]);
