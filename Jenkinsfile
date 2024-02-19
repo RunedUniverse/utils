@@ -282,7 +282,7 @@ pipeline {
 					}
 					steps {
 						script {
-							stages builder.forEachProject([
+							builder.forEachProject([
 									when: { p -> p.isActive() && p.hasChanged() }
 								]) { project ->
 								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -290,6 +290,14 @@ pipeline {
 										"dist-repo-releases",
 										"deploy-pom-signed"
 									], modules: ["."]);
+								}
+							}.each {
+								stage(it.key) {
+									steps {
+										script {
+											it.value();
+										}
+									}
 								}
 							}
 						}
@@ -303,7 +311,7 @@ pipeline {
 			}
 			steps {
 				script {
-					stages builder.forEachProject([
+					builder.forEachProject([
 							when: { p -> p.isActive() && p.hasChanged() }
 						]) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
@@ -315,6 +323,14 @@ pipeline {
 							], modules: ["."], skipRepos: true);
 							sshagent (credentials: ['RunedUniverse-Jenkins']) {
 								sh 'git push origin $(git-create-version-tag maven-parent .)'
+							}
+						}
+					}.each {
+						stage(it.key) {
+							steps {
+								script {
+									it.value();
+								}
 							}
 						}
 					}
