@@ -212,7 +212,7 @@ pipeline {
 								// select modules here
 								//List selected = 
 								echo "test! - 1"
-								project.getModules(
+								(project as net.runeduniverse.lib.tools.jenkins.MavenProject).getModules(
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								).each { echo "${it}" }
