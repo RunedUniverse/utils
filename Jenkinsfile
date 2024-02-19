@@ -214,6 +214,7 @@ pipeline {
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								]);
+								echo "${selected}"
 								// process selected modules
 								try {
 									project.execDev(profiles: [
