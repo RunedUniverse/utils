@@ -214,7 +214,11 @@ pipeline {
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								]);
-								echo "${selected}"
+								echo "modules: ${selected}";
+								echo "paths:   ${project.getModulePaths([
+											filter: { p -> selected.any { it == p } },
+											includeSelf: true
+										])}";
 								// process selected modules
 								try {
 									project.execDev(profiles: [
