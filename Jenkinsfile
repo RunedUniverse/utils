@@ -215,10 +215,7 @@ pipeline {
 									includeSelf: true
 								]);
 								echo "modules: ${selected}";
-								echo "paths:   ${project.getModulePaths([
-											filter: { p -> selected.any { it == p } },
-											includeSelf: true
-										])}";
+								echo "paths:   ${project.getModulePaths([filter: { p -> selected.any { it == p } }, includeSelf: true])}";
 								// process selected modules
 								try {
 									project.execDev(profiles: [
