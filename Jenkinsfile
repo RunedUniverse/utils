@@ -202,26 +202,43 @@ pipeline {
 			steps {
 				script {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
-						try {
-							parallel builder.forEachProject([
-								filter: { p -> p.isParent() },
-								when: { p -> p.modules.any { it.isActive() && it.hasChanged() }}
-							]) { project ->
-								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+						parallel builder.forEachProject([
+							filter: { p -> p.isParent() },
+							when: { p -> p.collectProjects([ includeSelf: true ]).any { it.isActive() && it.hasChanged() }}
+						]) { project ->
+
+							// project: maven
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+								// select modules here
+								def selected = p.getModules([
+									filter: { p -> p.isActive() && p.hasChanged() },
+									includeSelf: true
+								]);
+								// process selected modules
+								try {
 									project.execDev(profiles: [
 										"toolchain-openjdk-1-8-0",
 										"test-junit-jupiter"
 									], args: [
 										"-X"
-									], modules: ["."]);
+									], modules: p.getModulePaths([
+											filter: { p -> selected.any { it == p } },
+											includeSelf: true
+										]));
+								} catch (Exception e) {
+									selected.each {
+										archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
+									}
+									throw e;
+								} finally {
+									selected.each {
+										junit "${it.getPath()}/target/surefire-reports/*.xml"
+									}
 								}
 							}
-						} catch (Exception e) {
-							archiveArtifacts artifacts: "*/target/surefire-reports/*.xml"
-							throw e;
-						} finally {
-							sh 'tree'
-							junit "*/target/surefire-reports/*.xml"
+
+							// project: other
+
 						}
 					}
 				}
