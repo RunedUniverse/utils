@@ -210,7 +210,7 @@ pipeline {
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
-								def selected = p.getModules([
+								def selected = project.getModules([
 									filter: { p -> p.isActive() && p.hasChanged() },
 									includeSelf: true
 								]);
@@ -221,7 +221,7 @@ pipeline {
 										"test-junit-jupiter"
 									], args: [
 										"-X"
-									], modules: p.getModulePaths([
+									], modules: project.getModulePaths([
 											filter: { p -> selected.any { it == p } },
 											includeSelf: true
 										]));
