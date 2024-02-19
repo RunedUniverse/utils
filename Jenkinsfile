@@ -210,7 +210,7 @@ pipeline {
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
-								List selected = project.collectProjects(
+								List selected = project.getModules(
 									includeSelf: true
 								);
 								//echo "modules: ${selected.toString()}";
