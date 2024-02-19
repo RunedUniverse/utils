@@ -204,9 +204,9 @@ pipeline {
 					when(builder.hasActiveProjects() && builder.hasChangedProjects()) {
 						parallel builder.forEachProject([
 							filter: { p -> p.isParent() },
-							when: { p -> p.collectProjects( includeSelf: true ).any {  it.hasChanged() }}
+							when: { p -> p.collectProjects( includeSelf: true ).any { it.isActive() && it.hasChanged() }}
 						]) { project ->
-                    
+                    		echo "project: ${project}"
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
