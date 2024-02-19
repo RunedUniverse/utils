@@ -216,7 +216,7 @@ pipeline {
 											"gen-eff-pom"
 										], skipParent: true, skipRepos: true);
 									}
-								}.each { it.value() }
+								}.each { (it.value as Closure)() }
 							},
 							Release: {
 								when(BRANCH_NAME.equals("master")) {
@@ -234,7 +234,7 @@ pipeline {
 												"gen-eff-pom"
 											], skipParent: true);
 										}
-									}.each { it.value() }
+									}.each { (it.value as Closure)() }
 								}
 							}
 						]);
