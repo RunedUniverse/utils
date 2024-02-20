@@ -259,7 +259,7 @@ pipeline {
 								stage(it.getName()) {
 									when(it.isActive() && it.hasChanged()) {
 										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											project.execDev(profiles: [
+											it.execDev(profiles: [
 												"dist-repo-development",
 												"deploy"
 											], modules: ["."]);
