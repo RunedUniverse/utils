@@ -276,14 +276,16 @@ pipeline {
 					}
 					steps {
 						script {
-							parallel builder.forEachProject([
-									when: { p -> p.isActive() && p.hasChanged() }
-								]) { project ->
-								if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-									project.execDev(profiles: [
-										"dist-repo-releases",
-										"deploy-pom-signed"
-									], modules: ["."]);
+							builder.selectProjects().each {
+								stage(it.getName()) {
+									when(it.isActive() && it.hasChanged()) {
+										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+											it.execDev(profiles: [
+												"dist-repo-releases",
+												"deploy-pom-signed"
+											], modules: ["."]);
+										}
+									}
 								}
 							}
 						}
