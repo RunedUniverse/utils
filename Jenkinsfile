@@ -103,6 +103,8 @@ pipeline {
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
+								sh 'pwd'
+								sh 'ls -laZ'
 								archiveArtifacts artifacts: '*.pom', fingerprint: true
 								archiveArtifacts artifacts: '*.asc', fingerprint: true
 								sh 'cp *.pom *.asc ../../target/result/'
