@@ -105,6 +105,8 @@ pipeline {
 									], modules: ["."]
 								]);
 							}
+						} catch (Exception e) {
+							throw e;
 						} finally {
 							dir(path: "${project.getPath()}/target") {
 								sh 'pwd'
@@ -132,6 +134,8 @@ pipeline {
 									], modules: ["."]
 								]);
 							}
+						} catch (Exception e) {
+							throw e;
 						} finally {
 							dir(path: "${project.getPath()}/target") {
 								sh 'ls -l'
@@ -165,6 +169,8 @@ pipeline {
 									], modules: ["."]
 								]);
 							}
+						} catch (Exception e) {
+							throw e;
 						} finally {
 							dir(path: "${project.getPath()}/target") {
 								sh 'ls -l'
@@ -199,6 +205,8 @@ pipeline {
 									], modules: ["."]
 								]);
 							}
+						} catch (Exception e) {
+							throw e;
 						} finally {
 							dir(path: "${project.getPath()}/target") {
 								sh 'ls -l'
