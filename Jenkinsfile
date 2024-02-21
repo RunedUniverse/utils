@@ -1,26 +1,6 @@
 @Library('runeduniverse-pipeline-library') _
 
-// create builder
 def builder = new net.runeduniverse.lib.tools.jenkins.PipelineBuilder(this);
-// set versioning-system
-builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
-// create & link build tools
-def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
-builder.addBuildTool(maven);
-
-// define projects
-def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
-parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true);
-parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
-parent.addModule(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain");
-parent.addModule(id: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common");
-parent.addModule(id: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors");
-parent.addModule(id: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging");
-parent.addModule(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven");
-parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
-parent.addModule(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
-
-parent.attachTo(builder);
 
 pipeline {
 	agent any
@@ -57,6 +37,22 @@ pipeline {
 				sh 'echo "M2_HOME = ${M2_HOME}"'
 				sh 'printenv | sort'
 				script {
+					builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
+					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
+					builder.addBuildTool(maven);
+				
+					def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
+					parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true);
+					parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
+					parent.addModule(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain");
+					parent.addModule(id: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common");
+					parent.addModule(id: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors");
+					parent.addModule(id: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging");
+					parent.addModule(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven");
+					parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
+					parent.addModule(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
+					
+					parent.attachTo(builder);
 					
 					builder.checkChanges();
 					builder.logProjects();
@@ -223,27 +219,25 @@ pipeline {
 								echo "paths:X: ${project.getModulePaths(filter: { p -> true }, includeSelf: true).toString()}";
 								echo "paths:Y: ${project.getModulePaths(filter: { p -> true }, includeSelf: false).toString()}";
 								echo "paths:Z: ${project.getModulePaths().toString()}";
-								if(!selected.isEmpty()) {
-									// process selected modules
-									try {
-										project.execDev(profiles: [
-											"toolchain-openjdk-1-8-0",
-											"test-junit-jupiter"
-										], args: [
-											"-X"
-										], modules: project.getModulePaths([
-												filter: { p -> selected.any { it == p } },
-												includeSelf: true
-											]));
-									} catch (Exception e) {
-										selected.each {
-											archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
-										}
-										throw e;
-									} finally {
-										selected.each {
-											junit "${it.getPath()}/target/surefire-reports/*.xml"
-										}
+								// process selected modules
+								try {
+									project.execDev(profiles: [
+										"toolchain-openjdk-1-8-0",
+										"test-junit-jupiter"
+									], args: [
+										"-X"
+									], modules: project.getModulePaths([
+											filter: { p -> selected.any { it == p } },
+											includeSelf: true
+										]));
+								} catch (Exception e) {
+									selected.each {
+										archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
+									}
+									throw e;
+								} finally {
+									selected.each {
+										junit "${it.getPath()}/target/surefire-reports/*.xml"
 									}
 								}
 							}
