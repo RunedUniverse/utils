@@ -93,14 +93,16 @@ pipeline {
 				script {
 					parallel builder.forEachProject(filter: { p -> p.isParent() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						try {
-							//if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								PUtils.mvnExecDev(project, profiles: [
-									"toolchain-openjdk-1-8-0",
-									"install"
-								], args: [
-									"--non-recursive"
-								], modules: ["."]);
-							//}
+							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
+								PUtils.mvnExecDev(project, [
+									profiles: [
+										"toolchain-openjdk-1-8-0",
+										"install"
+									], args: [
+										"--non-recursive"
+									], modules: ["."]
+								]);
+							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
 								sh 'pwd'
@@ -121,10 +123,12 @@ pipeline {
 					parallel builder.forEachProject(filter: { p -> p.isBOM() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								PUtils.mvnExecDev(project, profiles: [
-									"toolchain-openjdk-1-8-0",
-									"install"
-								], modules: ["."]);
+								PUtils.mvnExecDev(project, [
+									profiles: [
+										"toolchain-openjdk-1-8-0",
+										"install"
+									], modules: ["."]
+								]);
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
@@ -152,10 +156,12 @@ pipeline {
 						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								PUtils.mvnExecDev(project, profiles: [
-									"toolchain-openjdk-1-8-0",
-									"install"
-								], modules: ["."]);
+								PUtils.mvnExecDev(project, [
+										profiles: [
+										"toolchain-openjdk-1-8-0",
+										"install"
+									], modules: ["."]
+								]);
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
@@ -184,10 +190,12 @@ pipeline {
 						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								PUtils.mvnExecDev(project, profiles: [
-									"toolchain-openjdk-1-8-0",
-									"install"
-								], modules: ["."]);
+								PUtils.mvnExecDev(project, [
+										profiles: [
+										"toolchain-openjdk-1-8-0",
+										"install"
+									], modules: ["."]
+								]);
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
@@ -219,22 +227,24 @@ pipeline {
 									includeSelf: true
 								]);
 								echo "modules: ${selected.toString()}";
-								echo "paths:A: ${PUtils.collectMvnModulePaths(project, filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
-								echo "paths:B: ${PUtils.collectMvnModulePaths(project, filter: { p -> p.isActive() && p.hasChanged() }, includeSelf: true).toString()}";
-								echo "paths:X: ${PUtils.collectMvnModulePaths(project, filter: { p -> true }, includeSelf: true).toString()}";
-								echo "paths:Y: ${PUtils.collectMvnModulePaths(project, filter: { p -> true }, includeSelf: false).toString()}";
+								echo "paths:A: ${PUtils.collectMvnModulePaths(project, [ filter: { p -> selected.any { it == p } }, includeSelf: true ]).toString()}";
+								echo "paths:B: ${PUtils.collectMvnModulePaths(project, [ filter: { p -> p.isActive() && p.hasChanged() }, includeSelf: true ]).toString()}";
+								echo "paths:X: ${PUtils.collectMvnModulePaths(project, [ filter: { p -> true }, includeSelf: true ]).toString()}";
+								echo "paths:Y: ${PUtils.collectMvnModulePaths(project, [ filter: { p -> true }, includeSelf: false ]).toString()}";
 								echo "paths:Z: ${PUtils.collectMvnModulePaths(project).toString()}";
 								// process selected modules
 								try {
-									PUtils.mvnExecDev(project, profiles: [
-										"toolchain-openjdk-1-8-0",
-										"test-junit-jupiter"
-									], args: [
-										"-X"
-									], modules: PUtils.collectMvnModulePaths(project, [
+									PUtils.mvnExecDev(project, [
+										profiles: [
+											"toolchain-openjdk-1-8-0",
+											"test-junit-jupiter"
+										], args: [
+											"-X"
+										], modules: PUtils.collectMvnModulePaths(project, [
 											filter: { p -> selected.any { it == p } },
 											includeSelf: true
-										]));
+										])
+									]);
 								} catch (Exception e) {
 									selected.each {
 										archiveArtifacts artifacts: "${it.getPath()}/target/surefire-reports/*.xml"
@@ -264,10 +274,12 @@ pipeline {
 								stage(it.getName()) {
 									when(it.isActive() && it.hasChanged()) {
 										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											PUtils.mvnExecDev(it, profiles: [
-												"dist-repo-development",
-												"deploy"
-											], modules: ["."]);
+											PUtils.mvnExecDev(it, [
+												profiles: [
+													"dist-repo-development",
+													"deploy"
+												], modules: ["."]
+											]);
 										}
 									}
 								}
@@ -285,10 +297,12 @@ pipeline {
 								stage(it.getName()) {
 									when(it.isActive() && it.hasChanged()) {
 										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											PUtils.mvnExecDev(it, profiles: [
-												"dist-repo-releases",
-												"deploy-pom-signed"
-											], modules: ["."]);
+											PUtils.mvnExecDev(it, [
+												profiles: [
+													"dist-repo-releases",
+													"deploy-pom-signed"
+												], modules: ["."]
+											]);
 										}
 									}
 								}
@@ -309,11 +323,15 @@ pipeline {
 						]) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 							// never add : -P ${REPOS} => this is ment to fail here
-							PUtils.mvnExecDev(project, profiles: [
-								"repo-releases",
-								"dist-repo-maven-central",
-								"deploy-pom-signed"
-							], modules: ["."], skipRepos: true);
+							PUtils.mvnExecDev(project, [
+								profiles: [
+									"repo-releases",
+									"dist-repo-maven-central",
+									"deploy-pom-signed"
+								],
+								modules: ["."],
+								skipRepos: true
+							]);
 							sshagent (credentials: ['RunedUniverse-Jenkins']) {
 								sh 'git push origin $(git-create-version-tag maven-parent .)'
 							}
