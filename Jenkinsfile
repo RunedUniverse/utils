@@ -10,15 +10,15 @@ builder.addBuildTool(toolMaven);
 
 // define projects
 def parent = toolMaven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
-parent.addModule(toolMaven.createProject(idid: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true));
-parent.addModule(toolMaven.createProject(idid: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus"));
-parent.addModule(toolMaven.createProject(idid: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner"));
+parent.addModule(toolMaven.createProject(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true));
+parent.addModule(toolMaven.createProject(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async"));
+parent.addModule(toolMaven.createProject(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain"));
+parent.addModule(toolMaven.createProject(id: "java-utils-common", name: "Java Utils Common", path: "java-utils-common", modulePath: "../java-utils-common"));
+parent.addModule(toolMaven.createProject(id: "java-utils-errors", name: "Java Error Handling Library", path: "java-utils-errors", modulePath: "../java-utils-errors"));
+parent.addModule(toolMaven.createProject(id: "java-utils-logging", name: "Java Logging Tools", path: "java-utils-logging", modulePath: "../java-utils-logging"));
+parent.addModule(toolMaven.createProject(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven"));
+parent.addModule(toolMaven.createProject(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus"));
+parent.addModule(toolMaven.createProject(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner"));
 
 parent.attachTo(builder);
 
