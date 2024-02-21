@@ -5,11 +5,11 @@ def builder = new net.runeduniverse.lib.tools.jenkins.PipelineBuilder(this);
 // set versioning-system
 builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
 // create & link build tools
-def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
-builder.addBuildTool(maven);
+def toolMaven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
+builder.addBuildTool(toolMaven);
 
 // define projects
-def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
+def parent = toolMaven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
 parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true);
 parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
 parent.addModule(id: "java-utils-chain", name: "Java Chain Library", path: "java-utils-chain", modulePath: "../java-utils-chain");
@@ -57,7 +57,6 @@ pipeline {
 				sh 'echo "M2_HOME = ${M2_HOME}"'
 				sh 'printenv | sort'
 				script {
-					
 					builder.checkChanges();
 					builder.logProjects();
 				}
