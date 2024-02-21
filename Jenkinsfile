@@ -212,16 +212,16 @@ pipeline {
 							// project: maven
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								// select modules here
-								List selected = project.getModules([
+								List selected = PUtils.collectMvnModules(project, [
 									filter: { p -> p.isActive() && p.hasChanged() && "jar".equals(p.getPackagingProcedure()) },
 									includeSelf: true
 								]);
 								echo "modules: ${selected.toString()}";
-								echo "paths:A: ${project.getModulePaths(filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
-								echo "paths:B: ${project.getModulePaths(filter: { p -> p.isActive() && p.hasChanged() }, includeSelf: true).toString()}";
-								echo "paths:X: ${project.getModulePaths(filter: { p -> true }, includeSelf: true).toString()}";
-								echo "paths:Y: ${project.getModulePaths(filter: { p -> true }, includeSelf: false).toString()}";
-								echo "paths:Z: ${project.getModulePaths().toString()}";
+								echo "paths:A: ${PUtils.collectMvnModulePaths(project, filter: { p -> selected.any { it == p } }, includeSelf: true).toString()}";
+								echo "paths:B: ${PUtils.collectMvnModulePaths(project, filter: { p -> p.isActive() && p.hasChanged() }, includeSelf: true).toString()}";
+								echo "paths:X: ${PUtils.collectMvnModulePaths(project, filter: { p -> true }, includeSelf: true).toString()}";
+								echo "paths:Y: ${PUtils.collectMvnModulePaths(project, filter: { p -> true }, includeSelf: false).toString()}";
+								echo "paths:Z: ${PUtils.collectMvnModulePaths(project).toString()}";
 								// process selected modules
 								try {
 									PUtils.mvnExecDev(project, profiles: [
@@ -229,7 +229,7 @@ pipeline {
 										"test-junit-jupiter"
 									], args: [
 										"-X"
-									], modules: project.getModulePaths([
+									], modules: PUtils.collectMvnModulePaths(project, [
 											filter: { p -> selected.any { it == p } },
 											includeSelf: true
 										]));
