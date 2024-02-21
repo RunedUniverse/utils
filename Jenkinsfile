@@ -93,6 +93,8 @@ pipeline {
 				script {
 					parallel builder.forEachProject(filter: { p -> p.isParent() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						try {
+							echo(project.toString());
+							project.info();
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
@@ -100,8 +102,6 @@ pipeline {
 								], args: [
 									"--non-recursive"
 								], modules: ["."]);
-							} else {
-								project.info();
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
