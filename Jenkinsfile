@@ -95,6 +95,8 @@ pipeline {
 						try {
 							echo(project.toString());
 							project.info(false);
+							echo("ist mvn project : ${project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject}");
+
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
