@@ -100,6 +100,8 @@ pipeline {
 								], args: [
 									"--non-recursive"
 								], modules: ["."]);
+							} else {
+								project.info();
 							}
 						} finally {
 							dir(path: "${project.getPath()}/target") {
