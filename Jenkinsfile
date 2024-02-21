@@ -78,10 +78,12 @@ pipeline {
 				script {
 					parallel builder.forEachProject(when: { p -> false && p.isActive() && p.hasChanged() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-							PUtils.mvnExecDev(project, profiles: [
-								"license-check",
-								"license-apache2-approve"
-							], modules: ["."]);
+							PUtils.mvnExecDev(project, [
+								profiles: [
+									"license-check",
+									"license-apache2-approve"
+								], modules: ["."]
+							]);
 						}
 					}
 				}
@@ -157,7 +159,7 @@ pipeline {
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 								PUtils.mvnExecDev(project, [
-										profiles: [
+									profiles: [
 										"toolchain-openjdk-1-8-0",
 										"install"
 									], modules: ["."]
