@@ -25,22 +25,24 @@ pipeline {
 				returnStdout: true,
 				script: 'printf $WORKSPACE/.mvn/toolchains.xml'
 			)}"""
-		REPOS = """${sh(
-				returnStdout: true,
-				script: 'REPOS=repo-releases; if [ $GIT_BRANCH != master ]; then REPOS=$REPOS,repo-development; fi; printf $REPOS'
-			)}"""
 	}
 	stages {
 		stage('Initialize') {
 			steps {
 				sh 'echo "PATH = ${PATH}"'
 				sh 'echo "M2_HOME = ${M2_HOME}"'
-				sh 'printenv | sort'
 				script {
 					builder.setVersionSystem(new net.runeduniverse.lib.tools.jenkins.Git());
+
 					def maven = new net.runeduniverse.lib.tools.jenkins.Maven(this);
+					// activate repos depending on git branch
+					maven.addRepoProfile("repo-releases");
+					if(!"master".equals(env.GIT_BRANCH)) {
+						maven.addRepoProfile("repo-development");
+					}
+
 					builder.addBuildTool(maven);
-				
+
 					def parent = maven.createProject(id: "mvn-parent", name: "Maven Parent", path: ".maven-parent");
 					parent.addModule(id: "java-utils-bom", name: "Bill of Materials", path: "java-utils-bom", modulePath: "../java-utils-bom", bom: true);
 					parent.addModule(id: "java-utils-async", name: "Java Utils Async", path: "java-utils-async", modulePath: "../java-utils-async");
@@ -51,12 +53,13 @@ pipeline {
 					parent.addModule(id: "java-utils-maven", name: "Java Maven Utils", path: "java-utils-maven", modulePath: "../java-utils-maven");
 					parent.addModule(id: "java-utils-plexus", name: "Java Plexus Tools", path: "java-utils-plexus", modulePath: "../java-utils-plexus");
 					parent.addModule(id: "java-utils-scanner", name: "Java Scanner", path: "java-utils-scanner", modulePath: "../java-utils-scanner");
-					
+
 					parent.attachTo(builder);
-					
+
 					builder.checkChanges();
 					builder.logProjects();
 				}
+				sh 'printenv | sort'
 			}
 		}
 		stage('Update Maven Repo') {
@@ -75,7 +78,7 @@ pipeline {
 				script {
 					parallel builder.forEachProject(when: { p -> false && p.isActive() && p.hasChanged() }) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-							project.execDev(profiles: [
+							PUtils.mvnExecDev(project, profiles: [
 								"license-check",
 								"license-apache2-approve"
 							], modules: ["."]);
@@ -91,7 +94,7 @@ pipeline {
 					parallel builder.forEachProject(filter: { p -> p.isParent() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								project.execDev(profiles: [
+								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
 									"install"
 								], args: [
@@ -116,7 +119,7 @@ pipeline {
 					parallel builder.forEachProject(filter: { p -> p.isBOM() }, when: { p -> p.isActive() && p.hasChanged() }) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								project.execDev(profiles: [
+								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
 									"install"
 								], modules: ["."]);
@@ -147,7 +150,7 @@ pipeline {
 						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								project.execDev(profiles: [
+								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
 									"install"
 								], modules: ["."]);
@@ -179,7 +182,7 @@ pipeline {
 						]) { project ->
 						try {
 							if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-								project.execDev(profiles: [
+								PUtils.mvnExecDev(project, profiles: [
 									"toolchain-openjdk-1-8-0",
 									"install"
 								], modules: ["."]);
@@ -221,7 +224,7 @@ pipeline {
 								echo "paths:Z: ${project.getModulePaths().toString()}";
 								// process selected modules
 								try {
-									project.execDev(profiles: [
+									PUtils.mvnExecDev(project, profiles: [
 										"toolchain-openjdk-1-8-0",
 										"test-junit-jupiter"
 									], args: [
@@ -259,7 +262,7 @@ pipeline {
 								stage(it.getName()) {
 									when(it.isActive() && it.hasChanged()) {
 										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											it.execDev(profiles: [
+											PUtils.mvnExecDev(it, profiles: [
 												"dist-repo-development",
 												"deploy"
 											], modules: ["."]);
@@ -280,7 +283,7 @@ pipeline {
 								stage(it.getName()) {
 									when(it.isActive() && it.hasChanged()) {
 										if(it instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
-											it.execDev(profiles: [
+											PUtils.mvnExecDev(it, profiles: [
 												"dist-repo-releases",
 												"deploy-pom-signed"
 											], modules: ["."]);
@@ -304,7 +307,7 @@ pipeline {
 						]) { project ->
 						if(project instanceof net.runeduniverse.lib.tools.jenkins.MavenProject) {
 							// never add : -P ${REPOS} => this is ment to fail here
-							project.execDev(profiles: [
+							PUtils.mvnExecDev(project, profiles: [
 								"repo-releases",
 								"dist-repo-maven-central",
 								"deploy-pom-signed"
