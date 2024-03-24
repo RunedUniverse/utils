@@ -1,15 +1,25 @@
 #!/usr/bin/bash
 
+if [[ -z "${GLOBAL_MAVEN_SETTINGS}" ]]; then
+  GLOBAL_SETTINGS_FILE=''
+else
+  GLOBAL_SETTINGS_FILE='-gs '$GLOBAL_MAVEN_SETTINGS
+fi
+
+if [[ -z "${MAVEN_SETTINGS}" ]]; then
+  SETTINGS_FILE=''
+else
+  SETTINGS_FILE='-s '$MAVEN_SETTINGS
+fi
+
 #git-check-version-tag <tag-name> <maven-module>
 #git-check-version-tag java-utils-bom ../java-utils-bom
 
-pushd .maven-parent > /dev/null
-TAG=$1/v$(mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=$2)
+TAG=$1/v$(mvn $GLOBAL_SETTINGS_FILE $SETTINGS_FILE org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=$2)
 if git describe --tags --abbrev=0 remotes/origin/master --match $TAG &>/dev/null
 then
   printf 0;
 else
   printf 1;
 fi
-popd > /dev/null
 
