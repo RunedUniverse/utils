@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2024 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class TriggeredParamTaskMap<KEY, PARAM> implements IRegistry<KEY>{
+public class TriggeredParamTaskMap<KEY, PARAM> implements IRegistry<KEY> {
 	private final Map<KEY, TriggeredParamTask<PARAM>> map = new HashMap<>();
 	@Setter
 	private Consumer<PARAM> consumer;
