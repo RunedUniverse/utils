@@ -27,7 +27,7 @@ Each artifact starts with the name of the programming language followed by its r
     <dependency>
       <groupId>net.runeduniverse.lib.utils</groupId>
       <artifactId>utils-bom</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.0</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -101,7 +101,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-scanner</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
