@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
 		<version>2.0.0</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-logging</artifactId>
@@ -37,6 +36,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ACTIVITIONS -->
 		<license-enforce>true</license-enforce>
 		<!-- ACTIVITIONS - LICENSES -->
@@ -113,50 +113,5 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<properties>
-						<year>2023</year>
-						<owner>VenaNocta</owner>
-						<email>venanocta@gmail.com</email>
-					</properties>
-					<licenseSets>
-						<licenseSet>
-							<header>
-								${project.basedir}/../.licenses/apache2-header.txt</header>
-							<excludes>
-								<exclude>**/.mvn/repo/**</exclude>
-								<exclude>**/resources/**</exclude>
-								<exclude>**/license/**</exclude>
-								<exclude>**/target/**</exclude>
-							</excludes>
-						</licenseSet>
-					</licenseSets>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

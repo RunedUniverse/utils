@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
 		<version>2.0.0</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
@@ -73,7 +72,8 @@
 	</issueManagement>
 
 	<properties>
-		<project-packaging>${project.packaging}</project-packaging>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ARTIFACT VERSIONS -->
 		<utils-async-version>2.1.1</utils-async-version>
 		<utils-chain-version>1.0.1</utils-chain-version>

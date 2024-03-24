@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@
 	<inceptionYear>2021</inceptionYear>
 
 	<modules>
-		<module>../java-utils-bom</module>
-		<module>../java-utils-async</module>
-		<module>../java-utils-chain</module>
-		<module>../java-utils-common</module>
-		<module>../java-utils-errors</module>
-		<module>../java-utils-logging</module>
-		<module>../java-utils-scanner</module>
+		<module>java-utils-bom</module>
+		<module>java-utils-async</module>
+		<module>java-utils-chain</module>
+		<module>java-utils-common</module>
+		<module>java-utils-errors</module>
+		<module>java-utils-logging</module>
+		<module>java-utils-scanner</module>
 	</modules>
 
 	<licenses>
@@ -80,12 +80,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-source-version>1.8</java-source-version>
 		<java-target-version>${java-source-version}</java-target-version>
+		<root-dir>${project.basedir}</root-dir>
 		<!-- ARTIFACT VERSIONS -->
 		<maven-version-min>3.3.9</maven-version-min>
 		<lombok-version>1.18.12</lombok-version>
 		<plexus-component-version>1.7.1</plexus-component-version>
 		<!-- ARTIFACT VERSIONS - COMPILER -->
-		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
 		<plugin-maven-clean-version>3.1.0</plugin-maven-clean-version>
 		<plugin-maven-toolchains-version>3.1.0</plugin-maven-toolchains-version>
 		<plugin-maven-resources-version>3.2.0</plugin-maven-resources-version>
@@ -93,20 +93,18 @@
 		<plugin-maven-jar-version>3.0.2</plugin-maven-jar-version>
 		<plugin-maven-source-version>3.2.1</plugin-maven-source-version>
 		<plugin-maven-javadoc-version>3.2.0</plugin-maven-javadoc-version>
+		<plugin-maven-surefire-version>3.0.0-M5</plugin-maven-surefire-version>
 		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
+		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
 		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
 		<plugin-maven-gpg-version>3.0.1</plugin-maven-gpg-version>
 		<plugin-mojohaus-build-helper-version>3.2.0</plugin-mojohaus-build-helper-version>
 		<plugin-maven-deploy-version>3.0.0-M2</plugin-maven-deploy-version>
-		<plugin-maven-help-version>3.2.0</plugin-maven-help-version>
 		<!-- VERSIONS - TESTING -->
 		<junit-platform-launcher-version>1.8.2</junit-platform-launcher-version>
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
 		<junit-jupiter-api-version>5.8.2</junit-jupiter-api-version>
 		<junit-jupiter-engine-version>5.8.2</junit-jupiter-engine-version>
-		<!-- TRACING -->
-		<tracing-log-path>../maven-build-trace/</tracing-log-path>
-		<tracing-stage>full</tracing-stage>
 	</properties>
 
 	<profiles>
@@ -147,16 +145,53 @@
 								</toolchains>
 							</configuration>
 						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<configuration>
+								<groups>system</groups>
+							</configuration>
+						</plugin>
 					</plugins>
 				</pluginManagement>
 			</build>
 		</profile>
+		<profile>
+			<id>format</id>
+			<build>
+				<defaultGoal>dev/validate</defaultGoal>
+			</build>
+		</profile>
 		<!-- PIPELINE -->
+		<profile>
+			<id>debug</id>
+			<properties>
+				<r4m.fancy-output>false</r4m.fancy-output>
+			</properties>
+			<build>
+				<defaultGoal>help@pipeline</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>validate</id>
+			<build>
+				<defaultGoal>check/[validate]@pipeline</defaultGoal>
+			</build>
+		</profile>
 		<profile>
 			<id>install</id>
 			<build>
 				<defaultGoal>
-					clean install/install]
+					clean@pipeline
+					install/install]@pipeline
+				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>build-tests</id>
+			<build>
+				<defaultGoal>
+					junit/test-compile]@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
@@ -164,32 +199,35 @@
 			<id>test-junit-jupiter</id>
 			<build>
 				<defaultGoal>
-					junit-jupiter/[initialize] junit-jupiter/[test]
+					junit/validate@pipeline
+					junit/test@pipeline
 				</defaultGoal>
+			</build>
+		</profile>
+		<profile>
+			<id>test-system</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<groups>system</groups>
+						</configuration>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 		<profile>
 			<id>deploy</id>
 			<build>
-				<defaultGoal>
-					deploy/deploy]
-				</defaultGoal>
+				<defaultGoal>deploy/deploy]@pipeline</defaultGoal>
 			</build>
 		</profile>
 		<profile>
 			<id>deploy-signed</id>
 			<build>
-				<defaultGoal>
-					deploy-signed/deploy]
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>gen-eff-pom</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@tracing
-				</defaultGoal>
+				<defaultGoal>deploy-signed/deploy]@pipeline</defaultGoal>
 			</build>
 		</profile>
 		<!-- REPOSITORIES -->
@@ -252,19 +290,13 @@
 		</profile>
 		<!-- LICENSES -->
 		<profile>
-			<id>license-check</id>
-			<build>
-				<defaultGoal>license:check</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>license-update</id>
-			<build>
-				<defaultGoal>default/validate</defaultGoal>
-			</build>
-		</profile>
-		<profile>
 			<id>license-apache2-approve</id>
+			<activation>
+				<property>
+					<name>license-apache2-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -280,32 +312,37 @@
 								<dependencyPolicy>
 									<type>LICENSE_NAME</type>
 									<rule>APPROVE</rule>
-									<value>The Apache Software License, Version
-										2.0</value>
+									<value>
+										The Apache Software License, Version 2.0
+									</value>
 								</dependencyPolicy>
 								<dependencyPolicy>
 									<type>LICENSE_URL</type>
 									<rule>APPROVE</rule>
 									<value>
-										http://www.apache.org/licenses/LICENSE-2.0</value>
+										http://www.apache.org/licenses/LICENSE-2.0
+									</value>
 								</dependencyPolicy>
 								<dependencyPolicy>
 									<type>LICENSE_URL</type>
 									<rule>APPROVE</rule>
 									<value>
-										https://www.apache.org/licenses/LICENSE-2.0</value>
+										https://www.apache.org/licenses/LICENSE-2.0
+									</value>
 								</dependencyPolicy>
 								<dependencyPolicy>
 									<type>LICENSE_URL</type>
 									<rule>APPROVE</rule>
 									<value>
-										http://www.apache.org/licenses/LICENSE-2.0.txt</value>
+										http://www.apache.org/licenses/LICENSE-2.0.txt
+									</value>
 								</dependencyPolicy>
 								<dependencyPolicy>
 									<type>LICENSE_URL</type>
 									<rule>APPROVE</rule>
 									<value>
-										https://www.apache.org/licenses/LICENSE-2.0.txt</value>
+										https://www.apache.org/licenses/LICENSE-2.0.txt
+									</value>
 								</dependencyPolicy>
 							</dependencyPolicies>
 						</configuration>
@@ -320,13 +357,27 @@
 			<dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
-				<version>1.18.28</version>
+				<version>${lombok-version}</version>
 				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -335,6 +386,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>toolchain</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>net.revelc.code.formatter</groupId>
@@ -343,6 +401,18 @@
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -356,10 +426,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-help-plugin</artifactId>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -372,6 +438,13 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-toolchains-plugin</artifactId>
 					<version>${plugin-maven-toolchains-version}</version>
+					<configuration>
+						<toolchains>
+							<jdk>
+								<version>openjdk-1.8.0</version>
+							</jdk>
+						</toolchains>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -383,7 +456,9 @@
 					<artifactId>formatter-maven-plugin</artifactId>
 					<version>${plugin-revelc-formatter-version}</version>
 					<configuration>
-						<configFile>../.code-formats/runed-code-format-java.xml</configFile>
+						<configFile>
+							${root-dir}/.code-formats/runed-code-format-java.xml
+						</configFile>
 						<lineEnding>LF</lineEnding>
 						<skipHtmlFormatting>true</skipHtmlFormatting>
 						<skipJsFormatting>true</skipJsFormatting>
@@ -396,7 +471,7 @@
 					<version>${plugin-mycila-license-version}</version>
 					<configuration>
 						<properties>
-							<year>2023</year>
+							<year>2024</year>
 							<owner>VenaNocta</owner>
 							<email>venanocta@gmail.com</email>
 						</properties>
@@ -405,14 +480,15 @@
 						</mapping>
 						<licenseSets>
 							<licenseSet>
-								<header>
-									${project.basedir}/../.licenses/apache2-header.txt
-								</header>
+								<header>${root-dir}/.licenses/apache2-header.txt</header>
 								<excludes>
-									<exclude>**/.mvn/repo/**</exclude>
+									<exclude>.build/**</exclude>
+									<exclude>.mvn/**</exclude>
+									<exclude>.code-formats/**</exclude>
 									<exclude>**/resources/**</exclude>
 									<exclude>**/license/**</exclude>
 									<exclude>**/target/**</exclude>
+									<exclude>Jenkinsfile</exclude>
 								</excludes>
 							</licenseSet>
 						</licenseSets>
@@ -455,6 +531,14 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${plugin-maven-surefire-version}</version>
+					<configuration>
+						<trimStackTrace>false</trimStackTrace>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
 					<version>${plugin-maven-gpg-version}</version>
 				</plugin>
@@ -469,45 +553,66 @@
 					<version>${plugin-mojohaus-build-helper-version}</version>
 					<executions>
 						<execution>
-							<!-- must be here or it gets overridden! -->
-							<id>pipeline</id>
-							<inherited>true</inherited>
+							<id>packaging-jar</id>
+							<configuration>
+								<artifacts>
+									<!-- javadoc -->
+									<artifact>
+										<file>
+											${project.build.directory}/${project.build.finalName}-javadoc.jar
+										</file>
+										<type>jar</type>
+										<classifier>javadoc</classifier>
+									</artifact>
+									<!-- sources -->
+									<artifact>
+										<file>
+											${project.build.directory}/${project.build.finalName}-sources.jar
+										</file>
+										<type>jar</type>
+										<classifier>sources</classifier>
+									</artifact>
+								</artifacts>
+							</configuration>
+						</execution>
+						<execution>
+							<id>signed-pom</id>
+							<configuration>
+								<artifacts>
+									<!-- gpg signature -->
+									<artifact>
+										<file>
+											${project.build.directory}/${project.build.finalName}.pom.asc
+										</file>
+										<type>pom.asc</type>
+									</artifact>
+								</artifacts>
+							</configuration>
+						</execution>
+						<execution>
+							<id>signed-jar</id>
 							<configuration>
 								<artifacts>
 									<!-- gpg signatures -->
 									<artifact>
 										<file>
-											${project.build.directory}/${project.build.finalName}.pom.asc</file>
-										<type>pom.asc</type>
-									</artifact>
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}.jar.asc</file>
+											${project.build.directory}/${project.build.finalName}.jar.asc
+										</file>
 										<type>jar.asc</type>
 									</artifact>
 									<!-- javadoc -->
 									<artifact>
 										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar</file>
-										<type>jar</type>
-										<classifier>javadoc</classifier>
-									</artifact>
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar.asc</file>
+											${project.build.directory}/${project.build.finalName}-javadoc.jar.asc
+										</file>
 										<type>jar.asc</type>
 										<classifier>javadoc</classifier>
 									</artifact>
 									<!-- sources -->
 									<artifact>
 										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar</file>
-										<type>jar</type>
-										<classifier>sources</classifier>
-									</artifact>
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar.asc</file>
+											${project.build.directory}/${project.build.finalName}-sources.jar.asc
+										</file>
 										<type>jar.asc</type>
 										<classifier>sources</classifier>
 									</artifact>
@@ -520,30 +625,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>${plugin-maven-deploy-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-help-plugin</artifactId>
-					<version>${plugin-maven-help-version}</version>
-					<executions>
-						<execution>
-							<phase>deploy</phase>
-							<goals>
-								<goal>all-profiles</goal>
-								<goal>active-profiles</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>tracing</id>
-							<inherited>true</inherited>
-							<configuration>
-								<artifact>
-									${project.groupId}:${project.artifactId}</artifact>
-								<output>
-									${tracing-log-path}/${project.artifactId}#${tracing-stage}-eff-pom.xml</output>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
