@@ -451,7 +451,7 @@ pipeline {
 								environment name: 'CHANGES_MVN_PARENT', value: '1'
 							}
 							steps {
-								sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-pom-signed -pl=.'
+								sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=.'
 							}
 						}
 						stage('java-utils-bom') {
@@ -459,7 +459,7 @@ pipeline {
 								environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 							}
 							steps {
-								sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-pom-signed -pl=java-utils-bom'
+								sh 'mvn-dev -P ${REPOS},dist-repo-releases,deploy-signed -pl=java-utils-bom'
 							}
 						}
 						stage('java-utils-logging') {
@@ -526,7 +526,7 @@ pipeline {
 						environment name: 'CHANGES_MVN_PARENT', value: '1'
 					}
 					steps {
-						sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed -pl=.'
+						sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=.'
 						sshagent (credentials: ['RunedUniverse-Jenkins']) {
 							sh 'git push origin $(git-create-version-tag maven-parent .)'
 						}
@@ -537,7 +537,7 @@ pipeline {
 						environment name: 'CHANGES_JAVA_UTILS_BOM', value: '1'
 					}
 					steps {
-						sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-pom-signed -pl=java-utils-bom'
+						sh 'mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=java-utils-bom'
 						sshagent (credentials: ['RunedUniverse-Jenkins']) {
 							sh 'git push origin $(git-create-version-tag java-utils-bom java-utils-bom)'
 						}
