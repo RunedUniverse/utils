@@ -24,4 +24,9 @@ public interface MethodScanner<M extends MethodPattern> {
 
 	void scan(Method method, Class<?> type, TypePattern<?, M> pattern) throws Exception;
 
+	@FunctionalInterface
+	public static interface PatternCreator<M extends MethodPattern> {
+		M createPattern(Method method) throws Exception;
+	}
+
 }

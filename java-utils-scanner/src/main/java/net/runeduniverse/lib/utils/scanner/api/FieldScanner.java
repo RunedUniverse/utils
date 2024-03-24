@@ -24,4 +24,9 @@ public interface FieldScanner<F extends FieldPattern> {
 
 	void scan(Field field, Class<?> type, TypePattern<F, ?> pattern) throws Exception;
 
+	@FunctionalInterface
+	public static interface PatternCreator<F extends FieldPattern> {
+		F createPattern(Field field) throws Exception;
+	}
+
 }

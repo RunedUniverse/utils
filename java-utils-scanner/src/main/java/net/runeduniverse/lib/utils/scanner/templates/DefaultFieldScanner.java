@@ -57,11 +57,6 @@ public class DefaultFieldScanner<F extends FieldPattern> implements FieldScanner
 		consumer.accept(pattern);
 	}
 
-	@FunctionalInterface
-	public static interface PatternCreator<F extends FieldPattern> {
-		F createPattern(Field field) throws Exception;
-	}
-
 	public static DefaultFieldScanner<FieldPattern> DEFAULT() {
 		return new DefaultFieldScanner<>(DefaultFieldScanner::createPattern);
 	}

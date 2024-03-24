@@ -15,8 +15,17 @@
  */
 package net.runeduniverse.lib.utils.scanner.api;
 
+import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.MethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
+
 public interface TypeScanner {
 
 	void scan(Class<?> type, ClassLoader loader, String pkg) throws Exception;
+
+	@FunctionalInterface
+	public static interface PatternCreator<F extends FieldPattern, M extends MethodPattern, T extends TypePattern<F, M>> {
+		T createPattern(Class<?> type, ClassLoader loader, String pkg) throws Exception;
+	}
 
 }

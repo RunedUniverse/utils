@@ -57,11 +57,6 @@ public class DefaultMethodScanner<M extends MethodPattern> implements MethodScan
 		consumer.accept(pattern);
 	}
 
-	@FunctionalInterface
-	public static interface PatternCreator<M extends MethodPattern> {
-		M createPattern(Method method) throws Exception;
-	}
-
 	public static DefaultMethodScanner<MethodPattern> DEFAULT() {
 		return new DefaultMethodScanner<>(DefaultMethodScanner::createPattern);
 	}

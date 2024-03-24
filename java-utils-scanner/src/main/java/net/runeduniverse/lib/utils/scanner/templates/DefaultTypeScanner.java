@@ -29,6 +29,7 @@ import net.runeduniverse.lib.utils.scanner.pattern.DefaultTypePattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern.PatternCreator;
 
 @RequiredArgsConstructor
 public class DefaultTypeScanner<F extends FieldPattern, M extends MethodPattern, T extends TypePattern<F, M>>
@@ -59,7 +60,7 @@ public class DefaultTypeScanner<F extends FieldPattern, M extends MethodPattern,
 
 	@Override
 	public void scan(Class<?> type, ClassLoader loader, String pkg) throws Exception {
-		T pattern = this.creator.createPattern(type, loader, pkg);
+		final T pattern = this.creator.createPattern(type, loader, pkg);
 		DefaultTypeScanner.cascade(this, this.scanFieldsFnc, pattern, pattern.getType());
 		DefaultTypeScanner.cascade(this, this.scanMethodsFnc, pattern, pattern.getType());
 		this.consumer.accept(pattern);
@@ -96,11 +97,6 @@ public class DefaultTypeScanner<F extends FieldPattern, M extends MethodPattern,
 		for (Method m : type.getDeclaredMethods())
 			for (MethodScanner<M> mscan : scanner.methodScanner)
 				mscan.scan(m, type, pattern);
-	}
-
-	@FunctionalInterface
-	public static interface PatternCreator<F extends FieldPattern, M extends MethodPattern, T extends TypePattern<F, M>> {
-		T createPattern(Class<?> type, ClassLoader loader, String pkg) throws Exception;
 	}
 
 	public static DefaultTypeScanner<FieldPattern, MethodPattern, TypePattern<FieldPattern, MethodPattern>> DEFAULT(
