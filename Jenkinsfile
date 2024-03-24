@@ -166,11 +166,10 @@ pipeline {
 			}
 			steps {
 				sh 'mvn-dev -P ${REPOS},toolchain-openjdk-1-8-0,install --non-recursive'
-				sh 'ls -l target/'
 			}
 			post {
 				always {
-					dir(path: '.maven-parent/target') {
+					dir(path: 'target') {
 						sh 'ls -l'
 						sh 'cp *.pom *.asc ${RESULT_PATH}'
 					}
