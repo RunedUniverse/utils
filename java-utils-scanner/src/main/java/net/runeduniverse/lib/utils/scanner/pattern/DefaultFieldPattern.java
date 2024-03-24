@@ -21,15 +21,16 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 import lombok.Data;
+import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
 
 @Data
-public class FieldPattern {
+public class DefaultFieldPattern implements FieldPattern {
 
 	protected final Field field;
 	protected final Class<?> type;
 	protected final boolean collection;
 
-	public FieldPattern(Field field) {
+	public DefaultFieldPattern(Field field) {
 		this.field = field;
 		this.field.setAccessible(true);
 		Class<?> clazz = this.field.getType();

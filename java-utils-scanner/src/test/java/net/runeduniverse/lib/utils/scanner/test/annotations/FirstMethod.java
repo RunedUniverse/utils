@@ -13,31 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.pattern;
+package net.runeduniverse.lib.utils.scanner.test.annotations;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import lombok.Data;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-@Data
-public class MethodPattern {
-
-	private final Method method;
-
-	public MethodPattern(Method method) {
-		this.method = method;
-		this.method.setAccessible(true);
-	}
-
-	public boolean invoke(Object obj, Object... args) {
-		try {
-			method.invoke(obj, args);
-			return true;
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
+@Retention(RUNTIME)
+@Target(METHOD)
+public @interface FirstMethod {
 
 }

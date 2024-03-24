@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.api;
+package net.runeduniverse.lib.utils.scanner.pattern.api;
 
-public interface ITypeScanner {
+import java.lang.reflect.Method;
 
-	void scan(Class<?> type, ClassLoader loader, String pkg) throws Exception;
+public interface MethodPattern {
+
+	public Method getMethod();
+
+	public boolean invoke(Object obj, Object... args);
 
 }

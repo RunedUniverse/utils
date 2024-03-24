@@ -13,21 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.test.model;
+package net.runeduniverse.lib.utils.scanner.templates;
 
-import net.runeduniverse.lib.utils.scanner.test.annotations.FirstField;
-import net.runeduniverse.lib.utils.scanner.test.annotations.LastField;
+public enum ScanOrder {
 
-public class Emmy extends APerson {
-
-	@FirstField
-	private String plants;
-
-	@FirstField
-	@LastField
-	protected String address;
-
-	@LastField
-	public Short age;
+	FIRST, LAST, ALL
 
 }

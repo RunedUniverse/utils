@@ -19,10 +19,10 @@ import java.net.URL;
 
 import lombok.Getter;
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
-import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
+import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
 @Getter
-public class IntercepterSection implements IIntercepter {
+public class IntercepterSection implements Intercepter {
 
 	private final String id;
 	private final CompoundTree tree;

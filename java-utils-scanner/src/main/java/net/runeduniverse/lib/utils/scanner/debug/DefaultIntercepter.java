@@ -21,25 +21,25 @@ import java.util.Map;
 import java.util.Set;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
-import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
+import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
-public class Intercepter implements IIntercepter {
+public class DefaultIntercepter implements Intercepter {
 
 	private final boolean active;
 	private IntercepterSection baseSection;
 	private Map<String, IntercepterSection> sections = new HashMap<>();
 
-	public Intercepter(String headline, boolean active) {
+	public DefaultIntercepter(String headline, boolean active) {
 		this.baseSection = new IntercepterSection(null, headline);
 		this.active = active;
 	}
 
-	public IIntercepter addSection(IntercepterSection section) {
+	public Intercepter addSection(IntercepterSection section) {
 		this.sections.put(section.getId(), section);
 		return section;
 	}
 
-	public IIntercepter addSection(String id, String headline) {
+	public Intercepter addSection(String id, String headline) {
 		return this.addSection(new IntercepterSection(id, headline));
 	}
 

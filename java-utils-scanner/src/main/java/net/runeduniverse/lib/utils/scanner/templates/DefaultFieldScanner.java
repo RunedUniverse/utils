@@ -16,37 +16,45 @@
 package net.runeduniverse.lib.utils.scanner.templates;
 
 import java.lang.reflect.Field;
+import java.util.function.Consumer;
 
-import net.runeduniverse.lib.utils.scanner.ScanOrder;
-import net.runeduniverse.lib.utils.scanner.api.IFieldScanner;
-import net.runeduniverse.lib.utils.scanner.pattern.FieldPattern;
-import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
+import net.runeduniverse.lib.utils.scanner.api.FieldScanner;
+import net.runeduniverse.lib.utils.scanner.pattern.DefaultFieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
 
-public class FieldScanner<F extends FieldPattern> implements IFieldScanner<F> {
+public class DefaultFieldScanner<F extends FieldPattern> implements FieldScanner<F> {
 
 	protected final PatternCreator<F> creator;
 	protected final ScanOrder order;
 
-	public FieldScanner(PatternCreator<F> creator) {
+	public DefaultFieldScanner(PatternCreator<F> creator) {
 		this.creator = creator;
 		this.order = ScanOrder.ALL;
 	}
 
-	public FieldScanner(PatternCreator<F> creator, ScanOrder order) {
+	public DefaultFieldScanner(PatternCreator<F> creator, ScanOrder order) {
 		this.creator = creator;
 		this.order = order;
 	}
 
 	protected static FieldPattern createPattern(Field field) {
-		return new FieldPattern(field);
+		return new DefaultFieldPattern(field);
 	}
 
 	@Override
 	public void scan(Field field, Class<?> type, TypePattern<F, ?> pattern) throws Exception {
-		F p = this.creator.createPattern(field);
-		if (p != null)
-			pattern.getFields()
-					.put(null, p);
+		withPattern(field, p -> {
+			pattern.getFields(null)
+					.add(p);
+		});
+	}
+
+	protected void withPattern(final Field field, Consumer<F> consumer) throws Exception {
+		final F pattern = this.creator.createPattern(field);
+		if (pattern == null)
+			return;
+		consumer.accept(pattern);
 	}
 
 	@FunctionalInterface
@@ -54,12 +62,12 @@ public class FieldScanner<F extends FieldPattern> implements IFieldScanner<F> {
 		F createPattern(Field field) throws Exception;
 	}
 
-	public static FieldScanner<FieldPattern> DEFAULT() {
-		return new FieldScanner<>(FieldScanner::createPattern);
+	public static DefaultFieldScanner<FieldPattern> DEFAULT() {
+		return new DefaultFieldScanner<>(DefaultFieldScanner::createPattern);
 	}
 
-	public static FieldScanner<FieldPattern> DEFAULT(ScanOrder order) {
-		return new FieldScanner<>(FieldScanner::createPattern, order);
+	public static DefaultFieldScanner<FieldPattern> DEFAULT(ScanOrder order) {
+		return new DefaultFieldScanner<>(DefaultFieldScanner::createPattern, order);
 	}
 
 }

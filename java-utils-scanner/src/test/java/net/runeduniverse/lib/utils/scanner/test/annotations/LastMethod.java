@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.test.model;
+package net.runeduniverse.lib.utils.scanner.test.annotations;
 
-import net.runeduniverse.lib.utils.scanner.test.annotations.FirstField;
-import net.runeduniverse.lib.utils.scanner.test.annotations.LastField;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-public class Emmy extends APerson {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	@FirstField
-	private String plants;
-
-	@FirstField
-	@LastField
-	protected String address;
-
-	@LastField
-	public Short age;
+@Retention(RUNTIME)
+@Target(METHOD)
+public @interface LastMethod {
 
 }

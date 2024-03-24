@@ -15,6 +15,23 @@
  */
 package net.runeduniverse.lib.utils.scanner.test.model;
 
+import net.runeduniverse.lib.utils.scanner.test.annotations.FirstMethod;
+import net.runeduniverse.lib.utils.scanner.test.annotations.LastMethod;
+
 public class Frank extends APerson {
+
+	@FirstMethod
+	public void wave() {
+	}
+
+	@FirstMethod
+	@LastMethod
+	public void walk() {
+	}
+
+	@LastMethod
+	public void hi() {
+
+	}
 
 }

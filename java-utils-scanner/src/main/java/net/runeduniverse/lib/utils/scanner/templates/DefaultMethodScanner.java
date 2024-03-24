@@ -16,35 +16,45 @@
 package net.runeduniverse.lib.utils.scanner.templates;
 
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
-import net.runeduniverse.lib.utils.scanner.ScanOrder;
-import net.runeduniverse.lib.utils.scanner.api.IMethodScanner;
-import net.runeduniverse.lib.utils.scanner.pattern.MethodPattern;
-import net.runeduniverse.lib.utils.scanner.pattern.TypePattern;
+import net.runeduniverse.lib.utils.scanner.api.MethodScanner;
+import net.runeduniverse.lib.utils.scanner.pattern.DefaultMethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.MethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
 
-public class MethodScanner<M extends MethodPattern> implements IMethodScanner<M> {
+public class DefaultMethodScanner<M extends MethodPattern> implements MethodScanner<M> {
 
 	protected final PatternCreator<M> creator;
 	protected final ScanOrder order;
 
-	public MethodScanner(PatternCreator<M> creator) {
+	public DefaultMethodScanner(PatternCreator<M> creator) {
 		this.creator = creator;
 		this.order = ScanOrder.ALL;
 	}
 
-	public MethodScanner(PatternCreator<M> creator, ScanOrder order) {
+	public DefaultMethodScanner(PatternCreator<M> creator, ScanOrder order) {
 		this.creator = creator;
 		this.order = order;
 	}
 
 	protected static MethodPattern createPattern(Method method) {
-		return new MethodPattern(method);
+		return new DefaultMethodPattern(method);
 	}
 
 	@Override
 	public void scan(Method method, Class<?> type, TypePattern<?, M> pattern) throws Exception {
-		pattern.getMethods()
-				.put(null, this.creator.createPattern(method));
+		withPattern(method, p -> {
+			pattern.getMethods(null)
+					.add(p);
+		});
+	}
+
+	protected void withPattern(final Method method, Consumer<M> consumer) throws Exception {
+		final M pattern = this.creator.createPattern(method);
+		if (pattern == null)
+			return;
+		consumer.accept(pattern);
 	}
 
 	@FunctionalInterface
@@ -52,12 +62,12 @@ public class MethodScanner<M extends MethodPattern> implements IMethodScanner<M>
 		M createPattern(Method method) throws Exception;
 	}
 
-	public static MethodScanner<MethodPattern> DEFAULT() {
-		return new MethodScanner<>(MethodScanner::createPattern);
+	public static DefaultMethodScanner<MethodPattern> DEFAULT() {
+		return new DefaultMethodScanner<>(DefaultMethodScanner::createPattern);
 	}
 
-	public static MethodScanner<MethodPattern> DEFAULT(ScanOrder order) {
-		return new MethodScanner<>(MethodScanner::createPattern, order);
+	public static DefaultMethodScanner<MethodPattern> DEFAULT(ScanOrder order) {
+		return new DefaultMethodScanner<>(DefaultMethodScanner::createPattern, order);
 	}
 
 }

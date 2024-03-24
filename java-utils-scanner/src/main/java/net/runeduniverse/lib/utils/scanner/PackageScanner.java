@@ -34,16 +34,16 @@ import java.util.jar.JarEntry;
 import lombok.NoArgsConstructor;
 import net.runeduniverse.lib.utils.common.LinkedDataHashMap;
 import net.runeduniverse.lib.utils.common.api.DataMap;
-import net.runeduniverse.lib.utils.scanner.api.ITypeScanner;
-import net.runeduniverse.lib.utils.scanner.debug.Intercepter;
-import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
+import net.runeduniverse.lib.utils.scanner.api.TypeScanner;
+import net.runeduniverse.lib.utils.scanner.debug.DefaultIntercepter;
+import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
 @NoArgsConstructor
 public class PackageScanner {
 
 	private final Set<ClassLoader> loader = new HashSet<>();
 	private final Set<String> pkgs = new HashSet<>();
-	private final Set<ITypeScanner> scanner = new HashSet<>();
+	private final Set<TypeScanner> scanner = new HashSet<>();
 	private final Set<Exception> errors = new HashSet<>();
 	private boolean includeSubPkgs = false;
 	private boolean debug = false;
@@ -69,13 +69,13 @@ public class PackageScanner {
 		return this;
 	}
 
-	public <SCANNER extends ITypeScanner> PackageScanner includeScanner(List<SCANNER> scanner) {
+	public <SCANNER extends TypeScanner> PackageScanner includeScanner(List<SCANNER> scanner) {
 		this.scanner.addAll(scanner);
 		return this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <SCANNER extends ITypeScanner> PackageScanner includeScanner(SCANNER... scanner) {
+	public <SCANNER extends TypeScanner> PackageScanner includeScanner(SCANNER... scanner) {
 		this.scanner.addAll(Arrays.asList(scanner));
 		return this;
 	}
@@ -92,8 +92,8 @@ public class PackageScanner {
 					this.includeOptions(element);
 			if (obj instanceof ClassLoader)
 				this.loader.add((ClassLoader) obj);
-			if (obj instanceof ITypeScanner)
-				this.scanner.add((ITypeScanner) obj);
+			if (obj instanceof TypeScanner)
+				this.scanner.add((TypeScanner) obj);
 			if (obj instanceof String)
 				this.pkgs.add((String) obj);
 			if (obj instanceof Validator)
@@ -117,10 +117,10 @@ public class PackageScanner {
 			this.loader.add(PackageScanner.class.getClassLoader());
 
 		DataMap<Class<?>, ClassLoader, String> classes = new LinkedDataHashMap<>();
-		Intercepter i = new Intercepter("PackageScanner INFO", this.debug);
-		IIntercepter iPkg = i.addSection("URL", "Discovered URL's");
-		IIntercepter iClass = i.addSection("CLASS", "Classes");
-		IIntercepter iLoader = i.addSection("LOADER", "ClassLoader");
+		DefaultIntercepter i = new DefaultIntercepter("PackageScanner INFO", this.debug);
+		Intercepter iPkg = i.addSection("URL", "Discovered URL's");
+		Intercepter iClass = i.addSection("CLASS", "Classes");
+		Intercepter iLoader = i.addSection("LOADER", "ClassLoader");
 		synchronized (this.loader) {
 			for (ClassLoader classLoader : this.loader) {
 				iLoader.intercept(classLoader);
@@ -132,7 +132,7 @@ public class PackageScanner {
 
 		synchronized (this.scanner) {
 			classes.forEach((c, l, p) -> {
-				for (ITypeScanner s : PackageScanner.this.scanner)
+				for (TypeScanner s : PackageScanner.this.scanner)
 					try {
 						s.scan(c, l, p);
 					} catch (Exception e) {
@@ -169,7 +169,7 @@ public class PackageScanner {
 	 * the given package and subpackages.
 	 */
 	private void loadResources(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
-			IIntercepter iPkg, IIntercepter iClass) {
+			Intercepter iPkg, Intercepter iClass) {
 		Enumeration<URL> resources;
 		String zpkg = pkg.replace('.', '/') + '/';
 		try {
@@ -232,7 +232,7 @@ public class PackageScanner {
 	 * Recursive method used to find all classes in a given directory and subdirs.
 	 */
 	private void findClasses(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, File directory,
-			String pkg, IIntercepter i) {
+			String pkg, Intercepter i) {
 		if (!directory.exists())
 			return;
 		for (File file : directory.listFiles()) {

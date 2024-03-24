@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner;
+package net.runeduniverse.lib.utils.scanner.api;
 
-public enum ScanOrder {
+import java.lang.reflect.Field;
 
-	FIRST, LAST, ALL
+import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
+
+public interface FieldScanner<F extends FieldPattern> {
+
+	void scan(Field field, Class<?> type, TypePattern<F, ?> pattern) throws Exception;
 
 }

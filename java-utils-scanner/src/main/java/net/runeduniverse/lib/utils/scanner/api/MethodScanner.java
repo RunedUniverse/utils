@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.scanner.test.model;
+package net.runeduniverse.lib.utils.scanner.api;
 
-import net.runeduniverse.lib.utils.scanner.test.annotations.FirstField;
-import net.runeduniverse.lib.utils.scanner.test.annotations.LastField;
+import java.lang.reflect.Method;
 
-public class Emmy extends APerson {
+import net.runeduniverse.lib.utils.scanner.pattern.api.MethodPattern;
+import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
 
-	@FirstField
-	private String plants;
+public interface MethodScanner<M extends MethodPattern> {
 
-	@FirstField
-	@LastField
-	protected String address;
-
-	@LastField
-	public Short age;
+	void scan(Method method, Class<?> type, TypePattern<?, M> pattern) throws Exception;
 
 }
