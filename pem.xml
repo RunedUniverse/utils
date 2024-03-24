@@ -23,6 +23,89 @@
 	<modelVersion>1.0.0</modelVersion>
 	<executions>
 
+		<!-- packaging-procedure: pom & jar (before upload) -->
+		<execution id="signed-pom" source="override">
+			<triggers>
+				<active-profile id="gpg-signature-software" />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>pom</packaging-procedure>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="deploy">
+							<goals>
+								<!-- attach-artifact could be removed -->
+								<!-- if maven could cache more effective -->
+								<goal id="attach-artifact">
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>build-helper-maven-plugin</artifactId>
+									<modes>
+										<deploy-signed />
+									</modes>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution source="override" id="packaging-jar">
+			<triggers>
+				<always />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="deploy">
+							<goals>
+								<goal id="attach-artifact">
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>build-helper-maven-plugin</artifactId>
+									<modes>
+										<deploy />
+										<deploy-signed />
+									</modes>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution source="override" id="signed-jar">
+			<triggers>
+				<active-profile id="gpg-signature-software" />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="deploy">
+							<goals>
+								<goal id="attach-artifact">
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>build-helper-maven-plugin</artifactId>
+									<modes>
+										<deploy-signed />
+									</modes>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
 		<!-- general -->
 		<execution id="default" source="override">
 			<triggers>
@@ -306,36 +389,6 @@
 			</lifecycles>
 		</execution>
 
-		<!-- packaging-procedure: pom & jar -->
-		<execution id="signed-pom" source="override">
-			<triggers>
-				<active-profile id="gpg-signature-software" />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>pom</packaging-procedure>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<!-- attach-artifact could be removed -->
-								<!-- if maven could cache more effective -->
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy-signed />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-
 		<!-- packaging-procedure: jar -->
 
 		<execution id="default" source="override">
@@ -534,59 +587,6 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-javadoc-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-
-		<execution source="override" id="packaging-jar">
-			<triggers>
-				<always />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy />
-										<deploy-signed />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-
-		<execution source="override" id="signed-jar">
-			<triggers>
-				<active-profile id="gpg-signature-software" />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy-signed />
-									</modes>
 								</goal>
 							</goals>
 						</phase>
