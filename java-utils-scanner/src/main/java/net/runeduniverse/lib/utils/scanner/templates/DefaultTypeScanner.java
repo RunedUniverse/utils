@@ -29,7 +29,6 @@ import net.runeduniverse.lib.utils.scanner.pattern.DefaultTypePattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.FieldPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.MethodPattern;
 import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern;
-import net.runeduniverse.lib.utils.scanner.pattern.api.TypePattern.PatternCreator;
 
 @RequiredArgsConstructor
 public class DefaultTypeScanner<F extends FieldPattern, M extends MethodPattern, T extends TypePattern<F, M>>

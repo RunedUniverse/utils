@@ -40,6 +40,7 @@ public class DefaultFieldPattern implements FieldPattern {
 		this.type = clazz;
 	}
 
+	@Override
 	public void setValue(Object entity, Object value) throws IllegalArgumentException {
 		if (entity == null)
 			return;
@@ -51,6 +52,7 @@ public class DefaultFieldPattern implements FieldPattern {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public void putValue(Object entity, Object value) throws IllegalArgumentException {
 		if (entity == null)
 			return;
@@ -65,6 +67,7 @@ public class DefaultFieldPattern implements FieldPattern {
 		}
 	}
 
+	@Override
 	public Object getValue(Object entity) throws IllegalArgumentException {
 		if (entity == null)
 			return null;
@@ -77,6 +80,7 @@ public class DefaultFieldPattern implements FieldPattern {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public void removeValues(Object entity, Collection<Object> deletedEntities) {
 		if (entity == null || deletedEntities == null)
 			return;
@@ -92,6 +96,7 @@ public class DefaultFieldPattern implements FieldPattern {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public void clearValue(Object entity) {
 		if (entity == null)
 			return;
@@ -106,6 +111,7 @@ public class DefaultFieldPattern implements FieldPattern {
 		}
 	}
 
+	@Override
 	public <A extends Annotation> A getAnno(Class<A> annoType) {
 		return this.field.getAnnotation(annoType);
 	}

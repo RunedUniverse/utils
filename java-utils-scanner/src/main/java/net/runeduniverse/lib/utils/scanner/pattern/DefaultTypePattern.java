@@ -57,6 +57,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		this.superType = type.getSuperclass();
 	}
 
+	@Override
 	public Set<Class<? extends Annotation>> getFieldAnnotations() {
 		final Set<Class<? extends Annotation>> keys = new LinkedHashSet<>();
 		for (Map.Entry<Class<? extends Annotation>, Set<F>> entry : this.fields.entrySet()) {
@@ -71,6 +72,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return Collections.unmodifiableSet(keys);
 	}
 
+	@Override
 	public Set<Class<? extends Annotation>> getMethodAnnotations() {
 		final Set<Class<? extends Annotation>> keys = new LinkedHashSet<>();
 		for (Map.Entry<Class<? extends Annotation>, Set<M>> entry : this.methods.entrySet()) {
@@ -85,6 +87,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return Collections.unmodifiableSet(keys);
 	}
 
+	@Override
 	public boolean hasFields(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -96,6 +99,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean hasAllFields(Class<? extends Annotation>... annos) {
 		for (Class<? extends Annotation> anno : annos) {
 			if (anno == null) {
@@ -108,6 +112,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean hasAnyFields(Class<? extends Annotation>... annos) {
 		for (Class<? extends Annotation> anno : annos) {
 			if (anno == null) {
@@ -119,6 +124,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return false;
 	}
 
+	@Override
 	public boolean hasMethods(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -130,6 +136,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean hasAllMethods(Class<? extends Annotation>... annos) {
 		for (Class<? extends Annotation> anno : annos) {
 			if (anno == null) {
@@ -142,6 +149,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean hasAnyMethods(Class<? extends Annotation>... annos) {
 		for (Class<? extends Annotation> anno : annos) {
 			if (anno == null) {
@@ -153,6 +161,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return false;
 	}
 
+	@Override
 	public F getField(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -163,6 +172,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return firstNotNull(annoFields);
 	}
 
+	@Override
 	public Set<F> getFields(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -174,6 +184,16 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return annoFields;
 	}
 
+	@Override
+	public Set<F> getAllFields() {
+		final Set<F> fields = new LinkedHashSet<>();
+		for (Set<F> col : this.fields.values()) {
+			fields.addAll(col);
+		}
+		return Collections.unmodifiableSet(fields);
+	}
+
+	@Override
 	public M getMethod(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -184,6 +204,7 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return firstNotNull(annoMethods);
 	}
 
+	@Override
 	public Set<M> getMethods(Class<? extends Annotation> anno) {
 		if (anno == null) {
 			anno = getNeutralAnnotation();
@@ -195,6 +216,16 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 		return annoMethods;
 	}
 
+	@Override
+	public Set<M> getAllMethods() {
+		final Set<M> methods = new LinkedHashSet<>();
+		for (Set<M> col : this.methods.values()) {
+			methods.addAll(col);
+		}
+		return Collections.unmodifiableSet(methods);
+	}
+
+	@Override
 	public boolean callMethod(Class<? extends Annotation> anno, Object obj, Object... args) {
 		final MethodPattern method = getMethod(anno);
 		return (obj == null || method == null) ? false : method.invoke(obj, args);

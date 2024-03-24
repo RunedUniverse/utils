@@ -31,6 +31,7 @@ public class DefaultMethodPattern implements MethodPattern {
 		this.method.setAccessible(true);
 	}
 
+	@Override
 	public boolean invoke(Object obj, Object... args) {
 		try {
 			method.invoke(obj, args);

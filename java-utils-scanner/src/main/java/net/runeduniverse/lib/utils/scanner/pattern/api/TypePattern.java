@@ -60,9 +60,13 @@ public interface TypePattern<F extends FieldPattern, M extends MethodPattern> {
 
 	public Set<F> getFields(Class<? extends Annotation> anno);
 
+	public Set<F> getAllFields();
+
 	public M getMethod(Class<? extends Annotation> anno);
 
 	public Set<M> getMethods(Class<? extends Annotation> anno);
+
+	public Set<M> getAllMethods();
 
 	/**
 	 * Used to call parsed Methods

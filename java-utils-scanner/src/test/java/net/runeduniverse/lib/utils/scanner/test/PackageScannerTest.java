@@ -113,6 +113,8 @@ public class PackageScannerTest {
 				assertEquals("age", typePattern.getField(LastField.class)
 						.getField()
 						.getName(), "Wrong LastField!");
+				assertEquals(3, typePattern.getAllFields()
+						.size(), "Too many/few Fields found!");
 			}
 
 			if (Frank.class.isAssignableFrom(typePattern.getType())) {
@@ -130,6 +132,8 @@ public class PackageScannerTest {
 				assertEquals("hi", typePattern.getMethod(LastMethod.class)
 						.getMethod()
 						.getName(), "Wrong LastMethod!");
+				assertEquals(3, typePattern.getAllMethods()
+						.size(), "Too many/few Methods found!");
 			}
 
 		}
