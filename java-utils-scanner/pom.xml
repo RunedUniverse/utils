@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,14 +23,16 @@
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.1</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
+		<version>2.0.0</version>
 	</parent>
 
 	<artifactId>utils-scanner</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
+	<packaging>jar</packaging>
 
 	<name>Java Scanner</name>
+	<url>https://github.com/RunedUniverse/utils</url>
+	<inceptionYear>2021</inceptionYear>
 
 	<licenses>
 		<license>
@@ -71,6 +73,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ACTIVITIONS -->
 		<license-enforce>true</license-enforce>
 		<!-- ACTIVITIONS - LICENSES -->
@@ -79,14 +82,13 @@
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
+		<runeduniverse-utils-bom-version>1.1.0</runeduniverse-utils-bom-version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.runeduniverse.lib.utils</groupId>
 			<artifactId>utils-common</artifactId>
-			<version>[1.1.0,)</version>
 		</dependency>
 		<dependency>
 			<groupId>net.runeduniverse.lib.utils</groupId>
@@ -119,28 +121,5 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<properties>
-						<year>2023</year>
-						<owner>VenaNocta</owner>
-						<email>venanocta@gmail.com</email>
-					</properties>
-					<licenseSets>
-						<licenseSet>
-							<header>
-								${project.basedir}/../.licenses/apache2-header.txt</header>
-							<excludes>
-								<exclude>**/resources/**</exclude>
-								<exclude>**/.licenses/**</exclude>
-							</excludes>
-						</licenseSet>
-					</licenseSets>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 </project>

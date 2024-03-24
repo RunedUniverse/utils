@@ -6,18 +6,9 @@ Each artifact starts with the name of the programming language followed by its r
 ## Distribution
 
 ### Maven Repository
-#### RunedUniverse: Releases
-> This contains our locally hosted release artifacts.<br>
-> These same artifacts are deployed to Maven Central (Sonatype)
-
-```xml
-<repository>
-  <id>runeduniverse-releases</id>
-  <url>https://nexus.runeduniverse.net/repository/maven-releases/</url>
-</repository>
-```
-
 #### RunedUniverse: Development
+> This contains our locally hosted development artifacts.<br>
+
 ```xml
 <repository>
   <id>runeduniverse-development</id>
@@ -31,11 +22,17 @@ Each artifact starts with the name of the programming language followed by its r
 [![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-bom.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-bom%22)
 
 ```xml
-<dependency>
-  <groupId>net.runeduniverse.lib.utils</groupId>
-  <artifactId>utils-bom</artifactId>
-  <version>1.0.1</version>
-</dependency>
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>net.runeduniverse.lib.utils</groupId>
+      <artifactId>utils-bom</artifactId>
+      <version>1.1.0</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
 ```
 
 #### [Maven] Java Utils Async
@@ -91,7 +88,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-logging</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -104,6 +101,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-scanner</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
+

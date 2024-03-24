@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.1</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
+		<version>2.0.0</version>
 	</parent>
 
 	<artifactId>utils-logging</artifactId>
@@ -35,6 +36,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ACTIVITIONS -->
 		<license-enforce>true</license-enforce>
 		<!-- ACTIVITIONS - LICENSES -->
@@ -111,29 +113,5 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.mycila</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<configuration>
-						<properties>
-							<year>2023</year>
-							<owner>VenaNocta</owner>
-							<email>venanocta@gmail.com</email>
-						</properties>
-						<licenseSets>
-							<licenseSet>
-								<header>${project.basedir}/../.licenses/apache2-header.txt</header>
-								<excludes>
-									<exclude>**/resources/**</exclude>
-									<exclude>**/.licenses/**</exclude>
-								</excludes>
-							</licenseSet>
-						</licenseSets>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 </project>
