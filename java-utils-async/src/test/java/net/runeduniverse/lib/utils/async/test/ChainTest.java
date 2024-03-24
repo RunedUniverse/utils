@@ -18,6 +18,7 @@ package net.runeduniverse.lib.utils.async.test;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import net.runeduniverse.lib.utils.async.ChainableTask;
@@ -32,6 +33,7 @@ public class ChainTest {
 	}
 
 	@Test
+	@Tag("system")
 	public void buildRunnable() throws InterruptedException {
 		System.out.println("BUILD RUNNABLE");
 
@@ -92,6 +94,7 @@ public class ChainTest {
 	}
 
 	@Test
+	@Tag("system")
 	public void buildRunnableAsThread() throws InterruptedException {
 		System.out.println("BUILD RUNNABLE - run as Thread");
 
@@ -149,6 +152,7 @@ public class ChainTest {
 	}
 
 	@Test
+	@Tag("system")
 	public void paramTrigger() throws InterruptedException {
 		TriggeredParamTask<UUID> task = new TriggeredParamTask<UUID>();
 
