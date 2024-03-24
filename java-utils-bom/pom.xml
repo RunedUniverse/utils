@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>1.0.1</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
+		<version>2.0.0</version>
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
@@ -30,6 +31,8 @@
 	<packaging>pom</packaging>
 
 	<name>UTILS - Bill of Materials</name>
+	<url>https://github.com/RunedUniverse/utils</url>
+	<inceptionYear>2021</inceptionYear>
 
 	<licenses>
 		<license>
@@ -45,9 +48,9 @@
 
 	<developers>
 		<developer>
-			<id>pl4yingnight</id>
-			<name>Pl4yingNight</name>
-			<email>pl4yingnight@gmail.com</email>
+			<id>venanocta</id>
+			<name>VenaNocta</name>
+			<email>venanocta@gmail.com</email>
 			<organization>RunedUniverse</organization>
 			<organizationUrl>https://www.runeduniverse.net</organizationUrl>
 			<timezone>Europe/Vienna</timezone>
@@ -69,14 +72,15 @@
 	</issueManagement>
 
 	<properties>
-		<project-packaging>${project.packaging}</project-packaging>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ARTIFACT VERSIONS -->
-		<min-utils-async-version>2.1.1</min-utils-async-version>
-		<min-utils-chain-version>1.0.1</min-utils-chain-version>
-		<min-utils-common-version>1.0.1</min-utils-common-version>
-		<min-utils-errors-version>1.0.1</min-utils-errors-version>
-		<min-utils-logging-version>1.0.1</min-utils-logging-version>
-		<min-utils-scanner-version>1.0.6</min-utils-scanner-version>
+		<utils-async-version>2.1.1</utils-async-version>
+		<utils-chain-version>1.0.1</utils-chain-version>
+		<utils-common-version>1.0.1</utils-common-version>
+		<utils-errors-version>1.0.1</utils-errors-version>
+		<utils-logging-version>1.0.2</utils-logging-version>
+		<utils-scanner-version>1.0.6</utils-scanner-version>
 	</properties>
 
 	<dependencyManagement>
@@ -84,64 +88,33 @@
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-async</artifactId>
-				<version>[${min-utils-async-version},)</version>
+				<version>${utils-async-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-chain</artifactId>
-				<version>[${min-utils-chain-version},)</version>
+				<version>${utils-chain-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-common</artifactId>
-				<version>[${min-utils-common-version},)</version>
+				<version>${utils-common-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-errors</artifactId>
-				<version>[${min-utils-errors-version},)</version>
+				<version>${utils-errors-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-logging</artifactId>
-				<version>[${min-utils-logging-version},)</version>
+				<version>${utils-logging-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-scanner</artifactId>
-				<version>[${min-utils-scanner-version},)</version>
+				<version>${utils-scanner-version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<profiles>
-		<!-- JENKINS -->
-		<profile>
-			<id>install</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-clean-plugin:clean@jenkins
-					org.apache.maven.plugins:maven-resources-plugin:resources@jenkins
-					org.apache.maven.plugins:maven-gpg-plugin:sign@jenkins
-					org.apache.maven.plugins:maven-install-plugin:install@jenkins
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>deploy</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-deploy-plugin:deploy@jenkins
-				</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>gen-eff-pom</id>
-			<build>
-				<defaultGoal>
-					org.apache.maven.plugins:maven-help-plugin:effective-pom@jenkins-tracing
-				</defaultGoal>
-			</build>
-		</profile>
-	</profiles>
 </project>
