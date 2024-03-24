@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import lombok.Getter;
@@ -185,12 +186,36 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@Override
-	public Set<F> getAllFields() {
+	public Set<F> getFields() {
 		final Set<F> fields = new LinkedHashSet<>();
 		for (Set<F> col : this.fields.values()) {
 			fields.addAll(col);
 		}
 		return Collections.unmodifiableSet(fields);
+	}
+
+	@Override
+	public Map<F, Set<Class<? extends Annotation>>> mapFields() {
+		final Map<F, Set<Class<? extends Annotation>>> map = new LinkedHashMap<>();
+
+		for (Entry<Class<? extends Annotation>, Set<F>> entry : this.fields.entrySet()) {
+			final Class<? extends Annotation> anno = entry.getKey();
+			if (isNeutralAnnotation(anno))
+				continue;
+
+			final Set<F> col = entry.getValue();
+			if (col == null)
+				continue;
+
+			for (F field : col) {
+				Set<Class<? extends Annotation>> annos = map.get(field);
+				if (annos == null) {
+					map.put(field, annos = new LinkedHashSet<>());
+				}
+				annos.add(anno);
+			}
+		}
+		return map;
 	}
 
 	@Override
@@ -217,12 +242,36 @@ public class DefaultTypePattern<F extends FieldPattern, M extends MethodPattern>
 	}
 
 	@Override
-	public Set<M> getAllMethods() {
+	public Set<M> getMethods() {
 		final Set<M> methods = new LinkedHashSet<>();
 		for (Set<M> col : this.methods.values()) {
 			methods.addAll(col);
 		}
 		return Collections.unmodifiableSet(methods);
+	}
+
+	@Override
+	public Map<M, Set<Class<? extends Annotation>>> mapMethods() {
+		final Map<M, Set<Class<? extends Annotation>>> map = new LinkedHashMap<>();
+
+		for (Entry<Class<? extends Annotation>, Set<M>> entry : this.methods.entrySet()) {
+			final Class<? extends Annotation> anno = entry.getKey();
+			if (isNeutralAnnotation(anno))
+				continue;
+
+			final Set<M> col = entry.getValue();
+			if (col == null)
+				continue;
+
+			for (M method : col) {
+				Set<Class<? extends Annotation>> annos = map.get(method);
+				if (annos == null) {
+					map.put(method, annos = new LinkedHashSet<>());
+				}
+				annos.add(anno);
+			}
+		}
+		return map;
 	}
 
 	@Override

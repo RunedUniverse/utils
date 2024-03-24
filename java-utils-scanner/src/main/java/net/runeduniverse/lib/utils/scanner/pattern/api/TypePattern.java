@@ -16,6 +16,7 @@
 package net.runeduniverse.lib.utils.scanner.pattern.api;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 import java.util.Set;
 
 public interface TypePattern<F extends FieldPattern, M extends MethodPattern> {
@@ -60,13 +61,17 @@ public interface TypePattern<F extends FieldPattern, M extends MethodPattern> {
 
 	public Set<F> getFields(Class<? extends Annotation> anno);
 
-	public Set<F> getAllFields();
+	public Set<F> getFields();
+
+	public Map<F, Set<Class<? extends Annotation>>> mapFields();
 
 	public M getMethod(Class<? extends Annotation> anno);
 
 	public Set<M> getMethods(Class<? extends Annotation> anno);
 
-	public Set<M> getAllMethods();
+	public Set<M> getMethods();
+
+	public Map<M, Set<Class<? extends Annotation>>> mapMethods();
 
 	/**
 	 * Used to call parsed Methods
