@@ -26,6 +26,7 @@
 	<packaging>pom</packaging>
 
 	<name>Utils-Project Maven Parent</name>
+	<description>RunedUniverse Utilities Project</description>
 	<url>https://github.com/RunedUniverse/utils</url>
 	<inceptionYear>2021</inceptionYear>
 
