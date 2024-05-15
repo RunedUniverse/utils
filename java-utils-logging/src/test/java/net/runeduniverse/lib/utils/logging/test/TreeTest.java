@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2024 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package net.runeduniverse.lib.utils.logging.test;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
@@ -22,6 +23,7 @@ import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
 public class TreeTest {
 
 	@Test
+	@Tag("system")
 	public void buildTree() throws Exception {
 		CompoundTree pkgs = new CompoundTree("Packages");
 		pkgs.append(new CompoundTree("PKG", "net.runeduniverse.lib.utils.logging.test.fake")

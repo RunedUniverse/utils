@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2023 VenaNocta (venanocta@gmail.com)
+    Copyright © 2024 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,11 +24,10 @@
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
 		<version>2.0.0</version>
-		<relativePath>../.maven-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>utils-scanner</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>Java Scanner</name>
@@ -74,8 +73,12 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>..</root-dir>
 		<!-- ACTIVITIONS -->
 		<license-enforce>true</license-enforce>
+		<!-- ACTIVITIONS - LICENSES -->
+		<license-prj-utils-approve>true</license-prj-utils-approve>
+		<license-apache2-approve>true</license-apache2-approve>
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
@@ -118,27 +121,5 @@
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
 	</build>
 </project>

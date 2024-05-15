@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2024 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import java.net.URL;
 
 import lombok.Getter;
 import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
-import net.runeduniverse.lib.utils.scanner.debug.api.IIntercepter;
+import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
 @Getter
-public class IntercepterSection implements IIntercepter {
+public class IntercepterSection implements Intercepter {
 
 	private final String id;
 	private final CompoundTree tree;

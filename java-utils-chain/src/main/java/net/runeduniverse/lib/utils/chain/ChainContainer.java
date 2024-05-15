@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Pl4yingNight (pl4yingnight@gmail.com)
+ * Copyright © 2024 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public final class ChainContainer {
 
 	/***
 	 * call(...) calls the chain and returns the Object defined by the resultType.
-	 * 
+	 *
 	 * @param ChainRuntime<R> runtime
 	 * @return returns the <code>Object</code> defined by the resultType or in case
 	 *         the resultType is null the last returned (!null) value in the chain;
