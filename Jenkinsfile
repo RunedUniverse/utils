@@ -18,29 +18,33 @@ node {
 		}
 
 		stage('Initialize') {
-			echo 'install parent to tmp repo'
-			sh "mvn-dev -P ${ REPOS },install --non-recursive"
 			env.RESULT_PATH  = "${ WORKSPACE }/result/"
 			env.ARCHIVE_PATH = "${ WORKSPACE }/archive/"
 			sh "mkdir -p ${ RESULT_PATH }"
 			sh "mkdir -p ${ ARCHIVE_PATH }"
 			
-			addModule id: 'mvn-parent',			path: '.',					name: 'Maven Parent'
-			addModule id: 'java-utils-async',	path: 'java-utils-async',	name: 'Java Utils Async'
-			addModule id: 'java-utils-bom',		path: 'java-utils-bom',		name: 'Bill of Materials'
-			addModule id: 'java-utils-chain',	path: 'java-utils-chain',	name: 'Java Chain Library'
-			addModule id: 'java-utils-common',	path: 'java-utils-common',	name: 'Java Utils Common'
-			addModule id: 'java-utils-errors',	path: 'java-utils-errors',	name: 'Java Error Handling Library'
-			addModule id: 'java-utils-logging',	path: 'java-utils-logging',	name: 'Java Logging Tools'
-			addModule id: 'java-utils-maven',	path: 'java-utils-maven',	name: 'Java Maven Utils'
-			addModule id: 'java-utils-plexus',	path: 'java-utils-plexus',	name: 'Java Plexus Utils'
-			addModule id: 'java-utils-scanner',	path: 'java-utils-scanner',	name: 'Java Scanner'
+			addModule id: 'mvn-parent',         path: '.',                  name: 'Maven Parent',                tags: [ 'parent' ]
+			addModule id: 'java-utils-async',   path: 'java-utils-async',   name: 'Java Utils Async',            tags: [ 'test' ]
+			addModule id: 'java-utils-bom',     path: 'java-utils-bom',     name: 'Bill of Materials',           tags: [ 'bom' ]
+			addModule id: 'java-utils-chain',   path: 'java-utils-chain',   name: 'Java Chain Library',          tags: [ 'test' ]
+			addModule id: 'java-utils-common',  path: 'java-utils-common',  name: 'Java Utils Common',           tags: [ 'test' ]
+			addModule id: 'java-utils-errors',  path: 'java-utils-errors',  name: 'Java Error Handling Library', tags: [ 'test' ]
+			addModule id: 'java-utils-logging',	path: 'java-utils-logging',	name: 'Java Logging Tools',          tags: [ 'test' ]
+			addModule id: 'java-utils-maven',   path: 'java-utils-maven',   name: 'Java Maven Utils',            tags: [ 'test' ]
+			addModule id: 'java-utils-plexus',  path: 'java-utils-plexus',  name: 'Java Plexus Utils',           tags: [ 'test' ]
+			addModule id: 'java-utils-scanner', path: 'java-utils-scanner', name: 'Java Scanner',                tags: [ 'test' ]
 		}
-		// init after "Initialize" since the selection requires maven, which in turn requires the parent to be already installed!
-		stage('Init Module Router') {
+
+		stage('Init Modules') {
+			// install parents so we can eval versions next
+			perModule(withTagIn: [ 'parent' ], failFast: true) {
+				dir(path: module.path()) {
+					sh "mvn-dev -P ${ REPOS },install --non-recursive"
+				}
+			}
 			perModule(failFast: true) {
 				module.activate(
-					sh(
+					!module.hasTag('ignore') && sh(
 						returnStdout: true,
 						script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('mvn-parent') }"
 					) == '1'
@@ -52,7 +56,7 @@ node {
 		}
 
 		stage('Update Maven Repo') {
-			if(!isAnyModuleActive()) {
+			if(checkAllModules(match: 'all', active: false)) {
 				skipStage()
 				return
 			}
@@ -85,22 +89,24 @@ node {
 			}
 		}
 		stage('Install - Bill of Materials') {
-			if(!isModuleActive(id: 'java-utils-bom')) {
-				skipStage()
-				return
-			}
-			try {
-				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=java-utils-bom"
-			} finally {
-				dir(path: 'java-utils-bom/target') {
-					sh 'ls -l'
-					sh "cp *.pom *.asc ${ RESULT_PATH }"
+			perModule(withTagIn: [ 'bom' ]) {
+				if(!module.active()) {
+					skipStage()
+					return
+				}
+				try {
+					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('mvn-parent') }"
+				} finally {
+					dir(path: "${ module.path() }/target") {
+						sh 'ls -l'
+						sh "cp *.pom *.asc ${ RESULT_PATH }"
+					}
 				}
 			}
 		}
 
 		stage('Build [1st Level]') {
-			perModule(selectIds: [ 'java-utils-logging', 'java-utils-errors', 'java-utils-common', 'java-utils-async' ]) {
+			perModule(withIds: [ 'java-utils-logging', 'java-utils-errors', 'java-utils-common', 'java-utils-async' ]) {
 				if(!module.active()) {
 					skipStage()
 					return
@@ -116,7 +122,7 @@ node {
 			}
 		}
 		stage('Build [2nd Level]') {
-			perModule(selectIds: [ 'java-utils-scanner', 'java-utils-chain', 'java-utils-maven', 'java-utils-plexus' ]) {
+			perModule(withIds: [ 'java-utils-scanner', 'java-utils-chain', 'java-utils-maven', 'java-utils-plexus' ]) {
 				if(!module.active()) {
 					skipStage()
 					return
@@ -133,16 +139,7 @@ node {
 		}
 
 		stage('Test') {
-			if(!isModuleSelectionActive([
-					'java-utils-logging',
-					'java-utils-errors',
-					'java-utils-common',
-					'java-utils-async',
-					'java-utils-scanner',
-					'java-utils-chain',
-					'java-utils-maven',
-					'java-utils-plexus'
-				])) {
+			if(!checkAllModules(withTagIn: [ 'test' ], active: true)) {
 				skipStage()
 				return
 			}
@@ -156,7 +153,7 @@ node {
 		}
 
 		stage('Package Build Result') {
-			if(!isAnyModuleActive()) {
+			if(checkAllModules(match: 'all', active: false)) {
 				skipStage()
 				return
 			}
