@@ -18,6 +18,9 @@ node {
 		}
 
 		stage('Initialize') {
+			// install parent so we can eval versions in 'Init Modules' stage
+			sh "mvn-dev -P ${ REPOS },install --non-recursive"
+			
 			env.RESULT_PATH  = "${ WORKSPACE }/result/"
 			env.ARCHIVE_PATH = "${ WORKSPACE }/archive/"
 			sh "mkdir -p ${ RESULT_PATH }"
@@ -36,12 +39,6 @@ node {
 		}
 
 		stage('Init Modules') {
-			// install parents so we can eval versions next
-			perModule(withTagIn: [ 'parent' ], failFast: true) {
-				dir(path: module.path()) {
-					sh "mvn-dev -P ${ REPOS },install --non-recursive"
-				}
-			}
 			perModule(failFast: true) {
 				module.activate(
 					!module.hasTag('ignore') && sh(
