@@ -26,7 +26,7 @@ node {
 			sh "mkdir -p ${ RESULT_PATH }"
 			sh "mkdir -p ${ ARCHIVE_PATH }"
 			
-			addModule id: 'mvn-parent',         path: '.',                  name: 'Maven Parent',                tags: [ 'parent' ]
+			addModule id: 'maven-parent',       path: '.',                  name: 'Maven Parent',                tags: [ 'parent' ]
 			addModule id: 'java-utils-async',   path: 'java-utils-async',   name: 'Java Utils Async',            tags: [ 'test' ]
 			addModule id: 'java-utils-bom',     path: 'java-utils-bom',     name: 'Bill of Materials',           tags: [ 'bom' ]
 			addModule id: 'java-utils-chain',   path: 'java-utils-chain',   name: 'Java Chain Library',          tags: [ 'test' ]
@@ -40,10 +40,11 @@ node {
 
 		stage('Init Modules') {
 			perModule(failFast: true) {
+				echo "path: ${ module.relPathFrom('maven-parent') }"
 				module.activate(
-					!module.hasTag('ignore') && sh(
+					!module.hasTag('skip') && sh(
 						returnStdout: true,
-						script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('mvn-parent') }"
+						script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') }"
 					) == '1'
 				);
 			}
@@ -67,12 +68,12 @@ node {
 					skipStage()
 					return
 				}
-				sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve -pl=${ module.relPathFrom('mvn-parent') }"
+				sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve -pl=${ module.relPathFrom('maven-parent') }"
 			}
 		}
 	
 		stage('Install Maven Parent') {
-			if(!getModule(id: 'mvn-parent').active()) {
+			if(!getModule(id: 'maven-parent').active()) {
 				skipStage()
 				return
 			}
@@ -92,7 +93,7 @@ node {
 					return
 				}
 				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
 				} finally {
 					dir(path: "${ module.path() }/target") {
 						sh 'ls -l'
@@ -109,7 +110,7 @@ node {
 					return
 				}
 				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
 				} finally {
 					dir(path: "${ module.path() }/target") {
 						sh 'ls -l'
@@ -125,7 +126,7 @@ node {
 					return
 				}
 				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
 				} finally {
 					dir(path: "${ module.path() }/target") {
 						sh 'ls -l'
@@ -172,14 +173,14 @@ node {
 					return
 				}
 				stage('Develop'){
-					sh "mvn-dev -P ${ REPOS },dist-repo-development,deploy -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P ${ REPOS },dist-repo-development,deploy -pl=${ module.relPathFrom('maven-parent') }"
 				}
 				stage('Release') {
 					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
 						skipStage()
 						return
 					}
-					sh "mvn-dev -P ${ REPOS },dist-repo-releases,deploy-signed -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P ${ REPOS },dist-repo-releases,deploy-signed -pl=${ module.relPathFrom('maven-parent') }"
 				}
 				stage('Stage at Maven-Central') {
 					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
@@ -187,9 +188,9 @@ node {
 						return
 					}
 					// never add : -P ${REPOS} => this is ment to fail here
-					sh "mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=${ module.relPathFrom('mvn-parent') }"
+					sh "mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=${ module.relPathFrom('maven-parent') }"
 					sshagent (credentials: ['RunedUniverse-Jenkins']) {
-						sh "git push origin \$(git-create-version-tag ${ module.id() } ${ module.relPathFrom('mvn-parent') })"
+						sh "git push origin \$(git-create-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') })"
 					}
 				}
 			}
