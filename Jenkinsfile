@@ -18,9 +18,6 @@ node {
 		}
 
 		stage('Initialize') {
-			// install parent so we can eval versions in 'Init Modules' stage
-			sh "mvn-dev -P ${ REPOS },install --non-recursive"
-			
 			env.RESULT_PATH  = "${ WORKSPACE }/result/"
 			env.ARCHIVE_PATH = "${ WORKSPACE }/archive/"
 			sh "mkdir -p ${ RESULT_PATH }"
@@ -39,14 +36,15 @@ node {
 		}
 
 		stage('Init Modules') {
-			perModule(failFast: true) {
-				echo "path: ${ module.relPathFrom('maven-parent') }"
-				module.activate(
-					!module.hasTag('skip') && sh(
-						returnStdout: true,
-						script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') }"
-					) == '1'
-				);
+			sshagent (credentials: ['RunedUniverse-Jenkins']) {
+				perModule(failFast: true) {
+					module.activate(
+						!module.hasTag('skip') && sh(
+								returnStdout: true,
+								script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') }"
+							) == '1'
+					);
+				}
 			}
 		}
 		stage ('Info') {
@@ -86,7 +84,7 @@ node {
 				}
 			}
 		}
-		stage('Install - Bill of Materials') {
+		stage('Install - BOMs') {
 			perModule(withTagIn: [ 'bom' ]) {
 				if(!module.active()) {
 					skipStage()
