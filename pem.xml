@@ -430,17 +430,6 @@
 								</goal>
 							</goals>
 						</phase>
-						<phase id="compile">
-							<goals>
-								<goal id="compile">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
 						<phase id="process-test-resources">
 							<goals>
 								<goal id="testResources">
@@ -449,28 +438,6 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-resources-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test-compile">
-							<goals>
-								<goal id="testCompile">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test">
-							<goals>
-								<goal id="test">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>
@@ -507,41 +474,6 @@
 			<lifecycles>
 				<lifecycle id="default">
 					<phases>
-						<phase id="compile">
-							<goals>
-								<goal id="compile">
-									<modes>
-										<install />
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test-compile">
-							<goals>
-								<goal id="testCompile">
-									<modes>
-										<install />
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test">
-							<goals>
-								<goal id="test">
-									<modes>
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
 						<phase id="package">
 							<goals>
 								<goal id="jar">
@@ -587,6 +519,74 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-javadoc-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="source-compile" source="override">
+			<triggers>
+				<always />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="compile">
+							<goals>
+								<goal id="compile">
+									<modes>
+										<dev />
+										<install />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="test-compile" source="override">
+			<triggers>
+				<always />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="test-compile">
+							<goals>
+								<goal id="testCompile">
+									<modes>
+										<dev />
+										<install />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test">
+							<goals>
+								<goal id="test">
+									<modes>
+										<dev />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-surefire-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>
