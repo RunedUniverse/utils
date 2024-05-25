@@ -37,6 +37,8 @@
 		<module>java-utils-common</module>
 		<module>java-utils-errors</module>
 		<module>java-utils-logging</module>
+		<module>java-utils-maven</module>
+		<module>java-utils-plexus</module>
 		<module>java-utils-scanner</module>
 	</modules>
 
@@ -79,9 +81,15 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>${project.basedir}</root-dir>
+		<!-- sources -->
+		<toolchain-jdk-source-version>openjdk-1.8.0</toolchain-jdk-source-version>
 		<java-source-version>1.8</java-source-version>
 		<java-target-version>${java-source-version}</java-target-version>
-		<root-dir>${project.basedir}</root-dir>
+		<!-- tests -->
+		<toolchain-jdk-test-version>${toolchain-jdk-source-version}</toolchain-jdk-test-version>
+		<java-test-source-version>${java-source-version}</java-test-source-version>
+		<java-test-target-version>${java-test-source-version}</java-test-target-version>
 		<!-- ARTIFACT VERSIONS -->
 		<maven-version-min>3.3.9</maven-version-min>
 		<lombok-version>1.18.12</lombok-version>
@@ -112,40 +120,22 @@
 		<!-- TOOLCHAINS -->
 		<profile>
 			<id>toolchain-openjdk-1-8-0</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-toolchains-plugin</artifactId>
-						<configuration>
-							<toolchains>
-								<jdk>
-									<version>openjdk-1.8.0</version>
-								</jdk>
-							</toolchains>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
+			<properties>
+				<jdk-toolchain-source-version>openjdk-1.8.0</jdk-toolchain-source-version>
+				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
+			</properties>
 		</profile>
 		<!-- DEV-INSTALL -->
 		<profile>
 			<id>dev-install</id>
+			<properties>
+				<jdk-toolchain-source-version>openjdk-1.8.0</jdk-toolchain-source-version>
+				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
+			</properties>
 			<build>
 				<defaultGoal>clean dev/install]</defaultGoal>
 				<pluginManagement>
 					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-toolchains-plugin</artifactId>
-							<configuration>
-								<toolchains>
-									<jdk>
-										<version>openjdk-1.8.0</version>
-									</jdk>
-								</toolchains>
-							</configuration>
-						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-surefire-plugin</artifactId>
@@ -304,7 +294,7 @@
 						<groupId>com.mycila</groupId>
 						<artifactId>license-maven-plugin</artifactId>
 						<configuration>
-							<dependencyPolicies>
+							<dependencyPolicies combine.children="append">
 								<dependencyPolicy>
 									<type>LICENSE_NAME</type>
 									<rule>APPROVE</rule>
@@ -343,6 +333,46 @@
 									<rule>APPROVE</rule>
 									<value>
 										https://www.apache.org/licenses/LICENSE-2.0.txt
+									</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>license-epl-v10-approve</id>
+			<activation>
+				<property>
+					<name>license-epl-v10-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License, Version 1.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										http://www.eclipse.org/legal/epl-v10.html
+									</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										https://www.eclipse.org/legal/epl-v10.html
 									</value>
 								</dependencyPolicy>
 							</dependencyPolicies>
@@ -470,7 +500,7 @@
 					<configuration>
 						<toolchains>
 							<jdk>
-								<version>openjdk-1.8.0</version>
+								<version>${toolchain-jdk-source-version}</version>
 							</jdk>
 						</toolchains>
 					</configuration>
@@ -539,6 +569,12 @@
 					<configuration>
 						<source>${java-source-version}</source>
 						<target>${java-target-version}</target>
+						<testSource>${java-test-source-version}</testSource>
+						<testTarget>${java-test-target-version}</testTarget>
+						<!-- use starting with version 3.12.0-->
+						<!--
+						<annotationProcessorPathsUseDepMgmt>true</annotationProcessorPathsUseDepMgmt>
+						-->
 						<annotationProcessorPaths>
 							<path>
 								<groupId>org.projectlombok</groupId>
@@ -547,6 +583,24 @@
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
+					<executions>
+						<execution>
+							<id>source-compile</id>
+							<configuration>
+								<jdkToolchain>
+									<version>${toolchain-jdk-source-version}</version>
+								</jdkToolchain>
+							</configuration>
+						</execution>
+						<execution>
+							<id>test-compile</id>
+							<configuration>
+								<jdkToolchain>
+									<version>${toolchain-jdk-test-version}</version>
+								</jdkToolchain>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -565,6 +619,16 @@
 					<configuration>
 						<trimStackTrace>false</trimStackTrace>
 					</configuration>
+					<executions>
+						<execution>
+							<id>test-compile</id>
+							<configuration>
+								<jdkToolchain>
+									<version>${toolchain-jdk-test-version}</version>
+								</jdkToolchain>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
