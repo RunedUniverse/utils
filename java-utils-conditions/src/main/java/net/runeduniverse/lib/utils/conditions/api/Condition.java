@@ -14,3 +14,16 @@
  * limitations under the License.
  */
 package net.runeduniverse.lib.utils.conditions.api;
+
+public interface Condition<T> {
+
+	public boolean evaluate(T entity);
+
+	public default boolean isValid() {
+		return true;
+	}
+
+	public default void compile(boolean recurse) {
+	}
+
+}

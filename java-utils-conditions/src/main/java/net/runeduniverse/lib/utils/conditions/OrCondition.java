@@ -14,3 +14,21 @@
  * limitations under the License.
  */
 package net.runeduniverse.lib.utils.conditions;
+
+import java.util.Iterator;
+
+import net.runeduniverse.lib.utils.conditions.api.Condition;
+
+public class OrCondition<T> extends DefaultConditionGroup<T> {
+
+	@Override
+	public boolean evaluate(T entity) {
+		for (Iterator<Condition<T>> i = this.conditions.iterator(); i.hasNext();) {
+			if (i.next()
+					.evaluate(entity))
+				return true;
+		}
+		return false;
+	}
+
+}
