@@ -35,6 +35,7 @@
 		<module>java-utils-async</module>
 		<module>java-utils-chain</module>
 		<module>java-utils-common</module>
+		<module>java-utils-conditions</module>
 		<module>java-utils-errors</module>
 		<module>java-utils-logging</module>
 		<module>java-utils-maven</module>
