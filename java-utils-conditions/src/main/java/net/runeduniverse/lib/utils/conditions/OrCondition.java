@@ -22,6 +22,11 @@ import net.runeduniverse.lib.utils.conditions.api.Condition;
 public class OrCondition<T> extends DefaultConditionGroup<T> {
 
 	@Override
+	public String getType() {
+		return "or";
+	}
+
+	@Override
 	public boolean evaluate(T entity) {
 		for (Iterator<Condition<T>> i = this.conditions.iterator(); i.hasNext();) {
 			if (i.next()

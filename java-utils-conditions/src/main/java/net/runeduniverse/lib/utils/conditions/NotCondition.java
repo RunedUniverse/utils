@@ -23,6 +23,11 @@ public class NotCondition<T> implements ConditionModifier<T> {
 	protected Condition<T> condition = null;
 
 	@Override
+	public String getType() {
+		return "not";
+	}
+
+	@Override
 	public boolean evaluate(T entity) {
 		if (this.condition != null)
 			return !this.condition.evaluate(entity);

@@ -15,9 +15,19 @@
  */
 package net.runeduniverse.lib.utils.conditions.api;
 
+import java.util.List;
+
 public interface Condition<T> {
 
 	public boolean evaluate(T entity);
+
+	public default String getType() {
+		return "???";
+	}
+
+	public default List<ConditionInfo> getInfo() {
+		return null;
+	}
 
 	public default boolean isValid() {
 		return true;
@@ -26,4 +36,10 @@ public interface Condition<T> {
 	public default void compile(boolean recurse) {
 	}
 
+	public interface ConditionInfo {
+
+		public CharSequence getTag();
+
+		public CharSequence getText();
+	}
 }
