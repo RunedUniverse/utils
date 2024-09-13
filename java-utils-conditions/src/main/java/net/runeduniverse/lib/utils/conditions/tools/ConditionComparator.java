@@ -17,7 +17,6 @@ package net.runeduniverse.lib.utils.conditions.tools;
 
 import java.util.Comparator;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
-import net.runeduniverse.lib.utils.conditions.tools.EntrySet.Entry;
 
 public class ConditionComparator<T> implements Comparator<T> {
 

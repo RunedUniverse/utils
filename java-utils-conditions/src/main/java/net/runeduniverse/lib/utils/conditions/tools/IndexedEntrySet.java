@@ -15,41 +15,32 @@
  */
 package net.runeduniverse.lib.utils.conditions.tools;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-
-import net.runeduniverse.lib.utils.conditions.api.Condition;
-
-public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
+public class IndexedEntrySet<T> extends EntrySet<T> {
 
 	private static final long serialVersionUID = 1L;
 
-	public EntrySet() {
+	protected final ConditionIndexer indexer;
+
+	public IndexedEntrySet(final ConditionIndexer indexer) {
+		this.indexer = indexer;
 	}
 
-	public EntrySet(int initialCapacity) {
+	public IndexedEntrySet(final ConditionIndexer indexer, int initialCapacity) {
 		super(initialCapacity);
+		this.indexer = indexer;
 	}
 
-	public EntrySet(int initialCapacity, float loadFactor) {
+	public IndexedEntrySet(final ConditionIndexer indexer, int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
+		this.indexer = indexer;
 	}
 
+	@Override
 	protected EntrySet<T> newInstance() {
-		return new EntrySet<>();
+		return new IndexedEntrySet<>(this.indexer);
 	}
 
-	public EntrySet<T> compile(final ConditionIndexer indexer) {
-		final EntrySet<T> set = newInstance();
-		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
-			final Entry<T> entry = i.next();
-			if (entry.validate(indexer))
-				set.add(entry);
-		}
-		return set;
-	}
-
-	public boolean add(final Condition<T> match, final Condition<T> before, final Condition<T> after) {
-		return add(new Entry<T>(match, before, after));
+	public EntrySet<T> compile() {
+		return compile(this.indexer);
 	}
 }
