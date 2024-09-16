@@ -36,11 +36,20 @@ public class IndexedEntrySet<T> extends EntrySet<T> {
 	}
 
 	@Override
-	protected EntrySet<T> newInstance() {
+	protected IndexedEntrySet<T> newInstance() {
 		return new IndexedEntrySet<>(this.indexer);
 	}
 
-	public EntrySet<T> compile() {
-		return compile(this.indexer);
+	@Override
+	public IndexedEntrySet<T> compile(ConditionIndexer indexer) {
+		final IndexedEntrySet<T> set = newInstance();
+		compileTo(indexer, set);
+		return set;
+	}
+
+	public IndexedEntrySet<T> compile() {
+		final IndexedEntrySet<T> set = newInstance();
+		compileTo(this.indexer, set);
+		return set;
 	}
 }

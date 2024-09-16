@@ -35,5 +35,4 @@ public class OrCondition<T> extends DefaultConditionGroup<T> {
 		}
 		return false;
 	}
-
 }

@@ -49,5 +49,4 @@ public interface ConditionGroup<T> extends Condition<T> {
 				i.remove();
 		}
 	}
-
 }

@@ -48,11 +48,11 @@ public class ConditionComparator<T> implements Comparator<T> {
 	}
 
 	protected int compare(final Entry<T> entry, final T entity) {
-		final Condition<T> before = entry.getBefore();
+		final Condition<T> before = entry.getMatchBefore();
 		if (before != null && before.evaluate(entity)) {
 			return 1;
 		}
-		final Condition<T> after = entry.getAfter();
+		final Condition<T> after = entry.getMatchAfter();
 		if (after != null && after.evaluate(entity)) {
 			return -1;
 		}
@@ -60,12 +60,11 @@ public class ConditionComparator<T> implements Comparator<T> {
 	}
 
 	protected Entry<T> checkMatch(final Entry<T> entry, final T entity) {
-		final Condition<T> con = entry.getMatch();
+		final Condition<T> con = entry.getMatchItem();
 		if (con == null)
 			return null;
 		if (con.evaluate(entity))
 			return entry;
 		return null;
 	}
-
 }

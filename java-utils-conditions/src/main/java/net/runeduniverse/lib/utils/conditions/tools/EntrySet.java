@@ -39,13 +39,17 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		return new EntrySet<>();
 	}
 
-	public EntrySet<T> compile(final ConditionIndexer indexer) {
-		final EntrySet<T> set = newInstance();
+	public void compileTo(final ConditionIndexer indexer, final EntrySet<T> set) {
 		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
 			final Entry<T> entry = i.next();
 			if (entry.validate(indexer))
 				set.add(entry);
 		}
+	}
+
+	public EntrySet<T> compile(final ConditionIndexer indexer) {
+		final EntrySet<T> set = newInstance();
+		compileTo(indexer, set);
 		return set;
 	}
 

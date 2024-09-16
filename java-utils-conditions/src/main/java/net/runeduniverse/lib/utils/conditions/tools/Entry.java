@@ -26,30 +26,30 @@ import net.runeduniverse.lib.utils.conditions.api.Condition;
 public class Entry<T> {
 	@Getter
 	@Setter
-	protected Condition<T> match = null;
+	protected Condition<T> matchItem = null;
 	@Getter
 	@Setter
-	protected Condition<T> before = null;
+	protected Condition<T> matchBefore = null;
 	@Getter
 	@Setter
-	protected Condition<T> after = null;
+	protected Condition<T> matchAfter = null;
 
 	public boolean validate(ConditionIndexer indexer) {
-		if (this.match == null)
+		if (this.matchItem == null)
 			return false;
-		this.match.compile(true);
-		if (indexer.detectCircle(this.match) != null)
+		this.matchItem.compile(true);
+		if (indexer.detectCircle(this.matchItem) != null)
 			return false;
 
-		if (this.before != null) {
-			this.before.compile(true);
-			if (indexer.detectCircle(this.before) != null)
+		if (this.matchBefore != null) {
+			this.matchBefore.compile(true);
+			if (indexer.detectCircle(this.matchBefore) != null)
 				return false;
 		}
 
-		if (this.after != null) {
-			this.after.compile(true);
-			if (indexer.detectCircle(this.after) != null)
+		if (this.matchAfter != null) {
+			this.matchAfter.compile(true);
+			if (indexer.detectCircle(this.matchAfter) != null)
 				return false;
 		}
 		return true;

@@ -35,5 +35,4 @@ public class AndCondition<T> extends DefaultConditionGroup<T> {
 		}
 		return true;
 	}
-
 }

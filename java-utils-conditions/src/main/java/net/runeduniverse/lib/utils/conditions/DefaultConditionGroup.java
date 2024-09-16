@@ -57,5 +57,4 @@ public abstract class DefaultConditionGroup<T> implements ConditionGroup<T> {
 			return false;
 		}
 	}
-
 }

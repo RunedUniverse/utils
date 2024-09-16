@@ -45,5 +45,4 @@ public class NotCondition<T> implements ConditionModifier<T> {
 		this.condition = condition;
 		return true;
 	}
-
 }
