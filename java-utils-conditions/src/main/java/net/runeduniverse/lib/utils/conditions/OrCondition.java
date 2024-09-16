@@ -15,11 +15,19 @@
  */
 package net.runeduniverse.lib.utils.conditions;
 
+import java.util.Collection;
 import java.util.Iterator;
-
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 
 public class OrCondition<T> extends DefaultConditionGroup<T> {
+
+	public OrCondition() {
+		super();
+	}
+
+	public OrCondition(final Collection<Condition<T>> conditions) {
+		super(conditions);
+	}
 
 	@Override
 	public String getType() {

@@ -15,12 +15,12 @@
  */
 package net.runeduniverse.lib.utils.conditions.api;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 public interface ConditionGroup<T> extends Condition<T> {
 
-	public List<Condition<T>> getGroup();
+	public Collection<Condition<T>> getGroup();
 
 	public boolean add(Condition<T> condition);
 
@@ -30,7 +30,7 @@ public interface ConditionGroup<T> extends Condition<T> {
 
 	@Override
 	default boolean isValid() {
-		final List<Condition<T>> group = getGroup();
+		final Collection<Condition<T>> group = getGroup();
 		return group != null && !group.isEmpty();
 	}
 

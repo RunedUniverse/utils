@@ -15,26 +15,25 @@
  */
 package net.runeduniverse.lib.utils.conditions;
 
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 import net.runeduniverse.lib.utils.conditions.api.ConditionGroup;
 
 public abstract class DefaultConditionGroup<T> implements ConditionGroup<T> {
 
-	protected final List<Condition<T>> conditions;
+	protected final Collection<Condition<T>> conditions;
 
 	public DefaultConditionGroup() {
 		this.conditions = new LinkedList<>();
 	}
 
-	public DefaultConditionGroup(final List<Condition<T>> conditions) {
+	public DefaultConditionGroup(final Collection<Condition<T>> conditions) {
 		this.conditions = conditions;
 	}
 
 	@Override
-	public List<Condition<T>> getGroup() {
+	public Collection<Condition<T>> getGroup() {
 		return this.conditions;
 	}
 
