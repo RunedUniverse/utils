@@ -21,6 +21,10 @@ import net.runeduniverse.lib.utils.conditions.api.Condition;
 
 public class AndCondition<T> extends DefaultConditionGroup<T> {
 
+	public AndCondition() {
+		super();
+	}
+
 	public AndCondition(final Collection<Condition<T>> conditions) {
 		super(conditions);
 	}

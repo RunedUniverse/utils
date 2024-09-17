@@ -16,12 +16,17 @@
 package net.runeduniverse.lib.utils.conditions;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 import net.runeduniverse.lib.utils.conditions.api.ConditionGroup;
 
 public abstract class DefaultConditionGroup<T> implements ConditionGroup<T> {
 
 	protected final Collection<Condition<T>> conditions;
+
+	public DefaultConditionGroup() {
+		this.conditions = new LinkedList<>();
+	}
 
 	public DefaultConditionGroup(final Collection<Condition<T>> conditions) {
 		this.conditions = conditions;
