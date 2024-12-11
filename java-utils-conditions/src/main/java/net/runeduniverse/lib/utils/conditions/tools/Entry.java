@@ -34,7 +34,7 @@ public class Entry<T> {
 	@Setter
 	protected Condition<T> matchAfter = null;
 
-	public boolean validate(ConditionIndexer indexer) {
+	public boolean validate(final ConditionIndexer indexer) {
 		if (this.matchItem == null)
 			return false;
 		this.matchItem.compile(true);
