@@ -25,6 +25,10 @@ public interface Condition<T> {
 		return "???";
 	}
 
+	public default int getPriority() {
+		return 0;
+	}
+
 	public default List<ConditionInfo> getInfo() {
 		return null;
 	}
@@ -41,5 +45,6 @@ public interface Condition<T> {
 		public CharSequence getTag();
 
 		public CharSequence getText();
+
 	}
 }
