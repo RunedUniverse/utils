@@ -18,21 +18,32 @@ package net.runeduniverse.lib.utils.conditions.tools;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class Entry<T> {
 	@Getter
-	@Setter
 	protected Condition<T> matchItem = null;
 	@Getter
-	@Setter
 	protected Condition<T> matchBefore = null;
 	@Getter
-	@Setter
 	protected Condition<T> matchAfter = null;
+
+	public Entry<T> setMatchItem(Condition<T> matchItem) {
+		this.matchItem = matchItem;
+		return this;
+	}
+
+	public Entry<T> setMatchBefore(Condition<T> matchBefore) {
+		this.matchBefore = matchBefore;
+		return this;
+	}
+
+	public Entry<T> setMatchAfter(Condition<T> matchAfter) {
+		this.matchAfter = matchAfter;
+		return this;
+	}
 
 	public boolean validate(final ConditionIndexer indexer) {
 		if (this.matchItem == null)
