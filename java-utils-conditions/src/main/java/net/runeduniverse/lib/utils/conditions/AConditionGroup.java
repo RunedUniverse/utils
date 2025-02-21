@@ -48,22 +48,6 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(super.equals(obj) && obj instanceof ConditionGroup<?>))
-			return false;
-
-		final ConditionGroup<?> grp = (ConditionGroup<?>) obj;
-		final Collection<?> colA = this.getGroup(), colB = grp.getGroup();
-		if (colA == null) {
-			if (colB == null)
-				return true;
-			return false;
-		} else if (colB == null)
-			return false;
-		return colA.equals(colB);
-	}
-
-	@Override
 	public boolean clear() {
 		try {
 			this.conditions.clear();
@@ -71,5 +55,23 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 		} catch (UnsupportedOperationException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(super.equals(obj) && obj instanceof ConditionGroup<?>))
+			return false;
+
+		final ConditionGroup<?> other = (ConditionGroup<?>) obj;
+		final Collection<?> colA = getGroup(), colB = other.getGroup();
+		if (colA == null) {
+			if (colB == null)
+				return true;
+			return false;
+		} else if (colB == null)
+			return false;
+		return colA.equals(colB);
 	}
 }

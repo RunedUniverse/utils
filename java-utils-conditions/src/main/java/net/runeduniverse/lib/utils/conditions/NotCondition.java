@@ -15,12 +15,7 @@
  */
 package net.runeduniverse.lib.utils.conditions;
 
-import net.runeduniverse.lib.utils.conditions.api.Condition;
-import net.runeduniverse.lib.utils.conditions.api.ConditionModifier;
-
-public class NotCondition<T> implements ConditionModifier<T> {
-
-	protected Condition<T> condition = null;
+public class NotCondition<T> extends AConditionModifier<T> {
 
 	@Override
 	public String getType() {
@@ -33,16 +28,5 @@ public class NotCondition<T> implements ConditionModifier<T> {
 			return !this.condition.evaluate(entity);
 		else
 			return false;
-	}
-
-	@Override
-	public Condition<T> getCondition() {
-		return this.condition;
-	}
-
-	@Override
-	public boolean setCondition(Condition<T> condition) {
-		this.condition = condition;
-		return true;
 	}
 }
