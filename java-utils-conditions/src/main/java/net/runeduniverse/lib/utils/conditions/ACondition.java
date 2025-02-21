@@ -34,6 +34,7 @@ public abstract class ACondition<T> implements Condition<T> {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		return obj instanceof Condition<?> && this.hashCode() == obj.hashCode();
+		return obj instanceof Condition<?> && hashCode() == obj.hashCode()
+				&& getPriority() == ((Condition<?>) obj).getPriority();
 	}
 }
