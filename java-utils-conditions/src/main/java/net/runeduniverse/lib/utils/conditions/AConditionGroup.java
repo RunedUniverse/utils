@@ -66,11 +66,9 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 
 		final ConditionGroup<?> other = (ConditionGroup<?>) obj;
 		final Collection<?> colA = getGroup(), colB = other.getGroup();
-		if (colA == null) {
-			if (colB == null)
-				return true;
-			return false;
-		} else if (colB == null)
+		if (colA == colB)
+			return true;
+		if (colA == null || colB == null)
 			return false;
 		return colA.equals(colB);
 	}

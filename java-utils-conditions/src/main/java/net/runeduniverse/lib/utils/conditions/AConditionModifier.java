@@ -42,11 +42,9 @@ public abstract class AConditionModifier<T> extends ACondition<T> implements Con
 
 		final ConditionModifier<?> other = (ConditionModifier<?>) obj;
 		final Condition<?> conA = getCondition(), conB = other.getCondition();
-		if (conA == null) {
-			if (conB == null)
-				return true;
-			return false;
-		} else if (conB == null)
+		if (conA == conB)
+			return true;
+		if (conA == null || conB == null)
 			return false;
 		return conA.equals(conB);
 	}
