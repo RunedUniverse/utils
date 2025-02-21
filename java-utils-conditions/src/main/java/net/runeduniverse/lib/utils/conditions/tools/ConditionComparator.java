@@ -159,6 +159,8 @@ public class ConditionComparator<T> implements Comparator<T> {
 		final Map<Integer, Set<Condition<T>>> map = new LinkedHashMap<>();
 		for (Entry<T> entry : set) {
 			final Condition<T> con = selector.get(entry);
+			if (con == null)
+				continue;
 			final Set<Condition<T>> s = map.computeIfAbsent(con.getPriority(), k -> new LinkedHashSet<>());
 			s.add(con);
 		}
