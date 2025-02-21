@@ -20,15 +20,15 @@ import java.util.LinkedList;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 import net.runeduniverse.lib.utils.conditions.api.ConditionGroup;
 
-public abstract class DefaultConditionGroup<T> implements ConditionGroup<T> {
+public abstract class AConditionGroup<T> extends ACondition<T> implements ConditionGroup<T> {
 
 	protected final Collection<Condition<T>> conditions;
 
-	public DefaultConditionGroup() {
+	public AConditionGroup() {
 		this.conditions = new LinkedList<>();
 	}
 
-	public DefaultConditionGroup(final Collection<Condition<T>> conditions) {
+	public AConditionGroup(final Collection<Condition<T>> conditions) {
 		this.conditions = conditions;
 	}
 
@@ -45,6 +45,24 @@ public abstract class DefaultConditionGroup<T> implements ConditionGroup<T> {
 	@Override
 	public boolean remove(Condition<T> condition) {
 		return this.conditions.remove(condition);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (super.equals(obj))
+			return true;
+		if (!(obj instanceof ConditionGroup<?>))
+			return false;
+
+		final ConditionGroup<?> grp = (ConditionGroup<?>) obj;
+		final Collection<?> colA = this.getGroup(), colB = grp.getGroup();
+		if (colA == null) {
+			if (colB == null)
+				return true;
+			return false;
+		} else if (colB == null)
+			return false;
+		return colA.equals(colB);
 	}
 
 	@Override

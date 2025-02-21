@@ -15,32 +15,25 @@
  */
 package net.runeduniverse.lib.utils.conditions;
 
-import java.util.Collection;
-import java.util.Iterator;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 
-public class AndCondition<T> extends AConditionGroup<T> {
+public abstract class ACondition<T> implements Condition<T> {
 
-	public AndCondition() {
-		super();
-	}
-
-	public AndCondition(final Collection<Condition<T>> conditions) {
-		super(conditions);
-	}
+	private Integer hashCode = null;
 
 	@Override
-	public String getType() {
-		return "and";
-	}
-
-	@Override
-	public boolean evaluate(T entity) {
-		for (Iterator<Condition<T>> i = this.conditions.iterator(); i.hasNext();) {
-			if (!i.next()
-					.evaluate(entity))
-				return false;
+	public int hashCode() {
+		if (this.hashCode == null) {
+			final String hashable = getType();
+			this.hashCode = hashable == null ? 0 : hashable.hashCode();
 		}
-		return true;
+		return this.hashCode;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		return obj instanceof Condition<?> && this.hashCode() == obj.hashCode();
 	}
 }

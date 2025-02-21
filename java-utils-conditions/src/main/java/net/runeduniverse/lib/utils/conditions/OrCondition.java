@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 
-public class OrCondition<T> extends DefaultConditionGroup<T> {
+public class OrCondition<T> extends AConditionGroup<T> {
 
 	public OrCondition() {
 		super();
