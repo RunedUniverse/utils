@@ -49,9 +49,7 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 
 	@Override
 	public boolean equals(Object obj) {
-		if (super.equals(obj))
-			return true;
-		if (!(obj instanceof ConditionGroup<?>))
+		if (!(super.equals(obj) && obj instanceof ConditionGroup<?>))
 			return false;
 
 		final ConditionGroup<?> grp = (ConditionGroup<?>) obj;
