@@ -35,7 +35,7 @@ public class AndCondition<T> extends AConditionGroup<T> {
 	}
 
 	@Override
-	public boolean evaluate(T entity) {
+	public boolean evaluate(final T entity) {
 		for (Iterator<Condition<T>> i = this.conditions.iterator(); i.hasNext();) {
 			if (!i.next()
 					.evaluate(entity))

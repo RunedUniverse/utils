@@ -30,17 +30,17 @@ public class Entry<T> {
 	@Getter
 	protected Condition<T> matchAfter = null;
 
-	public Entry<T> setMatchItem(Condition<T> matchItem) {
+	public Entry<T> setMatchItem(final Condition<T> matchItem) {
 		this.matchItem = matchItem;
 		return this;
 	}
 
-	public Entry<T> setMatchBefore(Condition<T> matchBefore) {
+	public Entry<T> setMatchBefore(final Condition<T> matchBefore) {
 		this.matchBefore = matchBefore;
 		return this;
 	}
 
-	public Entry<T> setMatchAfter(Condition<T> matchAfter) {
+	public Entry<T> setMatchAfter(final Condition<T> matchAfter) {
 		this.matchAfter = matchAfter;
 		return this;
 	}

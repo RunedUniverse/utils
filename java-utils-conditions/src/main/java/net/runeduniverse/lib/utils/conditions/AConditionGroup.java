@@ -38,12 +38,12 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 	}
 
 	@Override
-	public boolean add(Condition<T> condition) {
+	public boolean add(final Condition<T> condition) {
 		return this.conditions.add(condition);
 	}
 
 	@Override
-	public boolean remove(Condition<T> condition) {
+	public boolean remove(final Condition<T> condition) {
 		return this.conditions.remove(condition);
 	}
 
@@ -58,7 +58,7 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (!(super.equals(obj) && obj instanceof ConditionGroup<?>))

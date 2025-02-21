@@ -19,7 +19,7 @@ public interface ConditionModifier<T> extends Condition<T> {
 
 	public Condition<T> getCondition();
 
-	public boolean setCondition(Condition<T> condition);
+	public boolean setCondition(final Condition<T> condition);
 
 	@Override
 	default boolean isValid() {
@@ -27,7 +27,7 @@ public interface ConditionModifier<T> extends Condition<T> {
 	}
 
 	@Override
-	default void compile(boolean recurse) {
+	default void compile(final boolean recurse) {
 		final Condition<T> con = getCondition();
 		if (con == null)
 			return;

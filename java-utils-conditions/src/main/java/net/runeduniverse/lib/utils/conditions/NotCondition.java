@@ -23,7 +23,7 @@ public class NotCondition<T> extends AConditionModifier<T> {
 	}
 
 	@Override
-	public boolean evaluate(T entity) {
+	public boolean evaluate(final T entity) {
 		if (this.condition != null)
 			return !this.condition.evaluate(entity);
 		else

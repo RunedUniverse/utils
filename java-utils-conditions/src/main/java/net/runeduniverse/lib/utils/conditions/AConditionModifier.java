@@ -28,13 +28,13 @@ public abstract class AConditionModifier<T> extends ACondition<T> implements Con
 	}
 
 	@Override
-	public boolean setCondition(Condition<T> condition) {
+	public boolean setCondition(final Condition<T> condition) {
 		this.condition = condition;
 		return true;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (!(super.equals(obj) && obj instanceof ConditionModifier<?>))

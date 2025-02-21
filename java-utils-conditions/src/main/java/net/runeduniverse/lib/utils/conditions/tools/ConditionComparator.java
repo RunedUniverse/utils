@@ -30,12 +30,12 @@ public class ConditionComparator<T> implements Comparator<T> {
 
 	protected final EntrySet<T> entries;
 
-	public ConditionComparator(EntrySet<T> entries) {
+	public ConditionComparator(final EntrySet<T> entries) {
 		this.entries = entries;
 	}
 
 	@Override
-	public int compare(T o1, T o2) {
+	public int compare(final T o1, final T o2) {
 		Objects.requireNonNull(o1);
 		Objects.requireNonNull(o2);
 		if (o1.equals(o2))

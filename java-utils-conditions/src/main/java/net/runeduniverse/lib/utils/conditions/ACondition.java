@@ -31,7 +31,7 @@ public abstract class ACondition<T> implements Condition<T> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		return obj instanceof Condition<?> && hashCode() == obj.hashCode()

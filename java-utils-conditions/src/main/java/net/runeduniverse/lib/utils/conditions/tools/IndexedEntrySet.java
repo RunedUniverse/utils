@@ -41,7 +41,7 @@ public class IndexedEntrySet<T> extends EntrySet<T> {
 	}
 
 	@Override
-	public IndexedEntrySet<T> compile(ConditionIndexer indexer) {
+	public IndexedEntrySet<T> compile(final ConditionIndexer indexer) {
 		final IndexedEntrySet<T> set = newInstance();
 		compileTo(indexer, set);
 		return set;

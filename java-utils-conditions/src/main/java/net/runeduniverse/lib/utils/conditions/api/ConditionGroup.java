@@ -22,9 +22,9 @@ public interface ConditionGroup<T> extends Condition<T> {
 
 	public Collection<Condition<T>> getGroup();
 
-	public boolean add(Condition<T> condition);
+	public boolean add(final Condition<T> condition);
 
-	public boolean remove(Condition<T> condition);
+	public boolean remove(final Condition<T> condition);
 
 	public boolean clear();
 
@@ -36,7 +36,7 @@ public interface ConditionGroup<T> extends Condition<T> {
 
 	// Compiling the condition removes all underlying invalid conditions.
 	@Override
-	default void compile(boolean recurse) {
+	default void compile(final boolean recurse) {
 		for (Iterator<Condition<T>> i = getGroup().iterator(); i.hasNext();) {
 			final Condition<T> con = i.next();
 			if (con == null) {

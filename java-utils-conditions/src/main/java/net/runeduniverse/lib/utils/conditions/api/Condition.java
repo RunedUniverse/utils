@@ -19,10 +19,12 @@ import java.util.List;
 
 public interface Condition<T> {
 
-	public boolean evaluate(T entity);
+	public static final String TXT_UNKNOWN_TYPE = "???";
+
+	public boolean evaluate(final T entity);
 
 	public default String getType() {
-		return "???";
+		return TXT_UNKNOWN_TYPE;
 	}
 
 	public default int getPriority() {
@@ -37,7 +39,7 @@ public interface Condition<T> {
 		return true;
 	}
 
-	public default void compile(boolean recurse) {
+	public default void compile(final boolean recurse) {
 	}
 
 	public interface ConditionInfo {

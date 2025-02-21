@@ -19,7 +19,7 @@ import net.runeduniverse.lib.utils.conditions.api.Condition;
 
 public class Checker {
 
-	public <T> boolean matches(Condition<T> condition, T entity) {
+	public <T> boolean matches(final Condition<T> condition, T entity) {
 		return condition.evaluate(entity);
 	}
 }

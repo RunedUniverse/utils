@@ -51,6 +51,8 @@ public class ConditionIndexer {
 		final CompoundTree tree = new CompoundTree("#" + num, condition.getType());
 		parentTree.append(tree);
 
+		tree.append("priority", Integer.toString(condition.getPriority()));
+
 		final List<Condition.ConditionInfo> infos = condition.getInfo();
 		if (infos != null && !infos.isEmpty()) {
 			for (Condition.ConditionInfo info : infos)
@@ -100,7 +102,7 @@ public class ConditionIndexer {
 			final CompoundTree addition) {
 		String txt = condition.getType();
 		if (isBlank(txt))
-			txt = "???";
+			txt = Condition.TXT_UNKNOWN_TYPE;
 		final CompoundTree tree = new CompoundTree("#" + num, txt + '@' + condition.getClass()
 				.getCanonicalName());
 		if (addition != null)
