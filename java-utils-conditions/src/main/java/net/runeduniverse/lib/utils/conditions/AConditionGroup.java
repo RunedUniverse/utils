@@ -17,6 +17,8 @@ package net.runeduniverse.lib.utils.conditions;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Objects;
+
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 import net.runeduniverse.lib.utils.conditions.api.ConditionGroup;
 
@@ -29,7 +31,13 @@ public abstract class AConditionGroup<T> extends ACondition<T> implements Condit
 	}
 
 	public AConditionGroup(final Collection<Condition<T>> conditions) {
+		Objects.requireNonNull(conditions, "Condition-Collection must not be <null>!");
 		this.conditions = conditions;
+	}
+
+	@Override
+	protected DataCheck<T> check() {
+		return d -> false;
 	}
 
 	@Override

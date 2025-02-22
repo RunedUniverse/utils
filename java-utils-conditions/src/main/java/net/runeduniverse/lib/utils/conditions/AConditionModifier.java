@@ -23,6 +23,11 @@ public abstract class AConditionModifier<T> extends ACondition<T> implements Con
 	protected Condition<T> condition = null;
 
 	@Override
+	protected DataCheck<T> check() {
+		return d -> false;
+	}
+
+	@Override
 	public Condition<T> getCondition() {
 		return this.condition;
 	}

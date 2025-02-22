@@ -13,13 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditions.tools;
+package net.runeduniverse.lib.utils.conditions.test.model;
 
-import net.runeduniverse.lib.utils.conditions.api.Condition;
+public class MvnGoalView {
 
-public class Checker {
+	protected String groupId;
+	protected String artifactId;
+	protected String goalId;
 
-	public <T> boolean matches(final Condition<T> condition, final T entity) {
-		return condition.evaluate(entity);
+	public MvnGoalView(final String groupId, final String artifactId, final String goalId) {
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+		this.goalId = goalId;
+	}
+
+	public String getGroupId() {
+		return this.groupId;
+	}
+
+	public String getArtifactId() {
+		return this.artifactId;
+	}
+
+	public String getGoalId() {
+		return this.goalId;
 	}
 }

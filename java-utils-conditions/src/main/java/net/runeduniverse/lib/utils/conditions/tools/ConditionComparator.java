@@ -119,7 +119,7 @@ public class ConditionComparator<T> implements Comparator<T> {
 		if (pr1 == null) {
 			if (pr2 == null)
 				return 0;
-			return pr2.getResult();
+			return pr2.getResult() * -1;
 		}
 		if (pr2 == null)
 			return pr1.getResult();
@@ -133,18 +133,6 @@ public class ConditionComparator<T> implements Comparator<T> {
 			return 0;
 		}
 		return p1 > p2 ? r1 : r2;
-	}
-
-	protected int compare(final Entry<T> entry, final T entity) {
-		final Condition<T> before = entry.getMatchBefore();
-		if (before != null && before.evaluate(entity)) {
-			return 1;
-		}
-		final Condition<T> after = entry.getMatchAfter();
-		if (after != null && after.evaluate(entity)) {
-			return -1;
-		}
-		return 0;
 	}
 
 	protected boolean checkMatch(final Entry<T> entry, final T entity) {

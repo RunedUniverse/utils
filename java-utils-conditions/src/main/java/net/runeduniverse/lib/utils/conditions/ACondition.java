@@ -22,6 +22,17 @@ public abstract class ACondition<T> implements Condition<T> {
 	private Integer hashCode = null;
 
 	@Override
+	public boolean evaluate(final T entity) {
+		return and(this::conditionIsValid, check()).eval(entity);
+	}
+
+	protected boolean conditionIsValid(final T data) {
+		return isValid();
+	}
+
+	protected abstract DataCheck<T> check();
+
+	@Override
 	public int hashCode() {
 		if (this.hashCode == null) {
 			final String hashable = getType();
@@ -36,5 +47,57 @@ public abstract class ACondition<T> implements Condition<T> {
 			return true;
 		return obj instanceof Condition<?> && hashCode() == obj.hashCode()
 				&& getPriority() == ((Condition<?>) obj).getPriority();
+	}
+
+	protected static <T> DataCheck<T> isNull() {
+		return d -> d == null;
+	}
+
+	protected static <T> DataCheck<T> nonNull() {
+		return d -> d != null;
+	}
+
+	@SafeVarargs
+	protected static <T> DataCheck<T> and(final DataCheck<T>... checks) {
+		return new DataCheck<T>() {
+			@Override
+			public boolean eval(T data) {
+				for (DataCheck<T> check : checks) {
+					if (!check.eval(data))
+						return false;
+				}
+				return true;
+			}
+		};
+	}
+
+	@SafeVarargs
+	protected static <T> DataCheck<T> or(final DataCheck<T>... checks) {
+		return new DataCheck<T>() {
+			@Override
+			public boolean eval(T data) {
+				for (DataCheck<T> check : checks) {
+					if (check.eval(data))
+						return true;
+				}
+				return false;
+			}
+		};
+	}
+
+	protected static <T> DataCheck<T> not(final DataCheck<T> check) {
+		return new DataCheck<T>() {
+			@Override
+			public boolean eval(T data) {
+				return !check.eval(data);
+			}
+		};
+	}
+
+	@FunctionalInterface
+	public interface DataCheck<T> {
+
+		public boolean eval(final T data);
+
 	}
 }
