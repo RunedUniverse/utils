@@ -15,6 +15,7 @@
  */
 package net.runeduniverse.lib.utils.conditions.tools;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -39,6 +40,10 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		return new EntrySet<>();
 	}
 
+	public boolean add(final Condition<T> match, final Condition<T> before, final Condition<T> after) {
+		return add(new Entry<T>(match, before, after));
+	}
+
 	public void compileTo(final ConditionIndexer indexer, final EntrySet<T> set) {
 		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
 			final Entry<T> entry = i.next();
@@ -53,7 +58,33 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		return set;
 	}
 
-	public boolean add(final Condition<T> match, final Condition<T> before, final Condition<T> after) {
-		return add(new Entry<T>(match, before, after));
+	protected Checker checkerInstance() {
+		return new Checker();
+	}
+
+	public void filterByApplicableDataTo(final Collection<T> dataCollection, final EntrySet<T> set) {
+		final Checker checker = checkerInstance();
+
+		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
+			final Entry<T> entry = i.next();
+			if (entry == null || checker.matchesAny(entry.getMatchItem(), dataCollection))
+				continue;
+			final boolean before = checker.matchesAny(entry.getMatchBefore(), dataCollection);
+			final boolean after = checker.matchesAny(entry.getMatchAfter(), dataCollection);
+			if (before || after) {
+				final Entry<T> copy = entry.copy();
+				if (!before)
+					copy.setMatchBefore(null);
+				if (!after)
+					copy.setMatchAfter(null);
+				set.add(copy);
+			}
+		}
+	}
+
+	public EntrySet<T> filterByApplicableData(final Collection<T> dataCollection) {
+		final EntrySet<T> set = newInstance();
+		filterByApplicableDataTo(dataCollection, set);
+		return set;
 	}
 }

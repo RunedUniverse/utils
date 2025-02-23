@@ -15,11 +15,25 @@
  */
 package net.runeduniverse.lib.utils.conditions.tools;
 
+import java.util.Collection;
+
 import net.runeduniverse.lib.utils.conditions.api.Condition;
 
 public class Checker {
 
 	public <T> boolean matches(final Condition<T> condition, final T entity) {
+		if (condition == null)
+			return false;
 		return condition.evaluate(entity);
+	}
+
+	public <T> boolean matchesAny(final Condition<T> condition, final Collection<T> entityCollection) {
+		if (condition == null)
+			return false;
+		for (T entity : entityCollection) {
+			if (matches(condition, entity))
+				return true;
+		}
+		return false;
 	}
 }

@@ -30,6 +30,10 @@ public class Entry<T> {
 	@Getter
 	protected Condition<T> matchAfter = null;
 
+	protected Entry<T> newInstance() {
+		return new Entry<T>();
+	}
+
 	public Entry<T> setMatchItem(final Condition<T> matchItem) {
 		this.matchItem = matchItem;
 		return this;
@@ -43,6 +47,12 @@ public class Entry<T> {
 	public Entry<T> setMatchAfter(final Condition<T> matchAfter) {
 		this.matchAfter = matchAfter;
 		return this;
+	}
+
+	public Entry<T> copy() {
+		return new Entry<T>().setMatchItem(getMatchItem())
+				.setMatchBefore(getMatchBefore())
+				.setMatchAfter(getMatchAfter());
 	}
 
 	public boolean validate(final ConditionIndexer indexer) {
