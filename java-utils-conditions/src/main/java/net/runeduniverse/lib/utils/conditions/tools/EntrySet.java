@@ -44,6 +44,25 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		return add(new Entry<T>(match, before, after));
 	}
 
+	/**
+	 * Returns a deep copy of this <tt>EntrySet</tt> instance: the elements
+	 * themselves are copied.
+	 *
+	 * @return a deep copy of this set
+	 */
+	@Override
+	public EntrySet<T> clone() {
+		final EntrySet<T> set = newInstance();
+		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
+			final Entry<T> entry = i.next();
+			if (entry == null)
+				set.add(null);
+			else
+				set.add(entry.copy());
+		}
+		return set;
+	}
+
 	public void compileTo(final ConditionIndexer indexer, final EntrySet<T> set) {
 		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
 			final Entry<T> entry = i.next();
@@ -60,6 +79,27 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 
 	protected Checker checkerInstance() {
 		return new Checker();
+	}
+
+	public void filterByApplicableData(final Collection<T> dataCollection) {
+		final Checker checker = checkerInstance();
+
+		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
+			final Entry<T> entry = i.next();
+			if (entry == null || checker.matchesAny(entry.getMatchItem(), dataCollection)) {
+				i.remove();
+				continue;
+			}
+			final boolean before = checker.matchesAny(entry.getMatchBefore(), dataCollection);
+			final boolean after = checker.matchesAny(entry.getMatchAfter(), dataCollection);
+			if (before || after) {
+				if (!before)
+					entry.setMatchBefore(null);
+				if (!after)
+					entry.setMatchAfter(null);
+			} else
+				i.remove();
+		}
 	}
 
 	public void filterByApplicableDataTo(final Collection<T> dataCollection, final EntrySet<T> set) {
@@ -80,11 +120,5 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 				set.add(copy);
 			}
 		}
-	}
-
-	public EntrySet<T> filterByApplicableData(final Collection<T> dataCollection) {
-		final EntrySet<T> set = newInstance();
-		filterByApplicableDataTo(dataCollection, set);
-		return set;
 	}
 }
