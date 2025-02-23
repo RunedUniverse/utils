@@ -23,16 +23,17 @@ node {
 			sh "mkdir -p ${ RESULT_PATH }"
 			sh "mkdir -p ${ ARCHIVE_PATH }"
 			
-			addModule id: 'maven-parent',       path: '.',                  name: 'Maven Parent',                tags: [ 'parent' ]
-			addModule id: 'java-utils-async',   path: 'java-utils-async',   name: 'Java Utils Async',            tags: [ 'test' ]
-			addModule id: 'java-utils-bom',     path: 'java-utils-bom',     name: 'Bill of Materials',           tags: [ 'bom' ]
-			addModule id: 'java-utils-chain',   path: 'java-utils-chain',   name: 'Java Chain Library',          tags: [ 'test' ]
-			addModule id: 'java-utils-common',  path: 'java-utils-common',  name: 'Java Utils Common',           tags: [ 'test' ]
-			addModule id: 'java-utils-errors',  path: 'java-utils-errors',  name: 'Java Error Handling Library', tags: [ 'test' ]
-			addModule id: 'java-utils-logging',	path: 'java-utils-logging',	name: 'Java Logging Tools',          tags: [ 'test' ]
-			addModule id: 'java-utils-maven',   path: 'java-utils-maven',   name: 'Java Maven Utils',            tags: [ 'test' ]
-			addModule id: 'java-utils-plexus',  path: 'java-utils-plexus',  name: 'Java Plexus Utils',           tags: [ 'test' ]
-			addModule id: 'java-utils-scanner', path: 'java-utils-scanner', name: 'Java Scanner',                tags: [ 'test' ]
+			addModule id: 'maven-parent',          path: '.',                     name: 'Maven Parent',                tags: [ 'parent' ]
+			addModule id: 'java-utils-async',      path: 'java-utils-async',      name: 'Java Utils Async',            tags: [ 'test' ]
+			addModule id: 'java-utils-bom',        path: 'java-utils-bom',        name: 'Bill of Materials',           tags: [ 'bom' ]
+			addModule id: 'java-utils-chain',      path: 'java-utils-chain',      name: 'Java Chain Library',          tags: [ 'test' ]
+			addModule id: 'java-utils-common',     path: 'java-utils-common',     name: 'Java Utils Common',           tags: [ 'test' ]
+			addModule id: 'java-utils-conditions', path: 'java-utils-conditions', name: 'Java Utils Conditions',       tags: [ 'test' ]
+			addModule id: 'java-utils-errors',     path: 'java-utils-errors',     name: 'Java Error Handling Library', tags: [ 'test' ]
+			addModule id: 'java-utils-logging',    path: 'java-utils-logging',	  name: 'Java Logging Tools',          tags: [ 'test' ]
+			addModule id: 'java-utils-maven',      path: 'java-utils-maven',      name: 'Java Maven Utils',            tags: [ 'test' ]
+			addModule id: 'java-utils-plexus',     path: 'java-utils-plexus',     name: 'Java Plexus Utils',           tags: [ 'test' ]
+			addModule id: 'java-utils-scanner',    path: 'java-utils-scanner',    name: 'Java Scanner',                tags: [ 'test' ]
 		}
 
 		stage('Init Modules') {
@@ -118,7 +119,7 @@ node {
 			}
 		}
 		stage('Build [2nd Level]') {
-			perModule(withIds: [ 'java-utils-scanner', 'java-utils-chain', 'java-utils-maven', 'java-utils-plexus' ]) {
+			perModule(withIds: [ 'java-utils-scanner', 'java-utils-chain', 'java-utils-conditions', 'java-utils-maven', 'java-utils-plexus' ]) {
 				if(!module.active()) {
 					skipStage()
 					return
