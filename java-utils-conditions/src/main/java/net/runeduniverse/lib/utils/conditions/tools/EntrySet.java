@@ -86,7 +86,7 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 
 		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
 			final Entry<T> entry = i.next();
-			if (entry == null || checker.matchesAny(entry.getMatchItem(), dataCollection)) {
+			if (entry == null || !checker.matchesAny(entry.getMatchItem(), dataCollection)) {
 				i.remove();
 				continue;
 			}
@@ -107,7 +107,7 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 
 		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
 			final Entry<T> entry = i.next();
-			if (entry == null || checker.matchesAny(entry.getMatchItem(), dataCollection))
+			if (entry == null || !checker.matchesAny(entry.getMatchItem(), dataCollection))
 				continue;
 			final boolean before = checker.matchesAny(entry.getMatchBefore(), dataCollection);
 			final boolean after = checker.matchesAny(entry.getMatchAfter(), dataCollection);
