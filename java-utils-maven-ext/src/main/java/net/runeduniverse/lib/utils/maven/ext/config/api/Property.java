@@ -15,9 +15,44 @@
  */
 package net.runeduniverse.lib.utils.maven.ext.config.api;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface Property<T> extends Comparable<Property<?>> {
+
+	public String getId();
+
+	public T getDefault();
+
+	public T getSelected();
+
+	public Set<T> getOptions();
+
+	public void setDefault(final T value);
+
+	public void setSelected(final T value);
+
+	public void addOption(final T value);
+
+	public default void addOptions(final Collection<T> options) {
+		if (options == null)
+			return;
+		for (T option : options)
+			addOption(option);
+	}
+
+	@SuppressWarnings("unchecked")
+	public default void addOptions(final T... options) {
+		if (options == null)
+			return;
+		for (T option : options)
+			addOption(option);
+	}
+
+	public default void resolveSelection() {
+		if (getSelected() == null)
+			setSelected(getDefault());
+	}
 
 	@Override
 	public default int compareTo(final Property<?> o) {
@@ -36,16 +71,17 @@ public interface Property<T> extends Comparable<Property<?>> {
 		return id.compareTo(oid);
 	}
 
-	public String getId();
+	public static String key(final String key) {
+		return new StringBuilder() //
+				.append(key)
+				.toString();
+	}
 
-	public T getDefault();
-
-	public T getSelected();
-
-	public Set<T> getOptions();
-
-	public void setDefault(T value);
-
-	public void setSelected(T value);
+	public static String defaultKey(final String key) {
+		return new StringBuilder() //
+				.append(key)
+				.append(".default")
+				.toString();
+	}
 
 }

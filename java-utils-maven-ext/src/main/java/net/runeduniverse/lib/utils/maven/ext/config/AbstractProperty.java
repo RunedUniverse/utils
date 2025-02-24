@@ -15,31 +15,27 @@
  */
 package net.runeduniverse.lib.utils.maven.ext.config;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Properties;
 import java.util.Set;
 
 import net.runeduniverse.lib.utils.maven.ext.config.api.Property;
 
 public class AbstractProperty<T> implements Property<T> {
 
-	protected final Set<T> options = new LinkedHashSet<>();
+	protected final String id;
+	protected final Set<T> options;
 
-	protected String id;
 	protected T defaultValue = null;
 	protected T selectedValue = null;
 
-	public AbstractProperty() {
-		this(null);
+	public AbstractProperty(final String id) {
+		this.id = id;
+		this.options = new LinkedHashSet<>();
 	}
 
-	public AbstractProperty(String id) {
+	public AbstractProperty(final String id, final Set<T> options) {
 		this.id = id;
-	}
-
-	public AbstractProperty(String id, Properties properties) {
-		this.id = id;
+		this.options = options;
 	}
 
 	@Override
@@ -72,15 +68,8 @@ public class AbstractProperty<T> implements Property<T> {
 		this.selectedValue = value;
 	}
 
-	public AbstractProperty<T> add(final T... options) {
-		for (T option : options)
-			this.options.add(option);
-		return this;
+	@Override
+	public void addOption(T value) {
+		this.options.add(value);
 	}
-
-	public AbstractProperty<T> addAll(Collection<T> options) {
-		this.options.addAll(options);
-		return this;
-	}
-
 }
