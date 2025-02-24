@@ -81,6 +81,7 @@
 		<utils-errors-version>1.0.1</utils-errors-version>
 		<utils-logging-version>1.0.2</utils-logging-version>
 		<utils-maven-version>1.0.0</utils-maven-version>
+		<utils-maven-ext-version>1.0.0</utils-maven-ext-version>
 		<utils-plexus-version>1.0.0</utils-plexus-version>
 		<utils-scanner-version>1.2.0</utils-scanner-version>
 	</properties>
@@ -116,6 +117,11 @@
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-maven</artifactId>
 				<version>${utils-maven-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-maven-ext</artifactId>
+				<version>${utils-maven-ext-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
