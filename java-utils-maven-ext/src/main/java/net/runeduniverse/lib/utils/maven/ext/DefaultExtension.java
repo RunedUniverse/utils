@@ -142,11 +142,7 @@ public class DefaultExtension implements Extension {
 
 	@Override
 	public Plugin asPlugin(final MavenProject mvnProject) {
-		Plugin plugin = this.plugins.get(mvnProject);
-		if (plugin == null) {
-			this.plugins.put(mvnProject, plugin = asPlugin());
-		}
-		return plugin;
+		return this.plugins.computeIfAbsent(mvnProject, k -> asPlugin());
 	}
 
 	@Override
