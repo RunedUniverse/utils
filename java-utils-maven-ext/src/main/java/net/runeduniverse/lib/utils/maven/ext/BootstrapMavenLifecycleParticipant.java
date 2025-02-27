@@ -87,7 +87,7 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 	public void afterProjectsRead(final MavenSession mvnSession) throws MavenExecutionException {
 	}
 
-	protected ClassRealm createBuildExtensionRealm(final ClassRealm plexusCore, final ClassRealm currentRealm)
+	protected ClassRealm createExtensionRealm(final ClassRealm plexusCore, final ClassRealm currentRealm)
 			throws DuplicateRealmException {
 		return null;
 	}
@@ -133,7 +133,7 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 				realm = world.getRealm(REALM_ID_MAVEN_EXT);
 				extLoadState = 1;
 			} else {
-				realm = createBuildExtensionRealm(plexusCore, currentRealm);
+				realm = createExtensionRealm(plexusCore, currentRealm);
 				if (realm == null) {
 					_patchEventInfo_InvalidBuildExtension();
 					return false;
