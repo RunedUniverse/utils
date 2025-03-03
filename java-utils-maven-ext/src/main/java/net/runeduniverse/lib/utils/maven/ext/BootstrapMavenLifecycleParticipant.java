@@ -31,7 +31,6 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.InvalidPluginDescriptorException;
 import org.apache.maven.plugin.MavenPluginManager;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.classworlds.realm.DuplicateRealmException;
@@ -47,10 +46,9 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 
 	public static final String REALM_ID_PLEXUS_CORE = "plexus.core";
 	public static final String REALM_ID_MAVEN_EXT = "maven.ext";
-	public static final String REALM_ID_EXT_PREFIX = "extension>";
+	public static final String REALM_ID_CORE_EXT_PREFIX = "coreExtension>";
+	public static final String REALM_ID_BUILD_EXT_PREFIX = "extension>";
 
-	@Requirement
-	protected PlexusContainer container;
 	@Requirement
 	protected MavenPluginManager mavenPluginManager;
 
@@ -160,7 +158,8 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 			success = patchMaven(mvnSession, 0 < extLoadState, extensions, extPlugins);
 
 		} catch (DuplicateRealmException | NoSuchRealmException e) {
-			MavenExecutionException ex = new MavenExecutionException(ERR_FAILED_TO_LOAD_MAVEN_EXTENSION_CLASSREALM, e);
+			final MavenExecutionException ex = new MavenExecutionException(
+					ERR_FAILED_TO_LOAD_MAVEN_EXTENSION_CLASSREALM, e);
 			_patchEventError_PatchingAborted(ex);
 			throw ex;
 		} catch (MavenExecutionException ex) {
@@ -258,9 +257,9 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 
 	protected static Extension fromExtRealm(ClassRealm realm) {
 		String id = realm.getId();
-		if (id.startsWith("coreExtension>")) {
+		if (id.startsWith(REALM_ID_CORE_EXT_PREFIX)) {
 			id = id.substring(14);
-		} else if (id.startsWith("extension>")) {
+		} else if (id.startsWith(REALM_ID_BUILD_EXT_PREFIX)) {
 			id = id.substring(10);
 		} else
 			return null;

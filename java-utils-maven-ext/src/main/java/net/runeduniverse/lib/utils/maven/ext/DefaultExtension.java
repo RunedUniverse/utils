@@ -38,7 +38,7 @@ public class DefaultExtension implements Extension {
 	protected String artifactId = null;
 	protected String version = null;
 
-	protected Plugin basePlugin = null;
+	protected Plugin pluginInstance = null;
 	protected Map<MavenProject, Plugin> plugins = new LinkedHashMap<>(1);
 	protected Map<MavenProject, PluginDescriptor> descriptors = new LinkedHashMap<>(1);
 
@@ -103,7 +103,7 @@ public class DefaultExtension implements Extension {
 
 	@Override
 	public void setPlugin(Plugin plugin) {
-		this.basePlugin = plugin;
+		this.pluginInstance = plugin;
 	}
 
 	@Override
@@ -134,10 +134,10 @@ public class DefaultExtension implements Extension {
 
 	@Override
 	public Plugin asPlugin() {
-		if (this.basePlugin == null) {
-			this.basePlugin = createPlugin();
+		if (this.pluginInstance == null) {
+			this.pluginInstance = createPlugin();
 		}
-		return this.basePlugin;
+		return this.pluginInstance;
 	}
 
 	@Override
