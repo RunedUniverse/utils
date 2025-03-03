@@ -48,7 +48,9 @@ public class UnmodifiablePluginData implements PluginData {
 	/**
 	 * Wrap {@code Map<MavenProject, Set<Plugin>> map} as UnmodifiableData.
 	 *
-	 * @param plugins as unmodifiable data
+	 * @param plugins     as unmodifiable data
+	 * @param mapSupplier map-factory
+	 * @param setSupplier value-factory
 	 * @throws NullPointerException if any of [ {@code plugins},
 	 *                              {@code mapSupplier}, {@code setSupplier}] is
 	 *                              {@code null}

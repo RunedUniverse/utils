@@ -48,7 +48,9 @@ public class UnmodifiableExtensionData implements ExtensionData {
 	/**
 	 * Wrap {@code Map<MavenProject, Set<Extension>> map} as UnmodifiableData.
 	 *
-	 * @param extensions as unmodifiable data
+	 * @param extensions  as unmodifiable data
+	 * @param mapSupplier map-factory
+	 * @param setSupplier value-factory
 	 * @throws NullPointerException if any of [ {@code extensions},
 	 *                              {@code mapSupplier}, {@code setSupplier}] is
 	 *                              {@code null}
