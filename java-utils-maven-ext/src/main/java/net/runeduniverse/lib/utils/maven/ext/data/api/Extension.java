@@ -70,13 +70,17 @@ public interface Extension {
 	 * Tries to locate the {@link PluginDescriptor} for the provided
 	 * {@link MavenProject}, if found it will be set.
 	 *
-	 * @param manager
-	 * @param session
-	 * @param mvnProject
+	 * @param manager    the {@link MavenPluginManager} provided by Maven
+	 * @param session    the {@link RepositorySystemSession} provided by Maven
+	 * @param mvnProject the {@link MavenProject} where the plugin is supposed to be
+	 *                   located
 	 * @return {@code true} if the {@link PluginDescriptor} for the provided
 	 *         {@link MavenProject} was located
-	 * @throws InvalidPluginDescriptorException
-	 * @throws PluginDescriptorParsingException
+	 * @throws InvalidPluginDescriptorException thrown if the plugin descriptor
+	 *                                          couldn't be located!
+	 * @throws PluginDescriptorParsingException thrown if the given and the parsed
+	 *                                          groupId, artifacId and version do no
+	 *                                          match!
 	 */
 	public boolean locatePluginDescriptor(final MavenPluginManager manager, final RepositorySystemSession session,
 			final MavenProject mvnProject) throws InvalidPluginDescriptorException, PluginDescriptorParsingException;

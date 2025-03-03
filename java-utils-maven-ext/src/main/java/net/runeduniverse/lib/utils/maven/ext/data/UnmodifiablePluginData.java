@@ -38,7 +38,7 @@ public class UnmodifiablePluginData implements PluginData {
 	/**
 	 * Wrap {@code Map<MavenProject, Set<Plugin>> map} as UnmodifiableData.
 	 *
-	 * @param extensions as unmodifiable data
+	 * @param plugins as unmodifiable data
 	 * @throws NullPointerException if {@code plugins} is {@code null}
 	 */
 	public UnmodifiablePluginData(final Map<MavenProject, Set<Plugin>> plugins) {
