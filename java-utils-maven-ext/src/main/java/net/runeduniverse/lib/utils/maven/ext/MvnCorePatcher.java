@@ -63,7 +63,7 @@ public class MvnCorePatcher {
 	protected InfoEvent eventI_ResetRealm = null;
 	protected InfoEvent eventI_PatchingFinished = null;
 
-	protected MvnCorePatcher(final ExtensionIndex extensionIndex) {
+	public MvnCorePatcher(final ExtensionIndex extensionIndex) {
 		Objects.nonNull(extensionIndex);
 		this.extensionIndex = extensionIndex;
 	}
@@ -97,7 +97,7 @@ public class MvnCorePatcher {
 				.get(mvnProject);
 	}
 
-	protected boolean patchMaven(final MavenSession mvnSession, final Patch patch) throws MavenExecutionException {
+	public boolean patchMaven(final MavenSession mvnSession, final Patch patch) throws MavenExecutionException {
 		Objects.nonNull(mvnSession);
 		if (patch == null)
 			return false;
@@ -138,13 +138,13 @@ public class MvnCorePatcher {
 
 			this.extensionIndex.discoverExtensions();
 
-			final Map<MavenProject, Set<Extension>> extensions = this.extensionIndex.getExtensions();
-			final Map<MavenProject, Set<Plugin>> extPlugins = this.extensionIndex.getExtPlugins();
-
 			for (MavenProject mvnProject : mvnSession.getAllProjects()) {
 				this.extensionIndex.seedExtensions(mvnProject);
 				this.extensionIndex.discoverPlugins(mvnSession.getRepositorySession(), mvnProject);
 			}
+
+			final Map<MavenProject, Set<Extension>> extensions = this.extensionIndex.getExtensions();
+			final Map<MavenProject, Set<Plugin>> extPlugins = this.extensionIndex.getExtPlugins();
 
 			if (!extensions.isEmpty()) {
 				callInfo_ExtensionsDetected(mvnSession.getAllProjects(), extensions);
