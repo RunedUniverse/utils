@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 
 import org.apache.maven.project.MavenProject;
 
-import net.runeduniverse.lib.utils.maven.ext.api.Extension;
+import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 import net.runeduniverse.lib.utils.maven.ext.data.api.ExtensionData;
 
 public class UnmodifiableExtensionData implements ExtensionData {

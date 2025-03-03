@@ -20,8 +20,6 @@ import java.util.Set;
 
 import org.apache.maven.project.MavenProject;
 
-import net.runeduniverse.lib.utils.maven.ext.api.Extension;
-
 public interface ExtensionData {
 	public Set<Extension> getExtensions();
 

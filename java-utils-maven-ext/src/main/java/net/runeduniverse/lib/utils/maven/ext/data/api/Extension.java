@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.maven.ext.api;
+package net.runeduniverse.lib.utils.maven.ext.data.api;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.InvalidPluginDescriptorException;

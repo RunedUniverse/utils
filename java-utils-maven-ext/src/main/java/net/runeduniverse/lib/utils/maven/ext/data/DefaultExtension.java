@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.maven.ext;
+package net.runeduniverse.lib.utils.maven.ext.data;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ import org.apache.maven.shared.utils.StringUtils;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.aether.RepositorySystemSession;
 
-import net.runeduniverse.lib.utils.maven.ext.api.Extension;
+import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 
 public class DefaultExtension implements Extension {
 

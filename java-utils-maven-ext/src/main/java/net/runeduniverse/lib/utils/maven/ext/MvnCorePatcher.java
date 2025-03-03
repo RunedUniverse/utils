@@ -36,9 +36,10 @@ import org.codehaus.plexus.classworlds.realm.DuplicateRealmException;
 import org.codehaus.plexus.classworlds.realm.NoSuchRealmException;
 import org.eclipse.aether.RepositorySystemSession;
 
-import net.runeduniverse.lib.utils.maven.ext.api.Extension;
+import net.runeduniverse.lib.utils.maven.ext.data.DefaultExtension;
 import net.runeduniverse.lib.utils.maven.ext.data.UnmodifiableExtensionData;
 import net.runeduniverse.lib.utils.maven.ext.data.UnmodifiablePluginData;
+import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 import net.runeduniverse.lib.utils.maven.ext.data.api.ExtensionData;
 import net.runeduniverse.lib.utils.maven.ext.data.api.PluginData;
 
