@@ -16,9 +16,6 @@
 package net.runeduniverse.lib.utils.maven.ext;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -27,16 +24,12 @@ import java.util.Set;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Plugin;
-import org.apache.maven.plugin.InvalidPluginDescriptorException;
-import org.apache.maven.plugin.MavenPluginManager;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.codehaus.plexus.classworlds.realm.DuplicateRealmException;
 import org.codehaus.plexus.classworlds.realm.NoSuchRealmException;
-import org.eclipse.aether.RepositorySystemSession;
-
-import net.runeduniverse.lib.utils.maven.ext.data.DefaultExtension;
+import net.runeduniverse.lib.utils.maven.ext.api.ExtensionIndex;
 import net.runeduniverse.lib.utils.maven.ext.data.UnmodifiableExtensionData;
 import net.runeduniverse.lib.utils.maven.ext.data.UnmodifiablePluginData;
 import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
@@ -53,9 +46,7 @@ public class MvnCorePatcher {
 	public static final String REALM_ID_CORE_EXT_PREFIX = "coreExtension>";
 	public static final String REALM_ID_BUILD_EXT_PREFIX = "extension>";
 
-	protected final Map<MavenProject, Set<Extension>> extensions;
-	protected final Map<MavenProject, Set<Plugin>> invalidPlugins;
-	protected final MavenPluginManager mavenPluginManager;
+	protected final ExtensionIndex extensionIndex;
 
 	protected boolean coreExtension = false;
 	// supplier
@@ -72,18 +63,9 @@ public class MvnCorePatcher {
 	protected InfoEvent eventI_ResetRealm = null;
 	protected InfoEvent eventI_PatchingFinished = null;
 
-	protected MvnCorePatcher(final MavenPluginManager mavenPluginManager) {
-		this(mavenPluginManager, new LinkedHashMap<>(), new LinkedHashMap<>());
-	}
-
-	protected MvnCorePatcher(final MavenPluginManager mavenPluginManager,
-			final Map<MavenProject, Set<Extension>> extensions, final Map<MavenProject, Set<Plugin>> invalidPlugins) {
-		Objects.nonNull(mavenPluginManager);
-		Objects.nonNull(extensions);
-		Objects.nonNull(invalidPlugins);
-		this.mavenPluginManager = mavenPluginManager;
-		this.extensions = extensions;
-		this.invalidPlugins = invalidPlugins;
+	protected MvnCorePatcher(final ExtensionIndex extensionIndex) {
+		Objects.nonNull(extensionIndex);
+		this.extensionIndex = extensionIndex;
 	}
 
 	public void markAsCoreExtension() {
@@ -101,8 +83,8 @@ public class MvnCorePatcher {
 		return this.extensionRealmFactory.create(plexusCore, currentRealm);
 	}
 
-	protected boolean checkUnidentifiablePlugins() {
-		for (Entry<MavenProject, Set<Plugin>> entry : this.invalidPlugins.entrySet()) {
+	protected boolean checkInvalidPlugins(final Map<MavenProject, Set<Plugin>> invalidPlugins) {
+		for (Entry<MavenProject, Set<Plugin>> entry : invalidPlugins.entrySet()) {
 			final Set<Plugin> set = entry.getValue();
 			if (set != null && !set.isEmpty())
 				return true;
@@ -110,8 +92,9 @@ public class MvnCorePatcher {
 		return false;
 	}
 
-	protected Set<Plugin> getUnidentifiablePlugins(final MavenProject mvnProject) {
-		return this.invalidPlugins.computeIfAbsent(mvnProject, k -> new LinkedHashSet<>());
+	protected Set<Plugin> getInvalidPlugins(final MavenProject mvnProject) {
+		return this.extensionIndex.getInvalidPlugins()
+				.get(mvnProject);
 	}
 
 	protected boolean patchMaven(final MavenSession mvnSession, final Patch patch) throws MavenExecutionException {
@@ -153,21 +136,15 @@ public class MvnCorePatcher {
 			Thread.currentThread()
 					.setContextClassLoader(realm);
 
-			final Map<MavenProject, Set<Extension>> extensions = new LinkedHashMap<>();
-			final Map<MavenProject, Set<Plugin>> extPlugins = new LinkedHashMap<>();
+			this.extensionIndex.discoverExtensions();
 
-			{
-				final Set<Extension> coreExtensions = scanCoreExtensions(world.getRealms());
-				for (MavenProject mvnProject : mvnSession.getAllProjects()) {
-					extensions.computeIfAbsent(mvnProject, k -> new LinkedHashSet<>())
-							.addAll(coreExtensions);
-				}
+			final Map<MavenProject, Set<Extension>> extensions = this.extensionIndex.getExtensions();
+			final Map<MavenProject, Set<Plugin>> extPlugins = this.extensionIndex.getExtPlugins();
+
+			for (MavenProject mvnProject : mvnSession.getAllProjects()) {
+				this.extensionIndex.seedExtensions(mvnProject);
+				this.extensionIndex.discoverPlugins(mvnSession.getRepositorySession(), mvnProject);
 			}
-
-			for (MavenProject mvnProject : mvnSession.getAllProjects())
-				extPlugins.computeIfAbsent(mvnProject, k -> new LinkedHashSet<>())
-						.addAll(discoverPlugins(mvnSession.getRepositorySession(), mvnProject,
-								extensions.get(mvnProject)));
 
 			if (!extensions.isEmpty()) {
 				callInfo_ExtensionsDetected(mvnSession.getAllProjects(), extensions);
@@ -189,62 +166,13 @@ public class MvnCorePatcher {
 					.setContextClassLoader(currentRealm);
 		}
 
-		if (checkUnidentifiablePlugins()) {
-			callInfo_InvalidPluginsDetected(mvnSession.getAllProjects());
+		final Map<MavenProject, Set<Plugin>> invalidPlugins = this.extensionIndex.getInvalidPlugins();
+		if (checkInvalidPlugins(invalidPlugins)) {
+			callInfo_InvalidPluginsDetected(mvnSession.getAllProjects(), invalidPlugins);
 		}
 
 		callInfo_PatchingFinished();
 		return success;
-	}
-
-	protected Set<Plugin> discoverPlugins(final RepositorySystemSession repoSysSession, final MavenProject mvnProject,
-			final Set<Extension> extensions) {
-		final Set<Plugin> invalidPlugins = getUnidentifiablePlugins(mvnProject);
-		final Set<Plugin> extPlugins = new LinkedHashSet<>();
-		if (extensions == null || extensions.isEmpty())
-			return extPlugins;
-
-		for (Extension ext : extensions) {
-			final Plugin plugin = ext.asPlugin(mvnProject);
-			try {
-				if (ext.locatePluginDescriptor(this.mavenPluginManager, repoSysSession, mvnProject)) {
-					extPlugins.add(plugin);
-				}
-			} catch (InvalidPluginDescriptorException ignored) {
-				invalidPlugins.add(plugin);
-			}
-		}
-		return extPlugins;
-	}
-
-	protected static Set<Extension> scanCoreExtensions(final Collection<ClassRealm> realms) {
-		final Set<Extension> extensions = new LinkedHashSet<>();
-		for (ClassRealm realm : realms) {
-			final Extension ext = fromExtRealm(realm);
-			if (ext == null)
-				continue;
-			extensions.add(ext);
-		}
-		return Collections.unmodifiableSet(extensions);
-	}
-
-	protected static Extension fromExtRealm(ClassRealm realm) {
-		String id = realm.getId();
-		if (id.startsWith(REALM_ID_CORE_EXT_PREFIX)) {
-			id = id.substring(14);
-		} else if (id.startsWith(REALM_ID_BUILD_EXT_PREFIX)) {
-			id = id.substring(10);
-		} else
-			return null;
-		final DefaultExtension ext = new DefaultExtension();
-		ext.setClassRealm(realm);
-		int idx = id.indexOf(':');
-		ext.setGroupId(id.substring(0, idx));
-		id = id.substring(idx + 1);
-		idx = id.indexOf(':');
-		ext.setArtifactId(id.substring(0, idx));
-		ext.setVersion(id.substring(idx + 1));
-		return ext;
 	}
 
 	public static interface ClassRealmFactory {
@@ -331,7 +259,8 @@ public class MvnCorePatcher {
 		callInfoEvent(this.eventI_ExtensionsDetected, projects, extensions);
 	}
 
-	protected void callInfo_InvalidPluginsDetected(final Collection<MavenProject> projects) {
+	protected void callInfo_InvalidPluginsDetected(final Collection<MavenProject> projects,
+			final Map<MavenProject, Set<Plugin>> invalidPlugins) {
 		callInfoEvent(this.eventI_InvalidPluginsDetected, projects, invalidPlugins);
 	}
 

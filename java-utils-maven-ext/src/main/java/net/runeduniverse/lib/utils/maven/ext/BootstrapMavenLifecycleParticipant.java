@@ -30,6 +30,7 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.InvalidPluginDescriptorException;
 import org.apache.maven.plugin.MavenPluginManager;
+import org.apache.maven.plugin.PluginDescriptorParsingException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
@@ -238,7 +239,7 @@ public abstract class BootstrapMavenLifecycleParticipant extends AbstractMavenLi
 						mvnProject)) {
 					extPlugins.add(plugin);
 				}
-			} catch (InvalidPluginDescriptorException ignored) {
+			} catch (InvalidPluginDescriptorException | PluginDescriptorParsingException ignored) {
 				unidentifiablePlugins.add(plugin);
 			}
 		}

@@ -15,23 +15,20 @@
  */
 package net.runeduniverse.lib.utils.maven.ext.data;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.function.Supplier;
 
 import org.apache.maven.project.MavenProject;
 
 import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 import net.runeduniverse.lib.utils.maven.ext.data.api.ExtensionData;
+
+import static net.runeduniverse.lib.utils.common.CollectionUtils.unmodifiable;
 
 public class UnmodifiableExtensionData implements ExtensionData {
 
@@ -62,42 +59,19 @@ public class UnmodifiableExtensionData implements ExtensionData {
 		Objects.requireNonNull(mapSupplier);
 		Objects.requireNonNull(setSupplier);
 
-		Map<MavenProject, Set<Extension>> map = mapSupplier.get();
-		Set<Extension> all = setSupplier.get();
+		final Map<MavenProject, Set<Extension>> map = mapSupplier.get();
+		final Set<Extension> all = setSupplier.get();
 		for (Entry<MavenProject, Set<Extension>> entry : extensions.entrySet()) {
 			final Set<Extension> set = entry.getValue();
 			if (set == null || set.isEmpty())
 				continue;
-			Set<Extension> nset = setSupplier.get();
+			final Set<Extension> nset = setSupplier.get();
 			nset.addAll(set);
 			all.addAll(set);
-
-			if (nset instanceof NavigableSet)
-				nset = Collections.unmodifiableNavigableSet((NavigableSet<Extension>) nset);
-			else if (nset instanceof SortedSet)
-				nset = Collections.unmodifiableSortedSet((SortedSet<Extension>) nset);
-			else
-				nset = Collections.unmodifiableSet(nset);
-
-			map.put(entry.getKey(), nset);
+			map.put(entry.getKey(), unmodifiable(nset));
 		}
-
-		if (map instanceof NavigableMap)
-			map = Collections.unmodifiableNavigableMap((NavigableMap<MavenProject, Set<Extension>>) map);
-		else if (map instanceof SortedMap)
-			map = Collections.unmodifiableSortedMap((SortedMap<MavenProject, Set<Extension>>) map);
-		else
-			map = Collections.unmodifiableMap(map);
-
-		if (all instanceof NavigableSet)
-			all = Collections.unmodifiableNavigableSet((NavigableSet<Extension>) all);
-		else if (all instanceof SortedSet)
-			all = Collections.unmodifiableSortedSet((SortedSet<Extension>) all);
-		else
-			all = Collections.unmodifiableSet(all);
-
-		this.map = map;
-		this.all = all;
+		this.map = unmodifiable(map);
+		this.all = unmodifiable(all);
 	}
 
 	@Override

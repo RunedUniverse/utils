@@ -15,6 +15,7 @@
  */
 package net.runeduniverse.lib.utils.maven.ext.data;
 
+import java.security.CodeSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 
 public class DefaultExtension implements Extension {
 
-	protected ClassRealm realm;
+	protected ClassRealm realm = null;
+	protected CodeSource source = null;
 	protected String groupId = null;
 	protected String artifactId = null;
 	protected String version = null;
@@ -45,6 +47,11 @@ public class DefaultExtension implements Extension {
 	@Override
 	public ClassRealm getClassRealm() {
 		return this.realm;
+	}
+
+	@Override
+	public CodeSource getCodeSource() {
+		return this.source;
 	}
 
 	@Override
@@ -82,44 +89,55 @@ public class DefaultExtension implements Extension {
 	}
 
 	@Override
-	public void setClassRealm(ClassRealm realm) {
+	public void setClassRealm(final ClassRealm realm) {
 		this.realm = realm;
 	}
 
 	@Override
+	public void setCodeSource(CodeSource source) {
+		this.source = source;
+	}
+
+	@Override
 	public void setGroupId(String groupId) {
+		if (groupId != null)
+			groupId = groupId.trim();
 		this.groupId = groupId;
 	}
 
 	@Override
 	public void setArtifactId(String artifactId) {
+		if (artifactId != null)
+			artifactId = artifactId.trim();
 		this.artifactId = artifactId;
 	}
 
 	@Override
 	public void setVersion(String version) {
+		if (version != null)
+			version = version.trim();
 		this.version = version;
 	}
 
 	@Override
-	public void setPlugin(Plugin plugin) {
+	public void setPlugin(final Plugin plugin) {
 		this.pluginInstance = plugin;
 	}
 
 	@Override
-	public void setPlugin(final MavenProject mvnProject, Plugin plugin) {
+	public void setPlugin(final MavenProject mvnProject, final Plugin plugin) {
 		this.plugins.put(mvnProject, plugin);
 	}
 
 	@Override
-	public void setPluginDescriptor(final MavenProject mvnProject, PluginDescriptor descriptor) {
+	public void setPluginDescriptor(final MavenProject mvnProject, final PluginDescriptor descriptor) {
 		this.descriptors.put(mvnProject, descriptor);
-		if (descriptor != null) {
-			if (descriptor.getPlugin() == null) {
-				descriptor.setPlugin(asPlugin(mvnProject));
-			} else {
-				setPlugin(mvnProject, descriptor.getPlugin());
-			}
+		if (descriptor == null)
+			return;
+		if (descriptor.getPlugin() == null) {
+			descriptor.setPlugin(asPlugin(mvnProject));
+		} else {
+			setPlugin(mvnProject, descriptor.getPlugin());
 		}
 	}
 
@@ -146,13 +164,25 @@ public class DefaultExtension implements Extension {
 	}
 
 	@Override
+	public boolean validate() {
+		boolean valid = true;
+		if (this.groupId == null || this.groupId.length() == 0)
+			valid = false;
+		if (this.artifactId == null || this.artifactId.length() == 0)
+			valid = false;
+		if (this.version == null || this.version.length() == 0)
+			valid = false;
+		return valid;
+	}
+
+	@Override
 	public boolean locatePluginDescriptor(final MavenPluginManager manager, final RepositorySystemSession session,
-			final MavenProject mvnProject) throws InvalidPluginDescriptorException {
+			final MavenProject mvnProject) throws InvalidPluginDescriptorException, PluginDescriptorParsingException {
 		try {
 			setPluginDescriptor(mvnProject, manager.getPluginDescriptor(asPlugin(mvnProject),
 					mvnProject.getRemotePluginRepositories(), session));
 			return true;
-		} catch (PluginResolutionException | PluginDescriptorParsingException e) {
+		} catch (PluginResolutionException e) {
 			return false;
 		}
 	}
