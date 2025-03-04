@@ -123,16 +123,23 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		for (ComponentDescriptor<AbstractMavenLifecycleParticipant> descriptor : PlexusContextUtils
 				.getPlexusComponentDescriptorList(this.container, searchRealm, AbstractMavenLifecycleParticipant.class,
 						null)) {
-			final ClassRealm realm = descriptor.getRealm();
-			final String realmId = realm.getId();
-			realms.add(realm);
-			if (realmId != null && realmId.startsWith(REALM_ID_CORE_EXT_PREFIX))
-				coreRealms.add(realm);
+			final Class<?> clazz = descriptor.getClass();
+			ClassRealm realm = descriptor.getRealm();
+			if (realm == null) {
+				final ClassLoader loader = clazz.getClassLoader();
+				if (loader instanceof ClassRealm)
+					realm = (ClassRealm) realm;
+			}
+			if (realm != null) {
+				final String realmId = realm.getId();
+				realms.add(realm);
+				if (realmId != null && realmId.startsWith(REALM_ID_CORE_EXT_PREFIX))
+					coreRealms.add(realm);
+			}
 
 			CodeSource source = null;
 			try {
-				source = descriptor.getClass()
-						.getProtectionDomain()
+				source = clazz.getProtectionDomain()
 						.getCodeSource();
 			} catch (SecurityException ignored) {
 				if (this.log.isDebugEnabled())
@@ -145,8 +152,9 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 				continue;
 			}
 
-			this.extSourcesByRealm.computeIfAbsent(realm, k -> ConcurrentHashMap.newKeySet())
-					.add(source);
+			if (realm != null)
+				this.extSourcesByRealm.computeIfAbsent(realm, k -> ConcurrentHashMap.newKeySet())
+						.add(source);
 		}
 
 		for (ClassRealm realm : world.getRealms()) {
@@ -190,8 +198,8 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		final Set<Extension> set = this.extSetSupplier.get();
 
 		final Set<CodeSource> sources = this.extSourcesByRealm.get(realm);
-		boolean srcFailed = false;
-		if (!(srcFailed = sources == null) && 1 < sources.size()) {
+		boolean srcFailed = sources == null || sources.isEmpty();
+		if (!srcFailed && 1 < sources.size()) {
 			for (CodeSource source : sources) {
 				// load ID info from jar file
 				final Extension ext = new DefaultExtension();
