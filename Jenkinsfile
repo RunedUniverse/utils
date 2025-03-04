@@ -79,7 +79,7 @@ node {
 				return
 			}
 			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false --non-recursive"
-			sh "mvn-dev -P ${ REPOS } dependency:resolve-plugins -U"
+			sh "mvn-dev -P ${ REPOS } dependency:go-offline -U"
 		}
 
 		stage('Code Validation') {
