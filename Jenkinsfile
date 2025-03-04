@@ -51,7 +51,7 @@ node {
 			addModule id: 'java-utils-conditions', path: 'java-utils-conditions', name: 'Java Utils Conditions',       tags: [ 'test', 'build2', 'pack-jar' ]
 			addModule id: 'java-utils-errors',     path: 'java-utils-errors',     name: 'Java Error Handling Library', tags: [ 'test', 'build1', 'pack-jar' ]
 			addModule id: 'java-utils-logging',    path: 'java-utils-logging',	  name: 'Java Logging Tools',          tags: [ 'test', 'build1', 'pack-jar' ]
-			addModule id: 'java-utils-maven',      path: 'java-utils-maven',      name: 'Java Maven Utils',            tags: [ 'test', 'build2', 'pack-jar' ]
+			addModule id: 'java-utils-maven',      path: 'java-utils-maven',      name: 'Java Maven Utils',            tags: [ 'test', 'build1', 'pack-jar' ]
 			addModule id: 'java-utils-maven-ext',  path: 'java-utils-maven-ext',  name: 'Java Maven Extension Utils',  tags: [ 'test', 'build3', 'pack-jar' ]
 			addModule id: 'java-utils-plexus',     path: 'java-utils-plexus',     name: 'Java Plexus Utils',           tags: [ 'test', 'build2', 'pack-jar' ]
 			addModule id: 'java-utils-scanner',    path: 'java-utils-scanner',    name: 'Java Scanner',                tags: [ 'test', 'build2', 'pack-jar' ]

@@ -103,10 +103,22 @@
 		<dependency>
 			<groupId>net.runeduniverse.lib.utils</groupId>
 			<artifactId>utils-plexus</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.runeduniverse.lib.utils</groupId>
-			<artifactId>utils-maven</artifactId>
+			<exclusions>
+				<!-- provided by maven-core -->
+				<exclusion>
+					<groupId>org.codehaus.plexus</groupId>
+					<artifactId>plexus-classworlds</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.sisu</groupId>
+					<artifactId>org.eclipse.sisu.plexus</artifactId>
+				</exclusion>
+				<!-- managed by BOM -->
+				<exclusion>
+					<groupId>net.runeduniverse.lib.utils</groupId>
+					<artifactId>utils-common</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>

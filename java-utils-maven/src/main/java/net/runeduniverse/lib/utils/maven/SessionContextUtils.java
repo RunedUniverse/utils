@@ -57,7 +57,7 @@ public class SessionContextUtils {
 		final Map<String, R> context = getSessionContext(mvnSession, role);
 		if (context != null) {
 			for (R component : context.values()) {
-				SessionContextUtils.releaseSessionComponent(mvnSession, role, component);
+				releaseSessionComponent(mvnSession, role, component);
 			}
 			mvnSession.getCurrentProject()
 					.setContextValue(role.getCanonicalName(), null);
