@@ -88,7 +88,7 @@ node {
 				return
 			}
 			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
-			sh "mvn-dev -P ${ REPOS } dependency:go-offline -U"
+			sh "mvn-dev -P ${ REPOS },install,validate dependency:go-offline -U --fail-never"
 		}
 
 		stage('Code Validation') {
