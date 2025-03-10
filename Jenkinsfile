@@ -1,3 +1,23 @@
+def installArtifact(mod) {
+	if(!mod.active()) {
+		skipStage()
+		return
+	}
+	try {
+		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
+	} finally {
+		dir(path: "${ module.path() }/target") {
+			sh 'ls -l'
+			// copy pom & signatures
+			sh "cp *.pom *.asc ${ RESULT_PATH }"
+			// copy packaging specific files
+			if(mod.hasTag('pack-jar')) {
+				sh "cp *.jar ${ RESULT_PATH }"
+			}
+		}
+	}
+}
+
 node {
 	withModules {
 		tool(name: 'maven-latest', type: 'maven')
@@ -24,25 +44,27 @@ node {
 			sh "mkdir -p ${ ARCHIVE_PATH }"
 			
 			addModule id: 'maven-parent',          path: '.',                     name: 'Maven Parent',                tags: [ 'parent' ]
-			addModule id: 'java-utils-async',      path: 'java-utils-async',      name: 'Java Utils Async',            tags: [ 'test' ]
 			addModule id: 'java-utils-bom',        path: 'java-utils-bom',        name: 'Bill of Materials',           tags: [ 'bom' ]
-			addModule id: 'java-utils-chain',      path: 'java-utils-chain',      name: 'Java Chain Library',          tags: [ 'test' ]
-			addModule id: 'java-utils-common',     path: 'java-utils-common',     name: 'Java Utils Common',           tags: [ 'test' ]
-			addModule id: 'java-utils-conditions', path: 'java-utils-conditions', name: 'Java Utils Conditions',       tags: [ 'test' ]
-			addModule id: 'java-utils-errors',     path: 'java-utils-errors',     name: 'Java Error Handling Library', tags: [ 'test' ]
-			addModule id: 'java-utils-logging',    path: 'java-utils-logging',	  name: 'Java Logging Tools',          tags: [ 'test' ]
-			addModule id: 'java-utils-maven',      path: 'java-utils-maven',      name: 'Java Maven Utils',            tags: [ 'test' ]
-			addModule id: 'java-utils-plexus',     path: 'java-utils-plexus',     name: 'Java Plexus Utils',           tags: [ 'test' ]
-			addModule id: 'java-utils-scanner',    path: 'java-utils-scanner',    name: 'Java Scanner',                tags: [ 'test' ]
+			addModule id: 'java-utils-async',      path: 'java-utils-async',      name: 'Java Utils Async',            tags: [ 'test', 'build1', 'pack-jar' ]
+			addModule id: 'java-utils-chain',      path: 'java-utils-chain',      name: 'Java Chain Library',          tags: [ 'test', 'build2', 'pack-jar' ]
+			addModule id: 'java-utils-common',     path: 'java-utils-common',     name: 'Java Utils Common',           tags: [ 'test', 'build1', 'pack-jar' ]
+			addModule id: 'java-utils-conditions', path: 'java-utils-conditions', name: 'Java Utils Conditions',       tags: [ 'test', 'build2', 'pack-jar' ]
+			addModule id: 'java-utils-errors',     path: 'java-utils-errors',     name: 'Java Error Handling Library', tags: [ 'test', 'build1', 'pack-jar' ]
+			addModule id: 'java-utils-logging',    path: 'java-utils-logging',	  name: 'Java Logging Tools',          tags: [ 'test', 'build1', 'pack-jar' ]
+			addModule id: 'java-utils-maven',      path: 'java-utils-maven',      name: 'Java Maven Utils',            tags: [ 'test', 'build1', 'pack-jar' ]
+			addModule id: 'java-utils-maven-ext',  path: 'java-utils-maven-ext',  name: 'Java Maven Extension Utils',  tags: [ 'test', 'build3', 'pack-jar' ]
+			addModule id: 'java-utils-plexus',     path: 'java-utils-plexus',     name: 'Java Plexus Utils',           tags: [ 'test', 'build2', 'pack-jar' ]
+			addModule id: 'java-utils-scanner',    path: 'java-utils-scanner',    name: 'Java Scanner',                tags: [ 'test', 'build2', 'pack-jar' ]
 		}
 
 		stage('Init Modules') {
 			sshagent (credentials: ['RunedUniverse-Jenkins']) {
 				perModule(failFast: true) {
-					module.activate(
-						!module.hasTag('skip') && sh(
+					def mod = getModule();
+					mod.activate(
+						!mod.hasTag('skip') && sh(
 								returnStdout: true,
-								script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') }"
+								script: "git-check-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') }"
 							) == '1'
 					);
 				}
@@ -57,8 +79,8 @@ node {
 				skipStage()
 				return
 			}
-			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false --non-recursive"
-			sh "mvn-dev -P ${ REPOS } dependency:resolve-plugins -U"
+			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
+			sh "mvn-dev -P ${ REPOS },install,validate dependency:go-offline -U"
 		}
 
 		stage('Code Validation') {
@@ -72,66 +94,27 @@ node {
 		}
 	
 		stage('Install Maven Parent') {
-			if(!getModule(id: 'maven-parent').active()) {
-				skipStage()
-				return
-			}
-			try {
-				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install --non-recursive"
-			} finally {
-				dir(path: 'target') {
-					sh 'ls -l'
-					sh "cp *.pom *.asc ${ RESULT_PATH }"
-				}
-			}
+			installArtifact( getModule(id: 'maven-parent') );
 		}
 		stage('Install - BOMs') {
 			perModule(withTagIn: [ 'bom' ]) {
-				if(!module.active()) {
-					skipStage()
-					return
-				}
-				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
-				} finally {
-					dir(path: "${ module.path() }/target") {
-						sh 'ls -l'
-						sh "cp *.pom *.asc ${ RESULT_PATH }"
-					}
-				}
+				installArtifact( module );
 			}
 		}
 
 		stage('Build [1st Level]') {
-			perModule(withIds: [ 'java-utils-logging', 'java-utils-errors', 'java-utils-common', 'java-utils-async' ]) {
-				if(!module.active()) {
-					skipStage()
-					return
-				}
-				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
-				} finally {
-					dir(path: "${ module.path() }/target") {
-						sh 'ls -l'
-						sh "cp *.pom *.jar *.asc ${ RESULT_PATH }"
-					}
-				}
+			perModule(withTagIn: [ 'build1' ]) {
+				installArtifact( module );
 			}
 		}
 		stage('Build [2nd Level]') {
-			perModule(withIds: [ 'java-utils-scanner', 'java-utils-chain', 'java-utils-conditions', 'java-utils-maven', 'java-utils-plexus' ]) {
-				if(!module.active()) {
-					skipStage()
-					return
-				}
-				try {
-					sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ module.relPathFrom('maven-parent') }"
-				} finally {
-					dir(path: "${ module.path() }/target") {
-						sh 'ls -l'
-						sh "cp *.pom *.jar *.asc ${ RESULT_PATH }"
-					}
-				}
+			perModule(withTagIn: [ 'build2' ]) {
+				installArtifact( module );
+			}
+		}
+		stage('Build [3rd Level]') {
+			perModule(withTagIn: [ 'build3' ]) {
+				installArtifact( module );
 			}
 		}
 
