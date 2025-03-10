@@ -60,10 +60,11 @@ node {
 		stage('Init Modules') {
 			sshagent (credentials: ['RunedUniverse-Jenkins']) {
 				perModule(failFast: true) {
-					module.activate(
-						!module.hasTag('skip') && sh(
+					def mod = getModule();
+					mod.activate(
+						!mod.hasTag('skip') && sh(
 								returnStdout: true,
-								script: "git-check-version-tag ${ module.id() } ${ module.relPathFrom('maven-parent') }"
+								script: "git-check-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') }"
 							) == '1'
 					);
 				}
