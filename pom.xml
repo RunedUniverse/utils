@@ -38,8 +38,8 @@
 		<module>java-utils-chain</module>
 		<module>java-utils-common-api</module>
 		<module>java-utils-common</module>
-		<module>java-utils-conditions-api</module>
-		<module>java-utils-conditions</module>
+		<module>java-utils-conditional-api</module>
+		<module>java-utils-conditional</module>
 		<module>java-utils-errors</module>
 		<module>java-utils-logging-api</module>
 		<module>java-utils-logging</module>
