@@ -79,8 +79,8 @@ node {
 				skipStage()
 				return
 			}
-			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false --non-recursive"
-			sh "mvn-dev -P ${ REPOS },validate dependency:go-offline -U"
+			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
+			sh "mvn-dev -P ${ REPOS },install,validate dependency:go-offline -U"
 		}
 
 		stage('Code Validation') {
