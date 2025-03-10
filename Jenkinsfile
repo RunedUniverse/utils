@@ -89,7 +89,7 @@ node {
 					skipStage()
 					return
 				}
-				sh "mvn-dev --offline -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve -pl=${ module.relPathFrom('maven-parent') }"
+				sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve -pl=${ module.relPathFrom('maven-parent') }"
 			}
 		}
 	
