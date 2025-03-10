@@ -120,15 +120,19 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		final Set<ClassRealm> coreRealms = new LinkedHashSet<>();
 		final Set<ClassRealm> realms = new LinkedHashSet<>();
 
+		this.log.debug("DefaultExtensionIndex : Scanning LifecycleParticipants");
 		for (ComponentDescriptor<AbstractMavenLifecycleParticipant> descriptor : PlexusContextUtils
 				.getPlexusComponentDescriptorList(this.container, searchRealm, AbstractMavenLifecycleParticipant.class,
 						null)) {
-			final Class<?> clazz = descriptor.getClass();
+			this.log.debug("- " + descriptor);
+			final Class<?> clazz = descriptor.getImplementationClass();
 			ClassRealm realm = descriptor.getRealm();
 			if (realm == null) {
 				final ClassLoader loader = clazz.getClassLoader();
-				if (loader instanceof ClassRealm)
-					realm = (ClassRealm) realm;
+				if (loader instanceof ClassRealm) {
+					realm = (ClassRealm) loader;
+					this.log.debug("  └ located ClassRealm: " + realm);
+				}
 			}
 			if (realm != null) {
 				final String realmId = realm.getId();
@@ -170,25 +174,22 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 			realms.add(realm);
 		}
 
-		// collect core ext realms
-		final Set<ClassRealm> filter = new LinkedHashSet<>();
-		filter.addAll(realms);
-		filter.retainAll(searchRealm.getImportRealms());
-		filter.addAll(coreRealms);
-
 		// parse the extension references
+		this.log.debug("DefaultExtensionIndex : Locating Extensions from Realms");
 		for (ClassRealm realm : realms) {
+			this.log.debug("> " + realm.getId());
 			final Set<Extension> set = this.realmMap.computeIfAbsent(realm, this::fromExtRealm);
-			if (!set.isEmpty() && filter.contains(realm))
-				this.coreExtensions.addAll(set);
+			boolean inCore = coreRealms.contains(realm);
+			for (Extension ext : set) {
+				this.log.debug("  - " + ext.getId());
+				if (inCore)
+					this.coreExtensions.add(ext);
+			}
 		}
 	}
 
 	@Override
 	public boolean discoverExtRealm(final ClassRealm realm) {
-		if (this.realmMap.containsKey(realm))
-			return true;
-
 		final Set<Extension> set = this.realmMap.computeIfAbsent(realm, this::fromExtRealm);
 		return !set.isEmpty();
 	}

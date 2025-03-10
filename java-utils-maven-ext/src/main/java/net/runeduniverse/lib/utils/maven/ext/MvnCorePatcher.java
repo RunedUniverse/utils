@@ -309,12 +309,12 @@ public class MvnCorePatcher {
 
 	@FunctionalInterface
 	public static interface InfoEvent_Extensions {
-		public void call(final Collection<MavenProject> allProjects, final ExtensionData extensions);
+		public void call(final Collection<MavenProject> allProjects, final ExtensionData data);
 	}
 
 	@FunctionalInterface
 	public static interface InfoEvent_Plugins {
-		public void call(final Collection<MavenProject> allProjects, final PluginData plugins);
+		public void call(final Collection<MavenProject> allProjects, final PluginData data);
 	}
 
 	@FunctionalInterface
