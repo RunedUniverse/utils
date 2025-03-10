@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import net.runeduniverse.lib.utils.chain.api.Chain;
+
 public final class ChainManager {
 
 	private final Set<Method> existingMethods = new HashSet<>();
@@ -76,7 +78,7 @@ public final class ChainManager {
 		return container.callChain(resultType, args);
 	}
 
-	protected <R> R callChain(String label, Class<R> resultType, ChainRuntime<?> rootRuntime,
+	protected <R> R callChain(String label, Class<R> resultType, DefaultChainRuntime<?> rootRuntime,
 			Map<Class<?>, Object> sourceDataMap, Object... args) throws Exception {
 		ChainContainer container = this.chains.get(label);
 		if (container == null)

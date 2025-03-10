@@ -18,9 +18,9 @@ package net.runeduniverse.lib.utils.conditions.tools.test;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import net.runeduniverse.lib.utils.conditional.tools.ConditionComparator;
+import net.runeduniverse.lib.utils.conditional.tools.EntrySet;
 import net.runeduniverse.lib.utils.conditions.test.model.MvnGoalView;
-import net.runeduniverse.lib.utils.conditions.tools.ConditionComparator;
-import net.runeduniverse.lib.utils.conditions.tools.EntrySet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static net.runeduniverse.lib.utils.conditions.test.model.ModelFactory.*;

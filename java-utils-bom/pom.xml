@@ -75,23 +75,42 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<root-dir>..</root-dir>
 		<!-- ARTIFACT VERSIONS -->
-		<utils-async-version>2.1.1</utils-async-version>
-		<utils-chain-version>1.0.1</utils-chain-version>
-		<utils-common-version>1.2.0</utils-common-version>
+		<utils-async-api-version>2.2.0</utils-async-api-version>
+		<utils-async-version>2.2.0</utils-async-version>
+		<utils-chain-api-version>2.0.0</utils-chain-api-version>
+		<utils-chain-version>2.0.0</utils-chain-version>
+		<utils-common-api-version>2.0.0</utils-common-api-version>
+		<utils-common-version>2.0.0</utils-common-version>
+		<utils-conditional-api-version>2.0.0</utils-conditional-api-version>
+		<utils-conditional-version>2.0.0</utils-conditional-version>
 		<utils-errors-version>1.0.1</utils-errors-version>
-		<utils-logging-version>1.0.2</utils-logging-version>
-		<utils-maven-version>1.0.0</utils-maven-version>
-		<utils-maven-ext-version>1.0.0</utils-maven-ext-version>
-		<utils-plexus-version>1.0.0</utils-plexus-version>
-		<utils-scanner-version>1.2.0</utils-scanner-version>
+		<utils-logging-api-version>2.0.0</utils-logging-api-version>
+		<utils-logging-version>2.0.0</utils-logging-version>
+		<utils-maven-api-version>2.0.0</utils-maven-api-version>
+		<utils-maven-version>2.0.0</utils-maven-version>
+		<utils-maven-ext-api-version>2.0.0</utils-maven-ext-api-version>
+		<utils-maven-ext-version>2.0.0</utils-maven-ext-version>
+		<utils-plexus-version>2.0.0</utils-plexus-version>
+		<utils-scanner-api-version>2.0.0</utils-scanner-api-version>
+		<utils-scanner-version>2.0.0</utils-scanner-version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-async-api</artifactId>
+				<version>${utils-async-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-async</artifactId>
 				<version>${utils-async-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-chain-api</artifactId>
+				<version>${utils-chain-api-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
@@ -100,8 +119,23 @@
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-common-api</artifactId>
+				<version>${utils-common-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-common</artifactId>
 				<version>${utils-common-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-conditional-api</artifactId>
+				<version>${utils-conditional-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-conditional</artifactId>
+				<version>${utils-conditional-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
@@ -110,13 +144,28 @@
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-logging-api</artifactId>
+				<version>${utils-logging-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-logging</artifactId>
 				<version>${utils-logging-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-maven-api</artifactId>
+				<version>${utils-maven-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-maven</artifactId>
 				<version>${utils-maven-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-maven-ext-api</artifactId>
+				<version>${utils-maven-ext-api-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
@@ -127,6 +176,11 @@
 				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-plexus</artifactId>
 				<version>${utils-plexus-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-scanner-api</artifactId>
+				<version>${utils-scanner-api-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>

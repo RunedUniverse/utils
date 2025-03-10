@@ -17,8 +17,9 @@ package net.runeduniverse.lib.utils.maven.ext.indexer;
 
 import org.apache.maven.project.MavenProject;
 
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
-import net.runeduniverse.lib.utils.logging.logs.Recordable;
+import net.runeduniverse.lib.utils.logging.log.DefaultCompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.Recordable;
 import net.runeduniverse.lib.utils.maven.ext.indexer.api.ProjectBoundEntry;
 
 public class AProjectBoundEntry<E extends ProjectBoundEntry<E>> implements ProjectBoundEntry<E>, Recordable {
@@ -48,7 +49,7 @@ public class AProjectBoundEntry<E extends ProjectBoundEntry<E>> implements Proje
 
 	@Override
 	public CompoundTree toRecord() {
-		final CompoundTree tree = new CompoundTree(_getRecordTitle());
+		final CompoundTree tree = new DefaultCompoundTree(_getRecordTitle());
 
 		tree.append("project id", this.mvnProject.getId());
 

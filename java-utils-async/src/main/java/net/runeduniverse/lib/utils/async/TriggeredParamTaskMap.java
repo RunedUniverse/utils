@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.runeduniverse.lib.utils.async.api.IRegistry;
 
 @NoArgsConstructor
 public class TriggeredParamTaskMap<KEY, PARAM> implements IRegistry<KEY> {

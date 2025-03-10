@@ -15,7 +15,7 @@
  */
 package net.runeduniverse.lib.utils.conditions.test.model;
 
-import net.runeduniverse.lib.utils.conditions.ACondition;
+import net.runeduniverse.lib.utils.conditional.ACondition;
 
 public class MvnGoalCondition extends ACondition<MvnGoalView> {
 

@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.runeduniverse.lib.utils.async.api.IChainable;
+import net.runeduniverse.lib.utils.async.api.IRegistry;
+
 public class Pipeline<KEY> {
 
 	private final int concurrentPipes;
