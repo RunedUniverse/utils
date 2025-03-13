@@ -22,8 +22,9 @@ import org.apache.maven.execution.ProjectDependencyGraph;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Requirement;
 
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
-import net.runeduniverse.lib.utils.logging.logs.Recordable;
+import net.runeduniverse.lib.utils.logging.log.DefaultCompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.Recordable;
 import net.runeduniverse.lib.utils.maven.ext.indexer.api.ProjectBoundRegistry;
 
 public abstract class AProjectBoundArchive<S> extends AProjectBoundRegistry<S>
@@ -65,7 +66,7 @@ public abstract class AProjectBoundArchive<S> extends AProjectBoundRegistry<S>
 
 	@Override
 	public CompoundTree toRecord() {
-		final CompoundTree tree = new CompoundTree(_getRecordTitle());
+		final CompoundTree tree = new DefaultCompoundTree(_getRecordTitle());
 
 		for (S sector : this.sectors.values()) {
 			if (sector instanceof Recordable)

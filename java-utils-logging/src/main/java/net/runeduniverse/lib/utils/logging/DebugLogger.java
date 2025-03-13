@@ -22,17 +22,17 @@ import java.util.logging.Logger;
 public final class DebugLogger extends Logger {
 
 	public DebugLogger() {
-		super("ROGM-DEBUG", null);
+		super("DEBUG-LOGGER", null);
 		this.setLevel(Level.ALL);
 	}
 
-	public DebugLogger(Logger parent) {
+	public DebugLogger(final Logger parent) {
 		this();
 		super.setParent(parent);
 	}
 
 	@Override
-	public void log(LogRecord record) {
+	public void log(final LogRecord record) {
 		if (!isLoggable(record.getLevel())) {
 			record.setMessage("[TRACING-OVERRIDE][" + record.getLevel()
 					.getName() + "]\n" + record.getMessage());
@@ -44,7 +44,7 @@ public final class DebugLogger extends Logger {
 	private static final int offValue = Level.OFF.intValue();
 	private static final int infoLevelValue = Level.INFO.intValue();
 
-	public boolean isLoggable(Level level) {
+	public boolean isLoggable(final Level level) {
 		if (level.intValue() < infoLevelValue || infoLevelValue == offValue) {
 			return false;
 		}

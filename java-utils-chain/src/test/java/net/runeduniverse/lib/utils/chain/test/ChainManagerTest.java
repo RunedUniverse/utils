@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import net.runeduniverse.lib.utils.chain.Chain;
 import net.runeduniverse.lib.utils.chain.ChainManager;
-import net.runeduniverse.lib.utils.chain.ChainRuntime;
+import net.runeduniverse.lib.utils.chain.DefaultChainRuntime;
+import net.runeduniverse.lib.utils.chain.api.Chain;
 import net.runeduniverse.lib.utils.chain.test.model.Player;
 import net.runeduniverse.lib.utils.logging.DebugLogger;
 
@@ -87,7 +87,7 @@ public class ChainManagerTest {
 	}
 
 	@Chain(label = CHECK_RUNTIME_LABEL, layers = { 0 })
-	public static void checkRuntimeEntity(final ChainRuntime<?> runtime) {
+	public static void checkRuntimeEntity(final DefaultChainRuntime<?> runtime) {
 		assertNotNull(runtime, "ChainRuntime<?> did not get passed to layer");
 	}
 }

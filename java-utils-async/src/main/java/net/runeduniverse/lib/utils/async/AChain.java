@@ -16,6 +16,7 @@
 package net.runeduniverse.lib.utils.async;
 
 import lombok.Setter;
+import net.runeduniverse.lib.utils.async.api.IChainable;
 
 public abstract class AChain<CHAIN extends IChainable<?>> implements IChainable<CHAIN> {
 

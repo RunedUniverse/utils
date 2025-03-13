@@ -18,6 +18,8 @@ package net.runeduniverse.lib.utils.async;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.runeduniverse.lib.utils.async.api.IRegistry;
+
 public class TriggerMap<KEY> implements IRegistry<KEY> {
 
 	private final int initPermits;

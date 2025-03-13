@@ -24,14 +24,14 @@ import lombok.Getter;
 // for internal use only
 // depracted so that noone tries to get Store in chain args -> use ChainRuntime!
 public final class Store {
-	private final ChainRuntime<?> runtime;
+	private final DefaultChainRuntime<?> runtime;
 	@Getter
 	private final Map<Class<?>, Object> sourceDataMap = new HashMap<>();
 	@Getter
 	private final Map<Class<?>, Object> runtimeDataMap = new HashMap<>();
 	private Object last = null;
 
-	protected Store(ChainRuntime<?> runtime, Map<Class<?>, Object> sourceMap, Object[] args) {
+	protected Store(DefaultChainRuntime<?> runtime, Map<Class<?>, Object> sourceMap, Object[] args) {
 		this.runtime = runtime;
 		if (sourceMap != null)
 			this.sourceDataMap.putAll(sourceMap);
@@ -55,7 +55,7 @@ public final class Store {
 	public <T> T getData(Class<T> type) {
 		if (type == null)
 			return null;
-		if (type == ChainRuntime.class)
+		if (type == DefaultChainRuntime.class)
 			return (T) this.runtime;
 		Object obj = this.runtimeDataMap.get(type);
 		if (obj != null)

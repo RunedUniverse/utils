@@ -33,7 +33,7 @@ public class ChainLogger extends Logger {
 		super.log(Level.BURY, sourceMethod + "\n" + exception);
 	}
 
-	public void logTrace(ChainRuntimeExecutionTrace trace) {
+	public void logTrace(DefaultChainRuntimeExecutionTrace trace) {
 		super.log(Level.FINE, trace.toString());
 	}
 }

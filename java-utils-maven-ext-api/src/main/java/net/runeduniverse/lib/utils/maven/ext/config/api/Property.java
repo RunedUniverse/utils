@@ -1,0 +1,87 @@
+/*
+ * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.runeduniverse.lib.utils.maven.ext.config.api;
+
+import java.util.Collection;
+import java.util.Set;
+
+public interface Property<T> extends Comparable<Property<?>> {
+
+	public String getId();
+
+	public T getDefault();
+
+	public T getSelected();
+
+	public Set<T> getOptions();
+
+	public void setDefault(T value);
+
+	public void setSelected(T value);
+
+	public void addOption(T value);
+
+	public default void addOptions(final Collection<T> options) {
+		if (options == null)
+			return;
+		for (T option : options)
+			addOption(option);
+	}
+
+	@SuppressWarnings("unchecked")
+	public default void addOptions(final T... options) {
+		if (options == null)
+			return;
+		for (T option : options)
+			addOption(option);
+	}
+
+	public default void resolveSelection() {
+		if (getSelected() == null)
+			setSelected(getDefault());
+	}
+
+	@Override
+	public default int compareTo(final Property<?> o) {
+		if (this == o)
+			return 0;
+		final String id = getId(), oid = o.getId();
+		if (id == null)
+			return oid == null ? 0 : -1;
+		// debug to bottom
+		if (id.contains(".debug.")) {
+			if (!oid.contains(".debug."))
+				return 1;
+		} else if (oid.contains(".debug."))
+			return -1;
+		// normal str compare
+		return id.compareTo(oid);
+	}
+
+	public static String key(final String key) {
+		return new StringBuilder() //
+				.append(key)
+				.toString();
+	}
+
+	public static String defaultKey(final String key) {
+		return new StringBuilder() //
+				.append(key)
+				.append(".default")
+				.toString();
+	}
+
+}

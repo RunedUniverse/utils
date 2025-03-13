@@ -15,7 +15,11 @@
  */
 package net.runeduniverse.lib.utils.chain;
 
-public final class ChainLayer implements ILayer {
+import net.runeduniverse.lib.utils.chain.api.Chain;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
+import net.runeduniverse.lib.utils.chain.api.Layer;
+
+public final class ChainLayer implements Layer {
 
 	private final BaseChainLayer base;
 	private final boolean ignoreCancelled;
@@ -38,7 +42,7 @@ public final class ChainLayer implements ILayer {
 		return this.ignoreCancelled;
 	}
 
-	public static boolean ignoreCancelled(ILayer layer) {
+	public static boolean ignoreCancelled(Layer layer) {
 		return layer instanceof ChainLayer && ((ChainLayer) layer).ignoreCancelled();
 	}
 
@@ -46,7 +50,7 @@ public final class ChainLayer implements ILayer {
 		return this.ignoreResult;
 	}
 
-	public static boolean ignoreResult(ILayer layer) {
+	public static boolean ignoreResult(Layer layer) {
 		return layer instanceof ChainLayer && ((ChainLayer) layer).ignoreResult();
 	}
 
@@ -54,7 +58,7 @@ public final class ChainLayer implements ILayer {
 		return this.ignoreErrors;
 	}
 
-	public static boolean ignoreErrors(ILayer layer) {
+	public static boolean ignoreErrors(Layer layer) {
 		return layer instanceof ChainLayer && ((ChainLayer) layer).ignoreErrors();
 	}
 
@@ -62,7 +66,7 @@ public final class ChainLayer implements ILayer {
 		return this.ignoreResult || this.ignoreCancelled;
 	}
 
-	public static boolean ignoreInActive(ILayer layer) {
+	public static boolean ignoreInActive(Layer layer) {
 		return layer instanceof ChainLayer && ((ChainLayer) layer).ignoreInActive();
 	}
 }
