@@ -18,8 +18,8 @@ package net.runeduniverse.lib.utils.chain;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
 import net.runeduniverse.lib.utils.chain.api.Layer;
-import net.runeduniverse.lib.utils.errors.ExceptionSuppressions;
 
 public final class ChainContainer {
 
@@ -46,12 +46,12 @@ public final class ChainContainer {
 			this.chain.put(id, layer);
 	}
 
-	public <R> R callChain(Class<R> resultType, Object[] args) throws ExceptionSuppressions {
+	public <R> R callChain(Class<R> resultType, Object[] args) throws Exception {
 		return this._callChain(new DefaultChainRuntime<>(this, this.logger, resultType, args));
 	}
 
 	public <R> R callChain(Class<R> resultType, DefaultChainRuntime<?> rootRuntime, Map<Class<?>, Object> sourceDataMap,
-			Object[] args) throws ExceptionSuppressions {
+			Object[] args) throws Exception {
 		return this
 				._callChain(new DefaultChainRuntime<>(rootRuntime, this, this.logger, resultType, sourceDataMap, args));
 	}
@@ -66,7 +66,7 @@ public final class ChainContainer {
 	 *         Entity for the resultType got returned/stored
 	 * @throws <code>ExceptionSuppressions</code>
 	 */
-	private <R> R _callChain(DefaultChainRuntime<R> runtime) throws ExceptionSuppressions {
+	private <R> R _callChain(ChainRuntime<R> runtime) throws Exception {
 		if (this.dirty)
 			this.purify();
 		runtime.executeOnChain(this.chain, this.lowestId, this.highestId);

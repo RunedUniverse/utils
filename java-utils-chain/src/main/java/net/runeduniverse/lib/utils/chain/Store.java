@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Getter;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
 
 @Deprecated
 // for internal use only
@@ -55,7 +56,7 @@ public final class Store {
 	public <T> T getData(Class<T> type) {
 		if (type == null)
 			return null;
-		if (type == DefaultChainRuntime.class)
+		if (type.isAssignableFrom(ChainRuntime.class))
 			return (T) this.runtime;
 		Object obj = this.runtimeDataMap.get(type);
 		if (obj != null)

@@ -15,6 +15,8 @@
  */
 package net.runeduniverse.lib.utils.chain.api;
 
+import java.util.Map;
+
 public interface ChainRuntime<R> {
 
 	public ChainRuntime<?> getRoot();
@@ -22,15 +24,33 @@ public interface ChainRuntime<R> {
 	@Deprecated
 	public ChainRuntimeExecutionTrace getTrace();
 
+	public boolean active();
+
 	public boolean isCanceled();
 
 	public boolean isInterrupted();
 
+	public boolean isRoot();
+
+	public Object[] getParameters(Class<?>[] paramTypes);
+
 	public Class<R> getResultType();
+
+	public boolean hasResult();
 
 	public R getResult();
 
+	public R getFinalResult();
+
 	public void setCanceled(boolean canceled);
+
+	public void setResult(R result);
+
+	public boolean setPossibleResult(Object entity);
+
+	public <D extends Object> D storeData(D entity);
+
+	public <D extends Object> D storeData(Class<?> type, D entity);
 
 	public void interrupt();
 
@@ -40,22 +60,18 @@ public interface ChainRuntime<R> {
 
 	public <S> S callSubChainWithRuntimeData(String label, Class<S> resultType, Object... args) throws Exception;
 
+	/**
+	 * <b>Internal Method!</b> Executes this runtime on a given chain.
+	 *
+	 * @param chain     Map of Layers used in the chain
+	 * @param lowestId  lowest LayerId to be executed
+	 * @param highestId highest LayerId to be executed
+	 * @throws Exception throws a tracing Exception including all underlying
+	 *                   Exceptions as surpressed Exceptions
+	 */
+	public void executeOnChain(final Map<Integer, Layer> chain, final int lowestId, final int highestId)
+			throws Exception;
+
 	public void jumpToLayer(int layerId);
-
-	public <D extends Object> D storeData(D entity);
-
-	public <D extends Object> D storeData(Class<?> type, D entity);
-
-	public void setResult(R result);
-
-	public boolean setPossibleResult(Object entity);
-
-	public Object[] getParameters(Class<?>[] paramTypes);
-
-	public boolean active();
-
-	public boolean isRoot();
-
-	public boolean hasResult();
 
 }

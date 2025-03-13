@@ -66,24 +66,28 @@ public class DefaultChainRuntime<R> implements ChainRuntime<R> {
 		this.resultType = resultType;
 	}
 
+	@Override
 	public <S> S callSubChain(String label, Class<S> resultType, Object... args) throws Exception {
 		return container.getManager()
 				.callChain(label, resultType, this, null, args);
 	}
 
+	@Override
 	public <S> S callSubChainWithSourceData(final String label, final Class<S> resultType, final Object... args)
 			throws Exception {
 		return container.getManager()
 				.callChain(label, resultType, this, this.store.getSourceDataMap(), args);
 	}
 
+	@Override
 	public <S> S callSubChainWithRuntimeData(final String label, final Class<S> resultType, final Object... args)
 			throws Exception {
 		return container.getManager()
 				.callChain(label, resultType, this, this.store.getRuntimeDataMap(), args);
 	}
 
-	protected void executeOnChain(final Map<Integer, Layer> chain, final int lowestId, final int highestId)
+	@Override
+	public void executeOnChain(final Map<Integer, Layer> chain, final int lowestId, final int highestId)
 			throws ExceptionSuppressions {
 		Set<Exception> errors = new HashSet<>();
 		boolean noErrors = true;
@@ -113,19 +117,23 @@ public class DefaultChainRuntime<R> implements ChainRuntime<R> {
 							+ this.container.getLabel() + "> errored out!", true).addSuppressed(errors));
 	}
 
+	@Override
 	public void jumpToLayer(final int layerId) {
 		this.iterator.setI(layerId);
 		this.trace.jumpToLayer(layerId);
 	}
 
+	@Override
 	public void interrupt() {
 		this.interrupted = true;
 	}
 
+	@Override
 	public <D extends Object> D storeData(final D entity) {
 		return this.storeData(entity.getClass(), entity);
 	}
 
+	@Override
 	public <D extends Object> D storeData(final Class<?> type, final D entity) {
 		if (entity instanceof DefaultChainRuntime<?> || entity instanceof Store)
 			return entity;
@@ -134,11 +142,13 @@ public class DefaultChainRuntime<R> implements ChainRuntime<R> {
 		return entity;
 	}
 
+	@Override
 	public void setResult(final R result) {
 		this.result = result;
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public boolean setPossibleResult(final Object entity) {
 		if (this.resultType == null || entity == null)
 			return false;
@@ -149,26 +159,31 @@ public class DefaultChainRuntime<R> implements ChainRuntime<R> {
 		return false;
 	}
 
+	@Override
 	public Object[] getParameters(final Class<?>[] paramTypes) {
 		return this.store.getData(paramTypes);
 	}
 
+	@Override
 	public boolean active() {
 		if (this.canceled || this.result != null)
 			return false;
 		return true;
 	}
 
+	@Override
 	public boolean isRoot() {
 		return this.root == null;
 	}
 
+	@Override
 	public boolean hasResult() {
 		return this.result != null;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected R getFinalResult() {
+	@Override
+	public R getFinalResult() {
 		if (this.canceled)
 			return null;
 
