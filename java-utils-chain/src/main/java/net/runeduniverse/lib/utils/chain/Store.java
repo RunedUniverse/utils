@@ -56,7 +56,7 @@ public final class Store {
 	public <T> T getData(Class<T> type) {
 		if (type == null)
 			return null;
-		if (type.isAssignableFrom(ChainRuntime.class))
+		if (ChainRuntime.class.isAssignableFrom(type))
 			return (T) this.runtime;
 		Object obj = this.runtimeDataMap.get(type);
 		if (obj != null)
