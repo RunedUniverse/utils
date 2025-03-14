@@ -83,7 +83,7 @@
 		<utils-common-version>2.0.0</utils-common-version>
 		<utils-conditional-api-version>2.0.0</utils-conditional-api-version>
 		<utils-conditional-version>2.0.0</utils-conditional-version>
-		<utils-errors-version>1.0.1</utils-errors-version>
+		<utils-errors-version>2.0.0</utils-errors-version>
 		<utils-logging-api-version>2.0.0</utils-logging-api-version>
 		<utils-logging-version>2.0.0</utils-logging-version>
 		<utils-maven-api-version>2.0.0</utils-maven-api-version>
