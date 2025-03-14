@@ -13,42 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditional.tools;
+package net.runeduniverse.lib.utils.conditional.tool;
 
-public class IndexedEntrySet<T> extends EntrySet<T> {
+public class IndexedRelationEntrySet<T> extends RelationEntrySet<T> {
 
 	private static final long serialVersionUID = 1L;
 
 	protected final ConditionIndexer indexer;
 
-	public IndexedEntrySet(final ConditionIndexer indexer) {
+	public IndexedRelationEntrySet(final ConditionIndexer indexer) {
 		this.indexer = indexer;
 	}
 
-	public IndexedEntrySet(final ConditionIndexer indexer, int initialCapacity) {
+	public IndexedRelationEntrySet(final ConditionIndexer indexer, int initialCapacity) {
 		super(initialCapacity);
 		this.indexer = indexer;
 	}
 
-	public IndexedEntrySet(final ConditionIndexer indexer, int initialCapacity, float loadFactor) {
+	public IndexedRelationEntrySet(final ConditionIndexer indexer, int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
 		this.indexer = indexer;
 	}
 
 	@Override
-	protected IndexedEntrySet<T> newInstance() {
-		return new IndexedEntrySet<>(this.indexer);
+	protected IndexedRelationEntrySet<T> newInstance() {
+		return new IndexedRelationEntrySet<>(this.indexer);
 	}
 
 	@Override
-	public IndexedEntrySet<T> compile(final ConditionIndexer indexer) {
-		final IndexedEntrySet<T> set = newInstance();
+	public IndexedRelationEntrySet<T> compile(final ConditionIndexer indexer) {
+		final IndexedRelationEntrySet<T> set = newInstance();
 		compileTo(indexer, set);
 		return set;
 	}
 
-	public IndexedEntrySet<T> compile() {
-		final IndexedEntrySet<T> set = newInstance();
+	public IndexedRelationEntrySet<T> compile() {
+		final IndexedRelationEntrySet<T> set = newInstance();
 		compileTo(this.indexer, set);
 		return set;
 	}

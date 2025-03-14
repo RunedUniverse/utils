@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditional.tools;
+package net.runeduniverse.lib.utils.conditional.tool;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -28,9 +28,9 @@ import net.runeduniverse.lib.utils.conditional.api.Condition;
 
 public class ConditionComparator<T> implements Comparator<T> {
 
-	protected final EntrySet<T> entries;
+	protected final RelationEntrySet<T> entries;
 
-	public ConditionComparator(final EntrySet<T> entries) {
+	public ConditionComparator(final RelationEntrySet<T> entries) {
 		this.entries = entries;
 	}
 
@@ -41,8 +41,8 @@ public class ConditionComparator<T> implements Comparator<T> {
 		if (o1.equals(o2))
 			return 0;
 
-		final Set<Entry<T>> e1 = new LinkedHashSet<>(), e2 = new LinkedHashSet<>();
-		for (Entry<T> entry : this.entries) {
+		final Set<RelationEntry<T>> e1 = new LinkedHashSet<>(), e2 = new LinkedHashSet<>();
+		for (RelationEntry<T> entry : this.entries) {
 			if (checkMatch(entry, o1))
 				e1.add(entry);
 			if (checkMatch(entry, o2))
@@ -53,17 +53,17 @@ public class ConditionComparator<T> implements Comparator<T> {
 			return 0;
 
 		if (e1.size() == e2.size()) {
-			final Set<Entry<T>> e = new LinkedHashSet<>();
+			final Set<RelationEntry<T>> e = new LinkedHashSet<>();
 			e.addAll(e1);
 			e.addAll(e2);
 			if (e1.containsAll(e) && e2.containsAll(e))
 				return 0;
 		}
 
-		final PriorityResult r1 = compare(toPriorityTree(e1, Entry::getMatchBefore),
-				toPriorityTree(e1, Entry::getMatchAfter), o2);
-		final PriorityResult r2 = compare(toPriorityTree(e2, Entry::getMatchBefore),
-				toPriorityTree(e2, Entry::getMatchAfter), o1);
+		final PriorityResult r1 = compare(toPriorityTree(e1, RelationEntry::getMatchBefore),
+				toPriorityTree(e1, RelationEntry::getMatchAfter), o2);
+		final PriorityResult r2 = compare(toPriorityTree(e2, RelationEntry::getMatchBefore),
+				toPriorityTree(e2, RelationEntry::getMatchAfter), o1);
 
 		return computeExternalResult(r1, r2);
 	}
@@ -135,17 +135,17 @@ public class ConditionComparator<T> implements Comparator<T> {
 		return p1 > p2 ? r1 : r2;
 	}
 
-	protected boolean checkMatch(final Entry<T> entry, final T entity) {
+	protected boolean checkMatch(final RelationEntry<T> entry, final T entity) {
 		final Condition<T> con = entry.getMatchItem();
 		if (con == null)
 			return false;
 		return con.evaluate(entity);
 	}
 
-	protected Map<Integer, Set<Condition<T>>> toPriorityTree(final Set<Entry<T>> set,
+	protected Map<Integer, Set<Condition<T>>> toPriorityTree(final Set<RelationEntry<T>> set,
 			final ConditionSelector<T> selector) {
 		final Map<Integer, Set<Condition<T>>> map = new LinkedHashMap<>();
-		for (Entry<T> entry : set) {
+		for (RelationEntry<T> entry : set) {
 			final Condition<T> con = selector.get(entry);
 			if (con == null)
 				continue;
@@ -158,7 +158,7 @@ public class ConditionComparator<T> implements Comparator<T> {
 	@FunctionalInterface
 	protected interface ConditionSelector<T> {
 
-		public Condition<T> get(final Entry<T> entry);
+		public Condition<T> get(final RelationEntry<T> entry);
 
 	}
 

@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditional.tools;
+package net.runeduniverse.lib.utils.conditional.tools.test;
 
-import java.util.Collection;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
-import net.runeduniverse.lib.utils.conditional.api.Condition;
+public class CheckerTest {
 
-public class Checker {
+	@Test
+	@Tag("system")
+	public void testChecker() {
 
-	public <T> boolean matches(final Condition<T> condition, final T entity) {
-		if (condition == null)
-			return false;
-		return condition.evaluate(entity);
 	}
 
-	public <T> boolean matchesAny(final Condition<T> condition, final Collection<T> entityCollection) {
-		if (condition == null)
-			return false;
-		for (T entity : entityCollection) {
-			if (matches(condition, entity))
-				return true;
-		}
-		return false;
-	}
 }

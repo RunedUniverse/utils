@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditional.tools;
+package net.runeduniverse.lib.utils.conditional.tool;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +22,7 @@ import net.runeduniverse.lib.utils.conditional.api.Condition;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class Entry<T> {
+public class RelationEntry<T> {
 	@Getter
 	protected Condition<T> matchItem = null;
 	@Getter
@@ -30,27 +30,27 @@ public class Entry<T> {
 	@Getter
 	protected Condition<T> matchAfter = null;
 
-	protected Entry<T> newInstance() {
-		return new Entry<T>();
+	protected RelationEntry<T> newInstance() {
+		return new RelationEntry<T>();
 	}
 
-	public Entry<T> setMatchItem(final Condition<T> matchItem) {
+	public RelationEntry<T> setMatchItem(final Condition<T> matchItem) {
 		this.matchItem = matchItem;
 		return this;
 	}
 
-	public Entry<T> setMatchBefore(final Condition<T> matchBefore) {
+	public RelationEntry<T> setMatchBefore(final Condition<T> matchBefore) {
 		this.matchBefore = matchBefore;
 		return this;
 	}
 
-	public Entry<T> setMatchAfter(final Condition<T> matchAfter) {
+	public RelationEntry<T> setMatchAfter(final Condition<T> matchAfter) {
 		this.matchAfter = matchAfter;
 		return this;
 	}
 
-	public Entry<T> copy() {
-		return new Entry<T>().setMatchItem(getMatchItem())
+	public RelationEntry<T> copy() {
+		return new RelationEntry<T>().setMatchItem(getMatchItem())
 				.setMatchBefore(getMatchBefore())
 				.setMatchAfter(getMatchAfter());
 	}

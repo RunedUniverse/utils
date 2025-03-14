@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditional.tools;
+package net.runeduniverse.lib.utils.conditional.tool;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,40 +21,40 @@ import java.util.LinkedHashSet;
 
 import net.runeduniverse.lib.utils.conditional.api.Condition;
 
-public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
+public class RelationEntrySet<T> extends LinkedHashSet<RelationEntry<T>> {
 
 	private static final long serialVersionUID = 1L;
 
-	public EntrySet() {
+	public RelationEntrySet() {
 	}
 
-	public EntrySet(int initialCapacity) {
+	public RelationEntrySet(int initialCapacity) {
 		super(initialCapacity);
 	}
 
-	public EntrySet(int initialCapacity, float loadFactor) {
+	public RelationEntrySet(int initialCapacity, float loadFactor) {
 		super(initialCapacity, loadFactor);
 	}
 
-	protected EntrySet<T> newInstance() {
-		return new EntrySet<>();
+	protected RelationEntrySet<T> newInstance() {
+		return new RelationEntrySet<>();
 	}
 
 	public boolean add(final Condition<T> match, final Condition<T> before, final Condition<T> after) {
-		return add(new Entry<T>(match, before, after));
+		return add(new RelationEntry<T>(match, before, after));
 	}
 
 	/**
-	 * Returns a deep copy of this <tt>EntrySet</tt> instance: the elements
+	 * Returns a deep copy of this <tt>RelationEntrySet</tt> instance: the elements
 	 * themselves are copied.
 	 *
 	 * @return a deep copy of this set
 	 */
 	@Override
-	public EntrySet<T> clone() {
-		final EntrySet<T> set = newInstance();
-		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
-			final Entry<T> entry = i.next();
+	public RelationEntrySet<T> clone() {
+		final RelationEntrySet<T> set = newInstance();
+		for (Iterator<RelationEntry<T>> i = this.iterator(); i.hasNext();) {
+			final RelationEntry<T> entry = i.next();
 			if (entry == null)
 				set.add(null);
 			else
@@ -63,16 +63,16 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		return set;
 	}
 
-	public void compileTo(final ConditionIndexer indexer, final EntrySet<T> set) {
-		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
-			final Entry<T> entry = i.next();
+	public void compileTo(final ConditionIndexer indexer, final RelationEntrySet<T> set) {
+		for (Iterator<RelationEntry<T>> i = this.iterator(); i.hasNext();) {
+			final RelationEntry<T> entry = i.next();
 			if (entry.validate(indexer))
 				set.add(entry);
 		}
 	}
 
-	public EntrySet<T> compile(final ConditionIndexer indexer) {
-		final EntrySet<T> set = newInstance();
+	public RelationEntrySet<T> compile(final ConditionIndexer indexer) {
+		final RelationEntrySet<T> set = newInstance();
 		compileTo(indexer, set);
 		return set;
 	}
@@ -84,8 +84,8 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 	public void filterByApplicableData(final Collection<T> dataCollection) {
 		final Checker checker = checkerInstance();
 
-		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
-			final Entry<T> entry = i.next();
+		for (Iterator<RelationEntry<T>> i = this.iterator(); i.hasNext();) {
+			final RelationEntry<T> entry = i.next();
 			if (entry == null || !checker.matchesAny(entry.getMatchItem(), dataCollection)) {
 				i.remove();
 				continue;
@@ -102,17 +102,17 @@ public class EntrySet<T> extends LinkedHashSet<Entry<T>> {
 		}
 	}
 
-	public void filterByApplicableDataTo(final Collection<T> dataCollection, final EntrySet<T> set) {
+	public void filterByApplicableDataTo(final Collection<T> dataCollection, final RelationEntrySet<T> set) {
 		final Checker checker = checkerInstance();
 
-		for (Iterator<Entry<T>> i = this.iterator(); i.hasNext();) {
-			final Entry<T> entry = i.next();
+		for (Iterator<RelationEntry<T>> i = this.iterator(); i.hasNext();) {
+			final RelationEntry<T> entry = i.next();
 			if (entry == null || !checker.matchesAny(entry.getMatchItem(), dataCollection))
 				continue;
 			final boolean before = checker.matchesAny(entry.getMatchBefore(), dataCollection);
 			final boolean after = checker.matchesAny(entry.getMatchAfter(), dataCollection);
 			if (before || after) {
-				final Entry<T> copy = entry.copy();
+				final RelationEntry<T> copy = entry.copy();
 				if (!before)
 					copy.setMatchBefore(null);
 				if (!after)

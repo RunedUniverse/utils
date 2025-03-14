@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.conditions.tools.test;
+package net.runeduniverse.lib.utils.conditional.tools.test;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import net.runeduniverse.lib.utils.conditional.tools.ConditionComparator;
-import net.runeduniverse.lib.utils.conditional.tools.EntrySet;
-import net.runeduniverse.lib.utils.conditions.test.model.MvnGoalView;
+import net.runeduniverse.lib.utils.conditional.test.model.MvnGoalView;
+import net.runeduniverse.lib.utils.conditional.tool.ConditionComparator;
+import net.runeduniverse.lib.utils.conditional.tool.RelationEntrySet;
 
+import static net.runeduniverse.lib.utils.conditional.test.model.ModelFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static net.runeduniverse.lib.utils.conditions.test.model.ModelFactory.*;
 
 public class ConditionComparatorTest {
 
 	@Test
 	@Tag("system")
 	public void testCompareWithBeforeNoPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: mycila | before: revelc | mycila > revelc
 		set.add(createGoalConditionMycilaFormatter(), createGoalConditionRevelcFormatter(), null);
 
@@ -49,7 +49,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithAfterNoPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: revelc | after: mycila | revelc < mycila
 		set.add(createGoalConditionRevelcFormatter(), null, createGoalConditionMycilaFormatter());
 
@@ -69,7 +69,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithBeforeWithPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: revelc | before: mycila | priority: 0 | revelc > mycila
 		set.add(createGoalConditionMycilaFormatter(), createGoalConditionRevelcFormatter(0), null);
 		// match: mycila | before: revelc | priority: 1 | mycila > revelc
@@ -90,7 +90,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithAfterWithPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: mycila | after: revelc | priority: 0 | mycila < revelc
 		set.add(createGoalConditionMycilaFormatter(), null, createGoalConditionRevelcFormatter(0));
 		// match: revelc | after: mycila | priority: 1 | revelc < mycila
@@ -111,7 +111,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithInternalCollisionNoPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: mycila | before: revelc | after: revelc | revelc < mycila < revelc =>
 		// forced equal
 		set.add(createGoalConditionMycilaFormatter(), createGoalConditionRevelcFormatter(),
@@ -132,7 +132,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithExternalCollisionNoPriority() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// match: mycila | before: revelc | mycila > revelc
 		set.add(createGoalConditionMycilaFormatter(), createGoalConditionRevelcFormatter(), null);
 		// match: mycila | after: revelc | mycila < revelc
@@ -154,7 +154,7 @@ public class ConditionComparatorTest {
 	@Test
 	@Tag("system")
 	public void testCompareWithEmptySet() {
-		final EntrySet<MvnGoalView> set = new EntrySet<>();
+		final RelationEntrySet<MvnGoalView> set = new RelationEntrySet<>();
 		// => forced equal
 
 		final ConditionComparator<MvnGoalView> comparator = new ConditionComparator<MvnGoalView>(set);
