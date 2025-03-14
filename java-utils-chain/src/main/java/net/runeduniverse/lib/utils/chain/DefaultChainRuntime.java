@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
 import net.runeduniverse.lib.utils.chain.api.Layer;
-import net.runeduniverse.lib.utils.errors.ExceptionSuppressions;
+import net.runeduniverse.lib.utils.error.ExceptionSuppressions;
 
 @SuppressWarnings("deprecation")
 public class DefaultChainRuntime<R> implements ChainRuntime<R> {
