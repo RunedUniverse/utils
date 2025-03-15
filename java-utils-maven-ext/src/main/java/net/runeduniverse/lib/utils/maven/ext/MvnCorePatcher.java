@@ -49,6 +49,7 @@ public class MvnCorePatcher {
 	protected final ExtensionIndex extensionIndex;
 
 	protected boolean coreExtension = false;
+	protected boolean supportBuildExtension = false;
 	// supplier
 	protected ClassRealmFactory extensionRealmFactory = null;
 	// events
@@ -68,8 +69,20 @@ public class MvnCorePatcher {
 		this.extensionIndex = extensionIndex;
 	}
 
-	public void markAsCoreExtension() {
+	public boolean getCoreExtensionFlag() {
+		return this.coreExtension;
+	}
+
+	public boolean getBuildExtensionSupport() {
+		return this.supportBuildExtension;
+	}
+
+	public void flagAsCoreExtension() {
 		this.coreExtension = true;
+	}
+
+	public void withBuildExtensionSupport(final boolean value) {
+		this.supportBuildExtension = value;
 	}
 
 	public void withExtensionRealmFactory(final ClassRealmFactory extensionRealmFactory) {
@@ -123,7 +136,7 @@ public class MvnCorePatcher {
 				callInfo_SwitchRealmToMavenExt();
 				realm = world.getRealm(REALM_ID_MAVEN_EXT);
 				extLoadState = 1;
-			} else {
+			} else if (this.supportBuildExtension) {
 				realm = createExtensionRealm(plexusCore, currentRealm);
 				if (realm == null) {
 					callInfo_InvalidBuildExtension();
@@ -131,6 +144,9 @@ public class MvnCorePatcher {
 				}
 				callInfo_SwitchRealmToBuildExt();
 				extLoadState = 0;
+			} else {
+				callInfo_InvalidBuildExtension();
+				return false;
 			}
 
 			Thread.currentThread()

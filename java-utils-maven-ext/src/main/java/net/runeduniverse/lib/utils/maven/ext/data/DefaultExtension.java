@@ -26,10 +26,10 @@ import org.apache.maven.plugin.PluginDescriptorParsingException;
 import org.apache.maven.plugin.PluginResolutionException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.utils.StringUtils;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.aether.RepositorySystemSession;
 
+import net.runeduniverse.lib.utils.common.StringUtils;
 import net.runeduniverse.lib.utils.maven.ext.data.api.Extension;
 
 public class DefaultExtension implements Extension {
