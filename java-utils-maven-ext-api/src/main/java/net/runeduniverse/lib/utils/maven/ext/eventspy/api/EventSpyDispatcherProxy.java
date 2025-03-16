@@ -30,6 +30,6 @@ public interface EventSpyDispatcherProxy {
 
 	public void onEvent(Object event);
 
-	public void locateDispatcherProxy(final ClassRealm realm) throws ClassNotFoundException, ComponentLookupException;
+	public void locateDispatcherProxy(final ClassRealm realm) throws ComponentLookupException;
 
 }

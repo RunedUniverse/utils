@@ -52,14 +52,15 @@ public class DefaultEventSpyDispatcherProxy implements EventSpyDispatcherProxy, 
 			final ClassRealm currentRealm = (ClassRealm) Thread.currentThread()
 					.getContextClassLoader();
 			try {
-				locateDispatcherProxy(currentRealm);
-			} catch (ClassNotFoundException | ComponentLookupException ignored) {
-			}
-			if (this.proxy == null && this.log.isDebugEnabled()) {
-				this.log.fatalError(
-						"This Maven version does not provide an EventSpyDispatcher class to build-extensions!");
-				this.log.fatalError(
-						"Be adviced that build-extensions are unable to dispatch or receive events at this point!");
+				// validate that dependency is loadable
+				currentRealm.loadClass("org.apache.maven.eventspy.internal.EventSpyDispatcher");
+			} catch (ClassNotFoundException e) {
+				if (this.log.isDebugEnabled()) {
+					this.log.fatalError(
+							"This Maven version does not provide an EventSpyDispatcher class to build-extensions!");
+					this.log.fatalError(
+							"Be adviced that build-extensions are unable to dispatch or receive events at this point!");
+				}
 			}
 		}
 	}
@@ -84,7 +85,8 @@ public class DefaultEventSpyDispatcherProxy implements EventSpyDispatcherProxy, 
 			proxy.onEvent(event);
 	}
 
-	public void locateDispatcherProxy(final ClassRealm realm) throws ClassNotFoundException, ComponentLookupException {
+	@Override
+	public void locateDispatcherProxy(final ClassRealm realm) throws ComponentLookupException {
 		synchronized (this.container) {
 			synchronized (this) {
 				final ClassRealm oldLookupRealm = this.container.setLookupRealm(realm);
@@ -97,6 +99,7 @@ public class DefaultEventSpyDispatcherProxy implements EventSpyDispatcherProxy, 
 					realm.loadClass("org.apache.maven.eventspy.internal.EventSpyDispatcher");
 					// if it did not already fail, than try to load the proxy
 					this.proxy = this.container.lookup(DispatcherProxy.class, "v3.0.2");
+				} catch (ClassNotFoundException ignored) {
 				} finally {
 					Thread.currentThread()
 							.setContextClassLoader(oldClassLoader);
