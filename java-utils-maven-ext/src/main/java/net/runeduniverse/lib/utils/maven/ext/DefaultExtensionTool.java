@@ -54,7 +54,8 @@ import net.runeduniverse.lib.utils.maven.ext.api.ExtensionTool;
 @Component(role = ExtensionTool.class)
 public class DefaultExtensionTool implements ExtensionTool {
 
-	public static final String RESOURCE_PATH_XML_FORMAT_FIX_XSLT = "META-INF/format-xml/xml-format-fix.xslt";
+	public static final String RESOURCE_PATH_XML_FORMAT_FIX_XSLT = "META-INF/xml-format/xml-format-fix.xslt";
+	public static final String RESOURCE_PATH_XML_EXTENSION = "META-INF/xml-template/extensions.xml";
 	public static final String REALM_ID_BUILD_EXT_TEMPLATE = "extension>%s:%s";
 
 	@Requirement
@@ -130,24 +131,45 @@ public class DefaultExtensionTool implements ExtensionTool {
 					ignored);
 			return false;
 		}
+
+		final AtomicBoolean dirty = new AtomicBoolean(false);
 		final Document document;
-		try (InputStream inSream = new FileInputStream(mvnExtConfig.toFile())) {
-			document = builder.parse(inSream);
-		} catch (IOException e) {
-			throw e;
-		} catch (SAXException e) {
-			throw new IOException("Maven extension-configuration ( .mvn/extensions.xml ) is broken!"
-					+ " Check the official reference ( https://maven.apache.org/configure.html ) for the correct configuration!");
+		if (Files.exists(mvnExtConfig)) {
+			try (InputStream inSream = new FileInputStream(mvnExtConfig.toFile())) {
+				document = builder.parse(inSream);
+			} catch (IOException e) {
+				throw e;
+			} catch (SAXException e) {
+				throw new IOException("Maven extension-configuration ( .mvn/extensions.xml ) is broken!"
+						+ " Check the official reference ( https://maven.apache.org/configure.html ) for the correct configuration!");
+			}
+		} else {
+			try (InputStream inSream = getClass().getClassLoader()
+					.getResourceAsStream(RESOURCE_PATH_XML_EXTENSION)) {
+				document = builder.parse(inSream);
+				dirty.set(true);
+			} catch (IOException e) {
+				throw e;
+			} catch (SAXException ignored) {
+				this.log.error("unexpected exception in " + getClass().getCanonicalName() + ".setupAsCoreExtension()",
+						ignored);
+				return false;
+			}
 		}
 
 		final Element ext = acquireExtensionElementFromExtXml(document, groupId, artifactId);
-		final Element versionElement = acquireElement(document, ext, new AtomicBoolean(true), "version", true);
+		final Element versionElement = acquireElement(document, ext, dirty, "version", true);
 		// return if version isn't changing
-		if (version.equals(versionElement.getTextContent()
-				.trim()))
-			return true;
+		String oldVersion = versionElement.getTextContent();
+		if (oldVersion == null || !version.equals(oldVersion.trim())) {
+			versionElement.setTextContent(version);
+			dirty.compareAndSet(false, true);
+		}
 
-		versionElement.setTextContent(version);
+		if (!dirty.get()) {
+			// no elements have been changed! skip writing!
+			return true;
+		}
 
 		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		final Transformer transformer;

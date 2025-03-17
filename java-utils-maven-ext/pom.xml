@@ -150,9 +150,16 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<targetPath>META-INF/format-xml/</targetPath>
+				<targetPath>META-INF/xml-format/</targetPath>
 				<includes>
 					<include>xml-format-fix.xslt</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>META-INF/xml-template/</targetPath>
+				<includes>
+					<include>extensions.xml</include>
 				</includes>
 			</resource>
 		</resources>
