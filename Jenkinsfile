@@ -92,13 +92,7 @@ node {
 		}
 
 		stage('Code Validation') {
-			perModule {
-				if(!module.active()) {
-					skipStage()
-					return
-				}
-				sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve -pl=${ module.relPathFrom('maven-parent') }"
-			}
+			sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve --fail-at-end -T1C"
 		}
 	
 		stage('Install Maven Parent') {
