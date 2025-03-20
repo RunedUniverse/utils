@@ -40,6 +40,7 @@ public interface MavenProperties {
 			public static String PATH = METAINF.PATH + "maven/";
 			public static String PLUGIN_DESCRIPTOR = PATH + "plugin.xml";
 			public static String EXTENSIONS = PATH + "extension.xml";
+			public static String TMP_POM_PROPERTIES = PATH + "%s/%s/pom.properties";
 		}
 
 		public interface PLEXUS {
