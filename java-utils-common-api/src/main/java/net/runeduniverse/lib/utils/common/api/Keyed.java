@@ -13,25 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.runeduniverse.lib.utils.common;
+package net.runeduniverse.lib.utils.common.api;
 
-public class StringUtils {
+public interface Keyed {
 
-	public static boolean isBlank(final String s) {
-		// Null-safe, short-circuit evaluation.
-		return s == null || s.trim()
-				.isEmpty();
-	}
+	public String key();
 
-	public static boolean strEquals(final String a, final String b) {
-		return ComparisonUtils.objectEquals(a, b);
-	}
-
-	public static boolean strEqualsIgnoreCase(final String a, final String b) {
-		if (a == b)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return a.equalsIgnoreCase(b);
-	}
 }

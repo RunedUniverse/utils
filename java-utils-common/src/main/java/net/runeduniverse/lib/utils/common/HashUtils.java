@@ -15,23 +15,19 @@
  */
 package net.runeduniverse.lib.utils.common;
 
-public class StringUtils {
+import net.runeduniverse.lib.utils.common.api.Keyed;
 
-	public static boolean isBlank(final String s) {
-		// Null-safe, short-circuit evaluation.
-		return s == null || s.trim()
-				.isEmpty();
+public class HashUtils {
+
+	public static int hash(final Object o) {
+		if (o == null)
+			return 0;
+		return o.hashCode();
 	}
 
-	public static boolean strEquals(final String a, final String b) {
-		return ComparisonUtils.objectEquals(a, b);
-	}
-
-	public static boolean strEqualsIgnoreCase(final String a, final String b) {
-		if (a == b)
-			return true;
-		if (a == null || b == null)
-			return false;
-		return a.equalsIgnoreCase(b);
+	public static int hashKeyed(final Keyed k) {
+		if (k == null)
+			return 0;
+		return hash(k.key());
 	}
 }
