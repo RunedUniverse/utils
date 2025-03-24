@@ -54,7 +54,7 @@ public class ComparisonUtils {
 		return objectEquals(a.key(), b.key());
 	}
 
-	public static boolean keyedEquals(final Class<?> type, final Keyed a, final Keyed b) {
+	public static <T extends Keyed> boolean keyedEquals(final Class<T> type, final Object a, final Object b) {
 		if (a == b) {
 			if (a == null)
 				return true;
@@ -62,6 +62,6 @@ public class ComparisonUtils {
 		}
 		if (a == null || !typeIsAssignable(type, a.getClass()) || b == null || !typeIsAssignable(type, b.getClass()))
 			return false;
-		return objectEquals(a.key(), b.key());
+		return objectEquals(((Keyed) a).key(), ((Keyed) b).key());
 	}
 }
