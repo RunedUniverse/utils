@@ -17,37 +17,89 @@ package net.runeduniverse.lib.utils.logging.log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTreeStyle;
 import net.runeduniverse.lib.utils.logging.log.api.LogEntry;
 import net.runeduniverse.lib.utils.logging.log.api.TreeRecord;
 
 public class DefaultCompoundTree implements CompoundTree {
 
-	protected final List<LogEntry> entries = new ArrayList<>();
+	protected final CompoundTreeStyle style;
+	protected final List<LogEntry> entries;
 	protected final CharSequence tag;
 	protected final CharSequence title;
 
 	public DefaultCompoundTree() {
-		this(null, null);
+		this(null, null, null);
+	}
+
+	public DefaultCompoundTree(final CompoundTreeStyle style) {
+		this(null, null, style);
 	}
 
 	public DefaultCompoundTree(final CharSequence title) {
-		this(null, title);
+		this(null, title, null);
+	}
+
+	public DefaultCompoundTree(final CharSequence title, final CompoundTreeStyle style) {
+		this(null, title, style);
 	}
 
 	public DefaultCompoundTree(final CharSequence tag, final CharSequence title) {
+		this(tag, title, null);
+	}
+
+	public DefaultCompoundTree(final CharSequence tag, final CharSequence title, final CompoundTreeStyle style) {
+		this(tag, title, style, ArrayList::new);
+	}
+
+	public DefaultCompoundTree(final CharSequence tag, final CharSequence title, final CompoundTreeStyle style,
+			final Supplier<List<LogEntry>> entryListSupplier) {
+		this.style = style == null ? defaultBOM() : style;
+		this.entries = entryListSupplier.get();
 		this.tag = tag;
 		this.title = title;
 	}
 
+	@Override
+	public boolean hasLines() {
+		return checkContent(true, false);
+	}
+
+	@Override
+	public boolean hasSubTrees() {
+		return checkContent(false, true);
+	}
+
+	@Override
+	public boolean hasContent() {
+		return checkContent(true, true);
+	}
+
+	protected boolean checkContent(final boolean matchLines, final boolean matchTrees) {
+		for (LogEntry entry : entries) {
+			// check CompoundTree
+			if (entry instanceof CompoundTree) {
+				if (matchTrees)
+					return true;
+				continue;
+			}
+			// normal entry
+			if (matchLines)
+				return true;
+		}
+		return false;
+	}
+
 	public DefaultCompoundTree append(final CharSequence line) {
-		this.entries.add(new LineEntry(line));
+		this.entries.add(new LineEntry(this.style, line));
 		return this;
 	}
 
 	public DefaultCompoundTree append(final CharSequence tag, final CharSequence line) {
-		this.entries.add(new LineEntry(tag, line));
+		this.entries.add(new LineEntry(this.style, tag, line));
 		return this;
 	}
 
@@ -58,7 +110,7 @@ public class DefaultCompoundTree implements CompoundTree {
 
 	@Override
 	public void toRecord(final TreeRecord rootRecord) {
-		final DefaultTreeRecord record = new DefaultTreeRecord(this.tag, this.title);
+		final DefaultTreeRecord record = new DefaultTreeRecord(this.style, this.tag, this.title);
 		for (LogEntry e : entries)
 			e.toRecord(record);
 		rootRecord.append(record);
@@ -66,9 +118,14 @@ public class DefaultCompoundTree implements CompoundTree {
 
 	@Override
 	public String toString() {
-		final DefaultTreeRecord record = new DefaultTreeRecord(this.tag, this.title);
+		final DefaultTreeRecord record = new DefaultTreeRecord(this.style, this.tag, this.title);
 		for (LogEntry e : entries)
 			e.toRecord(record);
 		return record.toString();
+	}
+
+	public static CompoundTreeStyle defaultBOM() {
+		return new CompoundTreeStyle() {
+		};
 	}
 }

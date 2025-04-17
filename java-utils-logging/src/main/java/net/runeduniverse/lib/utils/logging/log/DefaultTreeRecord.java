@@ -15,29 +15,41 @@
  */
 package net.runeduniverse.lib.utils.logging.log;
 
-import static net.runeduniverse.lib.utils.logging.log.api.CompoundTreeBOM.*;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTreeStyle;
 import net.runeduniverse.lib.utils.logging.log.api.LineRecord;
 import net.runeduniverse.lib.utils.logging.log.api.TreeRecord;
 
 public class DefaultTreeRecord extends DefaultLineRecord implements TreeRecord {
 
-	private final List<LineRecord> subRecords = new ArrayList<>();
+	private final List<LineRecord> subRecords;
 	private int mxTagSize = 0;
 
-	public DefaultTreeRecord(CharSequence title) {
-		super(title);
+	public DefaultTreeRecord(final CompoundTreeStyle style, final CharSequence title) {
+		this(style, title, ArrayList::new);
 	}
 
-	public DefaultTreeRecord(CharSequence tag, CharSequence title) {
-		super(tag, title);
+	public DefaultTreeRecord(final CompoundTreeStyle style, final CharSequence tag, final CharSequence title) {
+		this(style, tag, title, ArrayList::new);
 	}
 
-	public DefaultTreeRecord append(LineRecord record) {
+	public DefaultTreeRecord(final CompoundTreeStyle style, final CharSequence title,
+			final Supplier<List<LineRecord>> subRecordsSupplier) {
+		super(style, title);
+		this.subRecords = subRecordsSupplier.get();
+	}
+
+	public DefaultTreeRecord(final CompoundTreeStyle style, final CharSequence tag, final CharSequence title,
+			final Supplier<List<LineRecord>> subRecordsSupplier) {
+		super(style, tag, title);
+		this.subRecords = subRecordsSupplier.get();
+	}
+
+	public DefaultTreeRecord append(final LineRecord record) {
 		this.subRecords.add(record);
 		int s;
 		if ((s = record.getTagSize()) > this.mxTagSize)
@@ -52,18 +64,18 @@ public class DefaultTreeRecord extends DefaultLineRecord implements TreeRecord {
 		for (int i = 0; i < baseOffset.length; i++)
 			offset[i] = baseOffset[i];
 		if (baseOffset.length > 1) {
-			if (baseOffset[baseOffset.length - 1] == ELEMENT_OFFSET)
-				offset[baseOffset.length - 1] = EMPTY_ELEMENT_OFFSET;
-			if (baseOffset[baseOffset.length - 1] == LAST_ELEMENT_OFFSET)
-				offset[baseOffset.length - 1] = NO_ELEMENT_OFFSET;
+			if (baseOffset[baseOffset.length - 1] == this.style.getElementOffset())
+				offset[baseOffset.length - 1] = this.style.getEmptyElementOffset();
+			if (baseOffset[baseOffset.length - 1] == this.style.getLastElementOffset())
+				offset[baseOffset.length - 1] = this.style.getNoElementOffset();
 		}
 
 		for (Iterator<LineRecord> iterator = subRecords.iterator(); iterator.hasNext();) {
 			final LineRecord r = (LineRecord) iterator.next();
 			if (iterator.hasNext())
-				offset[baseOffset.length] = ELEMENT_OFFSET;
+				offset[baseOffset.length] = this.style.getElementOffset();
 			else
-				offset[baseOffset.length] = LAST_ELEMENT_OFFSET;
+				offset[baseOffset.length] = this.style.getLastElementOffset();
 			builder.append(r.write(offset, this.mxTagSize));
 		}
 		return builder.toString();
@@ -71,6 +83,6 @@ public class DefaultTreeRecord extends DefaultLineRecord implements TreeRecord {
 
 	@Override
 	public String toString() {
-		return this.write(new CharSequence[] { INITIAL_OFFSET }, 0);
+		return this.write(new CharSequence[] { this.style.getInitialOffset() }, 0);
 	}
 }

@@ -15,25 +15,29 @@
  */
 package net.runeduniverse.lib.utils.logging.log;
 
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTreeStyle;
 import net.runeduniverse.lib.utils.logging.log.api.LogEntry;
 import net.runeduniverse.lib.utils.logging.log.api.TreeRecord;
 
 public class LineEntry implements LogEntry {
 
+	protected final CompoundTreeStyle style;
+
 	protected CharSequence tag;
 	protected CharSequence content;
 
-	public LineEntry(CharSequence content) {
-		this(null, content);
+	public LineEntry(final CompoundTreeStyle style, final CharSequence content) {
+		this(style, null, content);
 	}
 
-	public LineEntry(CharSequence tag, CharSequence content) {
+	public LineEntry(final CompoundTreeStyle style, final CharSequence tag, final CharSequence content) {
+		this.style = style;
 		this.tag = tag;
 		this.content = content;
 	}
 
 	@Override
-	public void toRecord(TreeRecord record) {
-		record.append(new DefaultLineRecord(this.tag, this.content));
+	public void toRecord(final TreeRecord record) {
+		record.append(new DefaultLineRecord(this.style, this.tag, this.content));
 	}
 }

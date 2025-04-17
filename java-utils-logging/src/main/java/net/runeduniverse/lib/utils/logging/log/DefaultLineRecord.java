@@ -15,27 +15,29 @@
  */
 package net.runeduniverse.lib.utils.logging.log;
 
-import static net.runeduniverse.lib.utils.logging.log.api.CompoundTreeBOM.*;
-
 import lombok.Getter;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTreeStyle;
 import net.runeduniverse.lib.utils.logging.log.api.LineRecord;
 
 public class DefaultLineRecord implements LineRecord {
+
+	protected final CompoundTreeStyle style;
 
 	protected CharSequence tag = null;
 	protected CharSequence content = null;
 	@Getter
 	private int tagSize;
 
-	public DefaultLineRecord(final CharSequence content) {
-		this(null, content);
+	public DefaultLineRecord(final CompoundTreeStyle style, final CharSequence content) {
+		this(style, null, content);
 	}
 
-	public DefaultLineRecord(final CharSequence tag, final CharSequence content) {
+	public DefaultLineRecord(final CompoundTreeStyle style, final CharSequence tag, final CharSequence content) {
+		this.style = style;
 		if (tag == null)
 			this.tagSize = 0;
 		else {
-			this.tag = TAGS_TO_UPPER ? tag.toString()
+			this.tag = this.style.getTagsToUpper() ? tag.toString()
 					.toUpperCase() : tag.toString();
 			this.tagSize = this.tag.length();
 		}
@@ -46,10 +48,11 @@ public class DefaultLineRecord implements LineRecord {
 		if (this.tag == null)
 			return (String) this.content + '\n';
 
-		final StringBuilder builder = new StringBuilder(String.format(TAGGED_TXT_BOX.toString(), this.tag));
+		final StringBuilder builder = new StringBuilder(String.format(this.style.getTaggedTxtBox()
+				.toString(), this.tag));
 		for (int i = 0; i < (tagSize - this.tagSize); i++)
 			builder.append(' ');
-		builder.append(TAGGED_TXT_SPLITTER)
+		builder.append(this.style.getTaggedTxtSplitter())
 				.append(this.content)
 				.append('\n');
 		return builder.toString();

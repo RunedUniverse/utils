@@ -17,6 +17,12 @@ package net.runeduniverse.lib.utils.logging.log.api;
 
 public interface CompoundTree extends LogEntry {
 
+	public boolean hasLines();
+
+	public boolean hasSubTrees();
+
+	public boolean hasContent();
+
 	public CompoundTree append(CharSequence line);
 
 	public CompoundTree append(CharSequence tag, CharSequence line);
