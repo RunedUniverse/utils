@@ -288,8 +288,10 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		extensions.addAll(this.coreExtensions);
 
 		// scan build-extensions = only "extension>" realms should be directly imported
-		for (ClassRealm realm : mvnProject.getClassRealm()
-				.getImportRealms()) {
+		final ClassRealm projectRealm = mvnProject.getClassRealm();
+		if (projectRealm == null)
+			return;
+		for (ClassRealm realm : projectRealm.getImportRealms()) {
 			final Set<Extension> set = this.realmMap.get(realm);
 			if (set == null)
 				continue;
