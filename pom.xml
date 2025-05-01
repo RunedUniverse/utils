@@ -40,13 +40,15 @@
 		<module>java-utils-common</module>
 		<module>java-utils-conditional-api</module>
 		<module>java-utils-conditional</module>
+		<module>java-utils-config-api</module>
+		<module>java-utils-config</module>
 		<module>java-utils-errors</module>
 		<module>java-utils-logging-api</module>
 		<module>java-utils-logging</module>
-		<module>java-utils-maven-api</module>
-		<module>java-utils-maven</module>
-		<module>java-utils-maven-ext-api</module>
-		<module>java-utils-maven-ext</module>
+		<module>java-utils-maven3-api</module>
+		<module>java-utils-maven3</module>
+		<module>java-utils-maven3-ext-api</module>
+		<module>java-utils-maven3-ext</module>
 		<module>java-utils-plexus</module>
 		<module>java-utils-scanner-api</module>
 		<module>java-utils-scanner</module>

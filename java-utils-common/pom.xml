@@ -30,7 +30,7 @@
 	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Java Utils Common</name>
+	<name>Java Common Utils</name>
 	<url>https://github.com/RunedUniverse/utils</url>
 	<inceptionYear>2021</inceptionYear>
 

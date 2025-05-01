@@ -30,7 +30,7 @@
 	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Java Utils Conditional [API]</name>
+	<name>Java Conditional Utils [API]</name>
 	<url>https://github.com/RunedUniverse/utils</url>
 	<inceptionYear>2025</inceptionYear>
 

@@ -30,7 +30,7 @@
 	<version>2.2.0</version>
 	<packaging>jar</packaging>
 
-	<name>Java Utils Async</name>
+	<name>Java Async Utils</name>
 	<url>https://github.com/RunedUniverse/utils</url>
 	<inceptionYear>2021</inceptionYear>
 
