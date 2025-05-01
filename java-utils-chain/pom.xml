@@ -30,7 +30,7 @@
 	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>Chain Library</name>
+	<name>Java Chain Library</name>
 	<url>https://github.com/RunedUniverse/utils</url>
 	<inceptionYear>2021</inceptionYear>
 
