@@ -6,7 +6,7 @@ def installArtifact(mod) {
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		dir(path: "${ module.path() }/target") {
+		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
 			// copy pom & signatures
 			sh "cp *.pom *.asc ${ RESULT_PATH }"
