@@ -17,48 +17,85 @@ package net.runeduniverse.lib.utils.common.api;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public interface DataMap<K, V, D> {
 
-	V put(K key, V value);
+	public V put(K key, V value);
 
-	V put(K key, V value, D data);
+	public V put(K key, V value, D data);
 
-	V get(K key);
+	public V get(K key);
 
-	V remove(K key);
+	public D getData(K key);
 
-	void clear();
+	public V remove(K key);
 
-	void setData(K key, D data);
+	public void clear();
 
-	D getData(K key);
+	public V putValue(K key, V value);
 
-	int size();
+	public D putData(K key, D data);
 
-	boolean containsKey(K key);
+	public void setValue(K key, V value);
 
-	boolean containsKey(K key, D data);
+	public void setData(K key, D data);
 
-	boolean containsValue(V value);
+	public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
 
-	boolean containsValue(V value, D data);
+	public D computeDataIfAbsent(K key, Function<? super K, ? extends D> mappingFunction);
 
-	void forEach(BiConsumer<K, V> action);
+	public int size();
 
-	void forEach(D data, BiConsumer<K, V> action);
+	public boolean containsKey(K key);
 
-	void forEach(TriConsumer<K, V, D> action);
+	public boolean containsKey(K key, D data);
 
-	Set<K> keySet();
+	public boolean containsValue(V value);
 
-	Set<Value<V, D>> valueSet();
+	public boolean containsValue(V value, D data);
 
-	public interface Value<V, M> {
+	public void forEach(BiConsumer<K, V> action);
+
+	public void forEach(D data, BiConsumer<K, V> action);
+
+	public void forEach(TriConsumer<K, V, D> action);
+
+	public Set<K> keySet();
+
+	public Set<InternalEntry<V, D>> internalEntrySet();
+
+	public interface InternalEntry<V, D> {
+
+		public Object lock();
 
 		public V getValue();
 
-		public M getData();
+		public D getData();
+
+		public void setValue(V value);
+
+		public void setData(D data);
+
+		public default <K> V computeValueIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
+			synchronized (lock()) {
+				V value = getValue();
+				if (value != null)
+					return value;
+				setValue(value = mappingFunction.apply(key));
+				return value;
+			}
+		}
+
+		public default <K> D computeDataIfAbsent(final K key, final Function<? super K, ? extends D> mappingFunction) {
+			synchronized (lock()) {
+				D data = getData();
+				if (data != null)
+					return data;
+				setData(data = mappingFunction.apply(key));
+				return data;
+			}
+		}
 
 	}
 

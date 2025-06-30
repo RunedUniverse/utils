@@ -19,8 +19,20 @@ import java.util.LinkedHashMap;
 
 public class LinkedDataHashMap<K, V, D> extends DataHashMap<K, V, D> {
 
+	public LinkedDataHashMap(final int initialCapacity, final float loadFactor) {
+		super(new LinkedHashMap<>(initialCapacity, loadFactor));
+	}
+
+	public LinkedDataHashMap(final int initialCapacity) {
+		super(new LinkedHashMap<>(initialCapacity));
+	}
+
 	public LinkedDataHashMap() {
 		super(new LinkedHashMap<>());
+	}
+
+	public LinkedDataHashMap(final int initialCapacity, final float loadFactor, final boolean accessOrder) {
+		super(new LinkedHashMap<>(initialCapacity, loadFactor, accessOrder));
 	}
 
 }

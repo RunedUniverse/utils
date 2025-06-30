@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import lombok.Data;
 import net.runeduniverse.lib.utils.common.api.DataMap;
@@ -40,12 +41,17 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public V put(final K key, final V value) {
-		return MEntry.getValue(this.map.put(key, new MEntry<>(value)));
+		final MEntry<V, D> entry = createEntry(key);
+		entry.setValue(value);
+		return MEntry.getValue(this.map.put(key, entry));
 	}
 
 	@Override
 	public V put(final K key, final V value, final D data) {
-		return MEntry.getValue(this.map.put(key, new MEntry<>(value, data)));
+		final MEntry<V, D> entry = createEntry(key);
+		entry.setValue(value);
+		entry.setData(data);
+		return MEntry.getValue(this.map.put(key, entry));
 	}
 
 	@Override
@@ -64,6 +70,29 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
+	public V putValue(final K key, final V value) {
+		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final V oldValue = entry.getValue();
+		entry.setValue(value);
+		return oldValue;
+	}
+
+	@Override
+	public D putData(final K key, final D data) {
+		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final D oldData = entry.getData();
+		entry.setData(data);
+		return oldData;
+	}
+
+	@Override
+	public void setValue(K key, V value) {
+		final MEntry<V, D> entry = this.map.get(key);
+		if (entry != null)
+			entry.setValue(value);
+	}
+
+	@Override
 	public void setData(final K key, final D data) {
 		final MEntry<V, D> entry = this.map.get(key);
 		if (entry != null)
@@ -73,6 +102,18 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	@Override
 	public D getData(final K key) {
 		return MEntry.getData(this.map.get(key));
+	}
+
+	@Override
+	public V computeIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
+		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		return entry.computeValueIfAbsent(key, mappingFunction);
+	}
+
+	@Override
+	public D computeDataIfAbsent(final K key, final Function<? super K, ? extends D> mappingFunction) {
+		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		return entry.computeDataIfAbsent(key, mappingFunction);
 	}
 
 	@Override
@@ -149,31 +190,41 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
-	public Set<DataMap.Value<V, D>> valueSet() {
-		return new HashSet<DataMap.Value<V, D>>(this.map.values());
+	public Set<DataMap.InternalEntry<V, D>> internalEntrySet() {
+		return new HashSet<DataMap.InternalEntry<V, D>>(this.map.values());
+	}
+
+	protected MEntry<V, D> createEntry(final K key) {
+		return new MEntry<>();
 	}
 
 	@Data
-	protected static class MEntry<V, D> implements DataMap.Value<V, D> {
+	protected static class MEntry<V, D> implements DataMap.InternalEntry<V, D> {
 
-		private V value;
-		private D data;
+		protected V value = null;
+		protected D data = null;
 
-		protected MEntry(V value) {
-			this.value = value;
-			this.data = null;
+		public Object lock() {
+			return this;
 		}
 
-		protected MEntry(V value, D data) {
-			this.value = value;
-			this.data = data;
+		public void setValue(final V value) {
+			synchronized (lock()) {
+				this.value = value;
+			}
 		}
 
-		public static <V, D> V getValue(MEntry<V, D> entry) {
+		public void setData(final D data) {
+			synchronized (lock()) {
+				this.data = data;
+			}
+		}
+
+		public static <V, D> V getValue(final MEntry<V, D> entry) {
 			return entry == null ? null : entry.getValue();
 		}
 
-		public static <V, D> D getData(MEntry<V, D> entry) {
+		public static <V, D> D getData(final MEntry<V, D> entry) {
 			return entry == null ? null : entry.getData();
 		}
 

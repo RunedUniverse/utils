@@ -26,7 +26,7 @@ public interface TriConsumer<A, B, C> {
 	 * @param b the second input argument
 	 * @param c the second input argument
 	 */
-	void accept(A a, B b, C c);
+	public void accept(A a, B b, C c);
 
 	/**
 	 * Returns a composed {@code TriConsumer} that performs, in sequence, this
@@ -40,7 +40,7 @@ public interface TriConsumer<A, B, C> {
 	 *         operation followed by the {@code after} operation
 	 * @throws NullPointerException if {@code after} is null
 	 */
-	default TriConsumer<A, B, C> andThen(TriConsumer<? super A, ? super B, ? super C> after) {
+	public default TriConsumer<A, B, C> andThen(TriConsumer<? super A, ? super B, ? super C> after) {
 		Objects.requireNonNull(after);
 
 		return (a, b, c) -> {
