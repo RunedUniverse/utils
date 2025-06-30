@@ -48,6 +48,8 @@ public interface DataMap<K, V, D> {
 
 	public int size();
 
+	public boolean isEmpty();
+
 	public boolean containsKey(K key);
 
 	public boolean containsKey(K key, D data);

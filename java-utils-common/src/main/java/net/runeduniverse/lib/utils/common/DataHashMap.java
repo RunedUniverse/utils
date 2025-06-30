@@ -122,6 +122,11 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return this.map.isEmpty();
+	}
+
+	@Override
 	public boolean containsKey(final K key) {
 		return this.map.containsKey(key);
 	}
