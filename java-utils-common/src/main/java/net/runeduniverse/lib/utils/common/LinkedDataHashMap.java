@@ -16,6 +16,7 @@
 package net.runeduniverse.lib.utils.common;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class LinkedDataHashMap<K, V, D> extends DataHashMap<K, V, D> {
 
@@ -33,6 +34,16 @@ public class LinkedDataHashMap<K, V, D> extends DataHashMap<K, V, D> {
 
 	public LinkedDataHashMap(final int initialCapacity, final float loadFactor, final boolean accessOrder) {
 		super(new LinkedHashMap<>(initialCapacity, loadFactor, accessOrder));
+	}
+
+	@Override
+	protected Map<K, V> createValueMap() {
+		return new LinkedHashMap<>();
+	}
+
+	@Override
+	protected Map<K, D> createDataMap() {
+		return new LinkedHashMap<>();
 	}
 
 }

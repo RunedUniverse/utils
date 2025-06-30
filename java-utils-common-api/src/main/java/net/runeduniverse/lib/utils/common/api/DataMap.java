@@ -15,6 +15,7 @@
  */
 package net.runeduniverse.lib.utils.common.api;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -64,6 +65,10 @@ public interface DataMap<K, V, D> {
 	public Set<K> keySet();
 
 	public Set<InternalEntry<V, D>> internalEntrySet();
+
+	public Map<K, V> toValueMap();
+
+	public Map<K, D> toDataMap();
 
 	public interface InternalEntry<V, D> {
 

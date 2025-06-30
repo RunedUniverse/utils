@@ -198,6 +198,34 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 		return new MEntry<>();
 	}
 
+	protected Map<K, V> createValueMap() {
+		return new HashMap<>();
+	}
+
+	protected Map<K, D> createDataMap() {
+		return new HashMap<>();
+	}
+
+	@Override
+	public Map<K, V> toValueMap() {
+		final Map<K, V> map = createValueMap();
+
+		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+			map.put(entry.getKey(), MEntry.getValue(entry.getValue()));
+
+		return map;
+	}
+
+	@Override
+	public Map<K, D> toDataMap() {
+		final Map<K, D> map = createDataMap();
+
+		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+			map.put(entry.getKey(), MEntry.getData(entry.getValue()));
+
+		return map;
+	}
+
 	@Data
 	protected static class MEntry<V, D> implements DataMap.InternalEntry<V, D> {
 
