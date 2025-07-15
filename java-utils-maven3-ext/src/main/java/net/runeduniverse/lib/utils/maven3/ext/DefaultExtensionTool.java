@@ -91,14 +91,16 @@ public class DefaultExtensionTool implements ExtensionTool {
 			return false;
 
 		boolean buildExtActive = false;
-		for (ClassRealm realm : mvnProject.getClassRealm()
-				.getWorld()
-				.getRealms()) {
-			if (realm == null)
-				continue;
-			if (realm.getId()
-					.startsWith(String.format(REALM_ID_BUILD_EXT_TEMPLATE, groupId, artifactId)))
-				buildExtActive = true;
+		final ClassRealm prjRealm = mvnProject.getClassRealm();
+		if (prjRealm != null) {
+			for (ClassRealm realm : prjRealm.getWorld()
+					.getRealms()) {
+				if (realm == null)
+					continue;
+				if (realm.getId()
+						.startsWith(String.format(REALM_ID_BUILD_EXT_TEMPLATE, groupId, artifactId)))
+					buildExtActive = true;
+			}
 		}
 
 		final MavenProject topLevelMvnProject = mvnSession.getTopLevelProject();
