@@ -15,35 +15,31 @@
  */
 package net.runeduniverse.lib.utils.common;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
-public class LinkedDataHashMap<K, V, D> extends DataHashMap<K, V, D> {
+public class HashDataMap<K, V, D> extends AbstractDataMap<K, V, D> {
 
-	public LinkedDataHashMap(final int initialCapacity, final float loadFactor) {
-		super(new LinkedHashMap<>(initialCapacity, loadFactor));
+	public HashDataMap(final int initialCapacity, final float loadFactor) {
+		super(new HashMap<>(initialCapacity, loadFactor));
 	}
 
-	public LinkedDataHashMap(final int initialCapacity) {
-		super(new LinkedHashMap<>(initialCapacity));
+	public HashDataMap(final int initialCapacity) {
+		super(new HashMap<>(initialCapacity));
 	}
 
-	public LinkedDataHashMap() {
-		super(new LinkedHashMap<>());
-	}
-
-	public LinkedDataHashMap(final int initialCapacity, final float loadFactor, final boolean accessOrder) {
-		super(new LinkedHashMap<>(initialCapacity, loadFactor, accessOrder));
+	public HashDataMap() {
+		super(new HashMap<>());
 	}
 
 	@Override
 	protected Map<K, V> createValueMap() {
-		return new LinkedHashMap<>();
+		return new HashMap<>();
 	}
 
 	@Override
 	protected Map<K, D> createDataMap() {
-		return new LinkedHashMap<>();
+		return new HashMap<>();
 	}
 
 }

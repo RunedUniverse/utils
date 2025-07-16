@@ -27,28 +27,24 @@ import lombok.Data;
 import net.runeduniverse.lib.utils.common.api.DataMap;
 import net.runeduniverse.lib.utils.common.api.TriConsumer;
 
-public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
+public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 
-	protected final Map<K, MEntry<V, D>> map;
+	protected final Map<K, MEntry<K, V, D>> map;
 
-	public DataHashMap() {
-		this.map = new HashMap<>();
-	}
-
-	protected DataHashMap(final Map<K, MEntry<V, D>> map) {
+	protected AbstractDataMap(final Map<K, MEntry<K, V, D>> map) {
 		this.map = map;
 	}
 
 	@Override
 	public V put(final K key, final V value) {
-		final MEntry<V, D> entry = createEntry(key);
+		final MEntry<K, V, D> entry = createEntry(key);
 		entry.setValue(value);
 		return MEntry.getValue(this.map.put(key, entry));
 	}
 
 	@Override
 	public V put(final K key, final V value, final D data) {
-		final MEntry<V, D> entry = createEntry(key);
+		final MEntry<K, V, D> entry = createEntry(key);
 		entry.setValue(value);
 		entry.setData(data);
 		return MEntry.getValue(this.map.put(key, entry));
@@ -71,7 +67,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public V putValue(final K key, final V value) {
-		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
 		final V oldValue = entry.getValue();
 		entry.setValue(value);
 		return oldValue;
@@ -79,7 +75,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public D putData(final K key, final D data) {
-		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
 		final D oldData = entry.getData();
 		entry.setData(data);
 		return oldData;
@@ -87,14 +83,14 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void setValue(K key, V value) {
-		final MEntry<V, D> entry = this.map.get(key);
+		final MEntry<K, V, D> entry = this.map.get(key);
 		if (entry != null)
 			entry.setValue(value);
 	}
 
 	@Override
 	public void setData(final K key, final D data) {
-		final MEntry<V, D> entry = this.map.get(key);
+		final MEntry<K, V, D> entry = this.map.get(key);
 		if (entry != null)
 			entry.setData(data);
 	}
@@ -106,13 +102,13 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public V computeIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
-		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
 		return entry.computeValueIfAbsent(key, mappingFunction);
 	}
 
 	@Override
 	public D computeDataIfAbsent(final K key, final Function<? super K, ? extends D> mappingFunction) {
-		final MEntry<V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
+		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
 		return entry.computeDataIfAbsent(key, mappingFunction);
 	}
 
@@ -133,7 +129,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public boolean containsKey(final K key, final D data) {
-		final MEntry<V, D> entry = this.map.get(key);
+		final MEntry<K, V, D> entry = this.map.get(key);
 		if (entry == null)
 			return false;
 		final D eData = entry.getData();
@@ -144,7 +140,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public boolean containsValue(final V value) {
-		for (MEntry<V, D> entry : this.map.values()) {
+		for (MEntry<K, V, D> entry : this.map.values()) {
 			final V eValue = entry.getValue();
 			if (eValue != null && eValue.equals(value))
 				return true;
@@ -154,7 +150,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public boolean containsValue(final V value, final D data) {
-		for (MEntry<V, D> entry : this.map.values()) {
+		for (MEntry<K, V, D> entry : this.map.values()) {
 			final D eData = entry.getData();
 			if (eData != null && eData.equals(data)) {
 				final V meValue = entry.getValue();
@@ -167,13 +163,13 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void forEach(final BiConsumer<K, V> action) {
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
 	}
 
 	@Override
 	public void forEach(final D modifier, final BiConsumer<K, V> action) {
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet()) {
+		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet()) {
 			final D eData = MEntry.getData(entry.getValue());
 			if (eData == null) {
 				if (modifier == null)
@@ -185,7 +181,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void forEach(final TriConsumer<K, V, D> action) {
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()), MEntry.getData(entry.getValue()));
 	}
 
@@ -195,12 +191,12 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
-	public Set<DataMap.InternalEntry<V, D>> internalEntrySet() {
-		return new HashSet<DataMap.InternalEntry<V, D>>(this.map.values());
+	public Set<DataMap.InternalEntry<K, V, D>> internalEntrySet() {
+		return new HashSet<DataMap.InternalEntry<K, V, D>>(this.map.values());
 	}
 
-	protected MEntry<V, D> createEntry(final K key) {
-		return new MEntry<>();
+	protected MEntry<K, V, D> createEntry(final K key) {
+		return new MEntry<>(key);
 	}
 
 	protected Map<K, V> createValueMap() {
@@ -215,7 +211,7 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	public Map<K, V> toValueMap() {
 		final Map<K, V> map = createValueMap();
 
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			map.put(entry.getKey(), MEntry.getValue(entry.getValue()));
 
 		return map;
@@ -225,17 +221,22 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 	public Map<K, D> toDataMap() {
 		final Map<K, D> map = createDataMap();
 
-		for (Entry<K, MEntry<V, D>> entry : this.map.entrySet())
+		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			map.put(entry.getKey(), MEntry.getData(entry.getValue()));
 
 		return map;
 	}
 
 	@Data
-	protected static class MEntry<V, D> implements DataMap.InternalEntry<V, D> {
+	protected static class MEntry<K, V, D> implements DataMap.InternalEntry<K, V, D> {
 
+		protected final K key;
 		protected V value = null;
 		protected D data = null;
+
+		protected MEntry(final K key) {
+			this.key = key;
+		}
 
 		public Object lock() {
 			return this;
@@ -253,11 +254,11 @@ public class DataHashMap<K, V, D> implements DataMap<K, V, D> {
 			}
 		}
 
-		public static <V, D> V getValue(final MEntry<V, D> entry) {
+		public static <K, V, D> V getValue(final MEntry<K, V, D> entry) {
 			return entry == null ? null : entry.getValue();
 		}
 
-		public static <V, D> D getData(final MEntry<V, D> entry) {
+		public static <K, V, D> D getData(final MEntry<K, V, D> entry) {
 			return entry == null ? null : entry.getData();
 		}
 

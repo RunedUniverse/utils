@@ -66,15 +66,17 @@ public interface DataMap<K, V, D> {
 
 	public Set<K> keySet();
 
-	public Set<InternalEntry<V, D>> internalEntrySet();
+	public Set<InternalEntry<K, V, D>> internalEntrySet();
 
 	public Map<K, V> toValueMap();
 
 	public Map<K, D> toDataMap();
 
-	public interface InternalEntry<V, D> {
+	public interface InternalEntry<K, V, D> {
 
 		public Object lock();
+
+		public K getKey();
 
 		public V getValue();
 
@@ -84,7 +86,7 @@ public interface DataMap<K, V, D> {
 
 		public void setData(D data);
 
-		public default <K> V computeValueIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
+		public default <T> V computeValueIfAbsent(final T key, final Function<? super T, ? extends V> mappingFunction) {
 			synchronized (lock()) {
 				V value = getValue();
 				if (value != null)
@@ -94,7 +96,7 @@ public interface DataMap<K, V, D> {
 			}
 		}
 
-		public default <K> D computeDataIfAbsent(final K key, final Function<? super K, ? extends D> mappingFunction) {
+		public default <T> D computeDataIfAbsent(final T key, final Function<? super T, ? extends D> mappingFunction) {
 			synchronized (lock()) {
 				D data = getData();
 				if (data != null)
