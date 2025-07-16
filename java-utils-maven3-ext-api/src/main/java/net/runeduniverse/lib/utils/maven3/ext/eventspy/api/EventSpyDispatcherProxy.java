@@ -24,7 +24,7 @@ public interface EventSpyDispatcherProxy {
 	 * Check the state of the maven wide events for this instance
 	 *
 	 * @return {@code true} if this proxy can dispatch events through maven's event
-	 *         dispatcher ({@code EventSpyDispatcher} else {@code false}
+	 *         dispatcher ({@code EventSpyDispatcher}) else {@code false}
 	 */
 	public boolean getFeatureState();
 
