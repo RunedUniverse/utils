@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import lombok.Data;
@@ -103,13 +104,38 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 	@Override
 	public V computeIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
 		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
-		return entry.computeValueIfAbsent(key, mappingFunction);
+		return entry.computeValueIfAbsent(mappingFunction);
 	}
 
 	@Override
 	public D computeDataIfAbsent(final K key, final Function<? super K, ? extends D> mappingFunction) {
 		final MEntry<K, V, D> entry = this.map.computeIfAbsent(key, this::createEntry);
-		return entry.computeDataIfAbsent(key, mappingFunction);
+		return entry.computeDataIfAbsent(mappingFunction);
+	}
+
+	@Override
+	public V computeIfPresent(final K key, BiFunction<? super K, ? super V, ? extends V> mappingFunction) {
+		final MEntry<K, V, D> newEntry = this.map.computeIfPresent(key, (k, entry) -> {
+			if (entry.getValue() == null)
+				return entry;
+			if (entry.computeValueIfPresent(mappingFunction) == null)
+				return null;
+			return entry;
+		});
+		if (newEntry == null)
+			return null;
+		return newEntry.getValue();
+	}
+
+	@Override
+	public D computeDataIfPresent(final K key, BiFunction<? super K, ? super D, ? extends D> mappingFunction) {
+		final MEntry<K, V, D> newEntry = this.map.computeIfPresent(key, (k, entry) -> {
+			entry.computeDataIfPresent(mappingFunction);
+			return entry;
+		});
+		if (newEntry == null)
+			return null;
+		return newEntry.getData();
 	}
 
 	@Override
@@ -251,6 +277,34 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 		public void setData(final D data) {
 			synchronized (lock()) {
 				this.data = data;
+			}
+		}
+
+		@Override
+		public V computeValueIfAbsent(Function<? super K, ? extends V> mappingFunction) {
+			synchronized (lock()) {
+				return InternalEntry.super.computeValueIfAbsent(mappingFunction);
+			}
+		}
+
+		@Override
+		public D computeDataIfAbsent(Function<? super K, ? extends D> mappingFunction) {
+			synchronized (lock()) {
+				return InternalEntry.super.computeDataIfAbsent(mappingFunction);
+			}
+		}
+
+		@Override
+		public V computeValueIfPresent(BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+			synchronized (lock()) {
+				return InternalEntry.super.computeValueIfPresent(remappingFunction);
+			}
+		}
+
+		@Override
+		public D computeDataIfPresent(BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
+			synchronized (lock()) {
+				return InternalEntry.super.computeDataIfPresent(remappingFunction);
 			}
 		}
 

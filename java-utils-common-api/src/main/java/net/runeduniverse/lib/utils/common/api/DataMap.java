@@ -16,8 +16,10 @@
 package net.runeduniverse.lib.utils.common.api;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface DataMap<K, V, D> {
@@ -45,6 +47,10 @@ public interface DataMap<K, V, D> {
 	public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction);
 
 	public D computeDataIfAbsent(K key, Function<? super K, ? extends D> mappingFunction);
+
+	public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> mappingFunction);
+
+	public D computeDataIfPresent(K key, BiFunction<? super K, ? super D, ? extends D> mappingFunction);
 
 	public int size();
 
@@ -86,24 +92,50 @@ public interface DataMap<K, V, D> {
 
 		public void setData(D data);
 
-		public default <T> V computeValueIfAbsent(final T key, final Function<? super T, ? extends V> mappingFunction) {
-			synchronized (lock()) {
-				V value = getValue();
-				if (value != null)
-					return value;
-				setValue(value = mappingFunction.apply(key));
-				return value;
+		public default V computeValueIfAbsent(Function<? super K, ? extends V> mappingFunction) {
+			Objects.requireNonNull(mappingFunction);
+			final V v;
+			if ((v = getValue()) == null) {
+				final V newValue;
+				if ((newValue = mappingFunction.apply(getKey())) != null) {
+					setValue(newValue);
+					return newValue;
+				}
 			}
+			return v;
 		}
 
-		public default <T> D computeDataIfAbsent(final T key, final Function<? super T, ? extends D> mappingFunction) {
-			synchronized (lock()) {
-				D data = getData();
-				if (data != null)
-					return data;
-				setData(data = mappingFunction.apply(key));
-				return data;
+		public default D computeDataIfAbsent(Function<? super K, ? extends D> mappingFunction) {
+			Objects.requireNonNull(mappingFunction);
+			final D d;
+			if ((d = getData()) == null) {
+				final D newData;
+				if ((newData = mappingFunction.apply(getKey())) != null) {
+					setData(newData);
+					return newData;
+				}
 			}
+			return d;
+		}
+
+		public default V computeValueIfPresent(BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+			Objects.requireNonNull(remappingFunction);
+			final V oldValue;
+			if ((oldValue = getValue()) == null)
+				return null;
+			final V newValue = remappingFunction.apply(getKey(), oldValue);
+			setValue(newValue);
+			return newValue;
+		}
+
+		public default D computeDataIfPresent(BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
+			Objects.requireNonNull(remappingFunction);
+			final D oldData;
+			if ((oldData = getData()) == null)
+				return null;
+			final D newData = remappingFunction.apply(getKey(), oldData);
+			setData(newData);
+			return newData;
 		}
 
 	}
