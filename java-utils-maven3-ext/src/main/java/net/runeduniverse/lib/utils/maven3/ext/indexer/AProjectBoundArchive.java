@@ -15,13 +15,9 @@
  */
 package net.runeduniverse.lib.utils.maven3.ext.indexer;
 
+import java.util.Collection;
 import java.util.Map;
-
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.execution.ProjectDependencyGraph;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.component.annotations.Requirement;
-
 import net.runeduniverse.lib.utils.logging.log.DefaultCompoundTree;
 import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
 import net.runeduniverse.lib.utils.logging.log.api.Recordable;
@@ -29,9 +25,6 @@ import net.runeduniverse.lib.utils.maven3.ext.indexer.api.ProjectBoundRegistry;
 
 public abstract class AProjectBoundArchive<S> extends AProjectBoundRegistry<S>
 		implements ProjectBoundRegistry<S>, Recordable {
-
-	@Requirement
-	protected MavenSession mvnSession;
 
 	protected AProjectBoundArchive() {
 		super();
@@ -45,17 +38,19 @@ public abstract class AProjectBoundArchive<S> extends AProjectBoundRegistry<S>
 	public S createSector(final MavenProject mvnProject) {
 		final S sector = super.createSector(mvnProject);
 
-		final ProjectDependencyGraph graph = this.mvnSession.getProjectDependencyGraph();
-		// this should contain max 1 project
-		for (MavenProject upstreamMvnProject : graph.getUpstreamProjects(mvnProject, false))
+		final MavenProject upstreamMvnProject = mvnProject.getParent();
+		if (upstreamMvnProject != null)
 			_updateSector(sector, this.sectors.get(upstreamMvnProject));
 
 		S downstreamSector = null;
-		for (MavenProject downstreamMvnProject : graph.getDownstreamProjects(mvnProject, false)) {
-			downstreamSector = this.sectors.get(downstreamMvnProject);
-			if (downstreamSector == null)
-				continue;
-			_updateSector(downstreamSector, sector);
+		final Collection<MavenProject> downstreamMvnProjects = mvnProject.getCollectedProjects();
+		if (downstreamMvnProjects != null) {
+			for (MavenProject downstreamMvnProject : downstreamMvnProjects) {
+				downstreamSector = this.sectors.get(downstreamMvnProject);
+				if (downstreamSector == null)
+					continue;
+				_updateSector(downstreamSector, sector);
+			}
 		}
 
 		return sector;
