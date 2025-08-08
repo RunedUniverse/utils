@@ -146,7 +146,7 @@ node {
 				return
 			}
 			dir(path: "${ env.RESULT_PATH }") {
-				unarchive mapping: ['*':'.']
+				unarchive mapping: ['./':'.']
 				sh 'ls -l'
 				sh "tar -I \"pxz -9\" -cvf ${ ARCHIVE_PATH }utils.tar.xz *"
 				sh "zip -9 ${ ARCHIVE_PATH }utils.zip *"
