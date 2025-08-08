@@ -6,14 +6,16 @@ def installArtifact(mod) {
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
+		dir(path: "${ mod.path() }") {
+			archiveArtifacts artifacts: '*.pom', fingerprint: true
+		}
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
-			archiveArtifacts artifacts: '*.pom', fingerprint: true
 			if(mod.hasTag('pack-jar')) {
 				archiveArtifacts artifacts: '*.jar', fingerprint: true
 			}
-			signArtifacts(artifacts: "${ mod.id() }-*", credentialId: 'pgp-signature-software')
 		}
+		signArtifacts(artifacts: "${ mod.id() }-*", credentialId: 'pgp-signature-software')
 	}
 }
 
