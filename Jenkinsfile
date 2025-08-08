@@ -7,7 +7,7 @@ def installArtifact(mod) {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
 		dir(path: "${ mod.path() }") {
-			archiveArtifacts artifacts: '*.pom', fingerprint: true
+			archiveArtifacts artifacts: 'pom.xml', fingerprint: true
 		}
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
