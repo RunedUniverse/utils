@@ -8,7 +8,11 @@ def installArtifact(mod) {
 	} finally {
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
-			signArtifacts(artifacts: "${ mod.id() }-*.pom, ${ mod.id() }-*.jar", credentialId: 'pgp-signature-software')
+			archiveArtifacts artifacts: '*.pom', fingerprint: true
+			if(mod.hasTag('pack-jar')) {
+				archiveArtifacts artifacts: '*.jar', fingerprint: true
+			}
+			signArtifacts(artifacts: "${ mod.id() }-*", credentialId: 'pgp-signature-software')
 		}
 	}
 }
@@ -146,7 +150,7 @@ node {
 				return
 			}
 			dir(path: "${ env.RESULT_PATH }") {
-				// unarchive mapping: ['./':'.']
+				unarchive mapping: ['./':'.']
 				sh 'ls -l'
 				sh "tar -I \"pxz -9\" -cvf ${ ARCHIVE_PATH }utils.tar.xz *"
 				sh "zip -9 ${ ARCHIVE_PATH }utils.zip *"
