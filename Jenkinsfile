@@ -4,8 +4,7 @@ def installArtifact(mod) {
 		return
 	}
 	def version = sh( returnStdout: true,
-		script: "mvn-dev org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
-	echo "version: ${ version }"
+		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
