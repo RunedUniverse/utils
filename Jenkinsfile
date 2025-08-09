@@ -3,14 +3,15 @@ def installArtifact(mod) {
 		skipStage()
 		return
 	}
+	def version = sh( returnStdout: true,
+		script: "mvn-dev org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		dir(path: "${ mod.path() }") {
-			archiveArtifacts artifacts: 'pom.xml', fingerprint: true
-		}
+		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ mod.id() }-${ version }.pom"
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
+			archiveArtifacts artifacts: '*.pom', fingerprint: true
 			if(mod.hasTag('pack-jar')) {
 				archiveArtifacts artifacts: '*.jar', fingerprint: true
 			}
