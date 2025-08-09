@@ -3,20 +3,22 @@ def installArtifact(mod) {
 		skipStage()
 		return
 	}
+	def artifactId = sh( returnStdout: true,
+			script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.artifactId -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
 	def version = sh( returnStdout: true,
 		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ mod.id() }-${ version }.pom"
+		sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ artifactId }-${ version }.pom'"
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
-			archiveArtifacts artifacts: '*.pom', fingerprint: true
+			archiveArtifacts artifacts: "${ artifactId }-${ version }.pom", fingerprint: true
 			if(mod.hasTag('pack-jar')) {
-				archiveArtifacts artifacts: '*.jar', fingerprint: true
+				archiveArtifacts artifacts: "${ artifactId }-${ version }*.jar", fingerprint: true
 			}
 		}
-		signArtifacts(artifacts: "${ mod.id() }-*", credentialId: 'pgp-signature-software')
+		signArtifacts(artifacts: "${ artifactId }-${ version }.*", credentialId: 'pgp-signature-software')
 	}
 }
 
