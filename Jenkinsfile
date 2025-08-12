@@ -18,7 +18,7 @@ def installArtifact(mod) {
 				archiveArtifacts artifacts: "${ artifactId }-${ version }*.jar", fingerprint: true
 			}
 		}
-		signArtifacts(artifacts: "${ artifactId }-${ version }.*", credentialId: 'pgp-signature-software')
+		signArtifacts(artifacts: "${ artifactId }-${ version }.*")
 	}
 }
 
