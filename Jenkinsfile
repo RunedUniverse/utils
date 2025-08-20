@@ -190,7 +190,7 @@ node {
 							for (classifier in [ '', 'javadoc', 'sources' ]) {
 								if(test)
 									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : classifier }.jar", metadata: [
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar", metadata: [
 									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar'
 								])
 							}
@@ -207,7 +207,7 @@ node {
 							for (classifier in [ '', 'javadoc', 'sources' ]) {
 								if(test)
 									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : classifier }.jar.asc", metadata: [
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar.asc", metadata: [
 									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar.asc'
 								])
 							}
