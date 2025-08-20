@@ -1,12 +1,15 @@
+def evalValue(expression, path) {
+	return sh( returnStdout: true,
+		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=${ expression } -q -DforceStdout -pl=${ path }")
+}
+
 def installArtifact(mod) {
 	if(!mod.active()) {
 		skipStage()
 		return
 	}
-	def artifactId = sh( returnStdout: true,
-			script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.artifactId -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
-	def version = sh( returnStdout: true,
-		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=${ mod.relPathFrom('maven-parent') }")
+	def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
+	def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
@@ -166,21 +169,61 @@ node {
 		}
 
 		stage('Deploy') {
-			perModule {
-				def mod = getModule();
-				if(!mod.active()) {
-					skipStage()
-					return
-				}
-				stage('Develop'){
-					sh "mvn-dev -P ${ REPOS },dist-repo-development,deploy -pl=${ mod.relPathFrom('maven-parent') }"
-				}
-				stage('Release') {
-					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
+			bundleContext {
+				perModule {
+					def mod = getModule();
+					if(!mod.active()) {
 						skipStage()
 						return
 					}
-					sh "mvn-dev -P ${ REPOS },dist-repo-releases,deploy-signed -pl=${ mod.relPathFrom('maven-parent') }"
+					// create bundle context per module
+					bundleContext {
+						// get module metadata
+						def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
+						def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
+						def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
+						// bundle basic artifacts
+						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom", metadata: [
+							'groupId': groupId, 'artifactId': artifactId, 'version': version, 'extension': 'pom'
+						])
+						for (test in [ false, true ]) {
+							for (classifier in [ null, 'javadoc', 'sources' ]) {
+								if(test)
+									classifier = classifier==null ? 'tests' : ('test-'+classifier)
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier==null ? '' : classifier }.jar", metadata: [
+									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar'
+								])
+							}
+						}
+						// deploy to development repo
+						stage('Develop'){
+							deployArtifacts repo: 'nexus-runeduniverse>maven-development'
+						}
+						// add signatures to bundle
+						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom.asc", metadata: [
+							'groupId': groupId, 'artifactId': artifactId, 'version': version, 'extension': 'pom.asc'
+						])
+						for (test in [ false, true ]) {
+							for (classifier in [ null, 'javadoc', 'sources' ]) {
+								if(test)
+									classifier = classifier==null ? 'tests' : ('test-'+classifier)
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier==null ? '' : classifier }.jar.asc", metadata: [
+									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar.asc'
+								])
+							}
+						}
+						// deploy to release repo
+						stage('Release') {
+							if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
+								skipStage()
+								return
+							}
+							deployArtifacts repo: 'nexus-runeduniverse>maven-releases'
+							sshagent (credentials: ['RunedUniverse-Jenkins']) {
+								sh "git push origin \$(git-create-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') })"
+							}
+						}
+					}
 				}
 				stage('Stage at Maven-Central') {
 					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
@@ -189,9 +232,6 @@ node {
 					}
 					// never add : -P ${REPOS} => this is ment to fail here
 					sh "mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=${ mod.relPathFrom('maven-parent') }"
-					sshagent (credentials: ['RunedUniverse-Jenkins']) {
-						sh "git push origin \$(git-create-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') })"
-					}
 				}
 			}
 		}
