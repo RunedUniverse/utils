@@ -187,10 +187,10 @@ node {
 							'groupId': groupId, 'artifactId': artifactId, 'version': version, 'extension': 'pom'
 						])
 						for (test in [ false, true ]) {
-							for (classifier in [ null, 'javadoc', 'sources' ]) {
+							for (classifier in [ '', 'javadoc', 'sources' ]) {
 								if(test)
-									classifier = classifier==null ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier==null ? '' : classifier }.jar", metadata: [
+									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : classifier }.jar", metadata: [
 									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar'
 								])
 							}
