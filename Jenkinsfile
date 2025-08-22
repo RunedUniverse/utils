@@ -8,20 +8,39 @@ def installArtifact(mod) {
 		skipStage()
 		return
 	}
+	// get module metadata
+	def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
 	def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
 	def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ artifactId }-${ version }.pom'"
+		def baseName="${ artifactId }-${ version }"
+		// create spec .pom in target/ path
+		sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ baseName }.pom'"
+		// archive artifacts
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
-			archiveArtifacts artifacts: "${ artifactId }-${ version }.pom", fingerprint: true
+			archiveArtifacts artifacts: "${ baseName }.pom", fingerprint: true
 			if(mod.hasTag('pack-jar')) {
-				archiveArtifacts artifacts: "${ artifactId }-${ version }*.jar", fingerprint: true
+				archiveArtifacts artifacts: "${ baseName }*.jar", fingerprint: true
 			}
 		}
-		signArtifacts(artifacts: "${ artifactId }-${ version }.*")
+		// create signatures
+		signArtifacts(artifacts: "${ baseName }.*")
+		// bundle artifacts + signatures
+		bundleArtifacts( bundle: mod.id(), artifacts: "${ baseName }.pom*", metadata: [
+			'groupId': groupId, 'artifactId': artifactId, 'version': version
+		])
+		for (test in [ false, true ]) {
+			for (classifier in [ '', 'javadoc', 'sources' ]) {
+				if(test)
+					classifier = classifier=='' ? 'tests' : ('test-'+classifier)
+				bundleArtifacts( bundle: mod.id(), artifacts: "${ baseName }${ classifier=='' ? '' : ('-'+classifier) }.jar*", metadata: [
+					'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier
+				])
+			}
+		}
 	}
 }
 
@@ -103,121 +122,103 @@ node {
 		stage('Code Validation') {
 			sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve --fail-at-end -T1C"
 		}
-	
-		stage('Install Maven Parent') {
-			installArtifact( getModule(id: 'maven-parent') );
-		}
-		stage('Install - BOMs') {
-			perModule(withTagIn: [ 'bom' ]) {
-				installArtifact( module );
-			}
-		}
 
-		stage('Build [1st Level]') {
-			perModule(withTagIn: [ 'build1a' ]) {
-				installArtifact( module );
+		bundleContext {
+			stage('Install Maven Parent') {
+				installArtifact( getModule(id: 'maven-parent') );
 			}
-			perModule(withTagIn: [ 'build1' ]) {
-				installArtifact( module );
+			stage('Install - BOMs') {
+				perModule(withTagIn: [ 'bom' ]) {
+					installArtifact( module );
+				}
 			}
-		}
-		stage('Build [2nd Level]') {
-			perModule(withTagIn: [ 'build2a' ]) {
-				installArtifact( module );
-			}
-			perModule(withTagIn: [ 'build2' ]) {
-				installArtifact( module );
-			}
-		}
-		stage('Build [3rd Level]') {
-			perModule(withTagIn: [ 'build3a' ]) {
-				installArtifact( module );
-			}
-			perModule(withTagIn: [ 'build3' ]) {
-				installArtifact( module );
-			}
-		}
 
-		stage('Test') {
-			if(!checkAllModules(withTagIn: [ 'test' ], active: true)) {
-				skipStage()
-				return
+			stage('Build [1st Level]') {
+				perModule(withTagIn: [ 'build1a' ]) {
+					installArtifact( module );
+				}
+				perModule(withTagIn: [ 'build1' ]) {
+					installArtifact( module );
+				}
 			}
-			sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,build-tests"
-			sh "mvn-dev --fail-never -P ${ REPOS },toolchain-openjdk-1-8-0,test-junit-jupiter,test-system"
-			// check tests, archive reports in case junit flags errors
-			junit '*/target/surefire-reports/*.xml'
-			if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
-				archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
+			stage('Build [2nd Level]') {
+				perModule(withTagIn: [ 'build2a' ]) {
+					installArtifact( module );
+				}
+				perModule(withTagIn: [ 'build2' ]) {
+					installArtifact( module );
+				}
 			}
-		}
+			stage('Build [3rd Level]') {
+				perModule(withTagIn: [ 'build3a' ]) {
+					installArtifact( module );
+				}
+				perModule(withTagIn: [ 'build3' ]) {
+					installArtifact( module );
+				}
+			}
 
-		stage('Package Build Result') {
-			if(checkAllModules(match: 'all', active: false)) {
-				skipStage()
-				return
+			stage('Test') {
+				if(!checkAllModules(withTagIn: [ 'test' ], active: true)) {
+					skipStage()
+					return
+				}
+				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,build-tests"
+				sh "mvn-dev --fail-never -P ${ REPOS },toolchain-openjdk-1-8-0,test-junit-jupiter,test-system"
+				// check tests, archive reports in case junit flags errors
+				junit '*/target/surefire-reports/*.xml'
+				if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
+					archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
+				}
 			}
-			dir(path: "${ env.RESULT_PATH }") {
-				unarchive mapping: ['*':'.']
-				sh 'ls -l'
-				sh "tar -I \"pxz -9\" -cvf ${ ARCHIVE_PATH }utils.tar.xz *"
-				sh "zip -9 ${ ARCHIVE_PATH }utils.zip *"
-			}
-			dir(path: "${ env.ARCHIVE_PATH }") {
-				archiveArtifacts artifacts: '*', fingerprint: true
-			}
-		}
 
-		stage('Deploy') {
-			bundleContext {
+			stage('Package Build Result') {
+				if(checkAllModules(match: 'all', active: false)) {
+					skipStage()
+					return
+				}
+				dir(path: "${ env.RESULT_PATH }") {
+					unarchive mapping: ['*':'.']
+					sh 'ls -l'
+					sh "tar -I \"pxz -9\" -cvf ${ ARCHIVE_PATH }utils.tar.xz *"
+					sh "zip -9 ${ ARCHIVE_PATH }utils.zip *"
+				}
+				dir(path: "${ env.ARCHIVE_PATH }") {
+					archiveArtifacts artifacts: '*', fingerprint: true
+				}
+			}
+
+			stage('Deploy') {
 				perModule {
 					def mod = getModule();
 					if(!mod.active()) {
 						skipStage()
 						return
 					}
-					// create bundle context per module
-					bundleContext {
-						// get module metadata
-						def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
-						def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
-						def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
-						// bundle basic artifacts
-						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom*", metadata: [
-							'groupId': groupId, 'artifactId': artifactId, 'version': version
-						])
-						for (test in [ false, true ]) {
-							for (classifier in [ '', 'javadoc', 'sources' ]) {
-								if(test)
-									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar*", metadata: [
-									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier
-								])
-							}
+					// deploy to development repo
+					stage('Develop'){
+						deployArtifacts( bundle: mod.id(), repo: 'nexus-runeduniverse>maven-development' )
+					}
+					// deploy to release repo
+					stage('Release') {
+						if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
+							skipStage()
+							return
 						}
-						// deploy to development repo
-						stage('Develop'){
-							deployArtifacts repo: 'nexus-runeduniverse>maven-development'
-						}
-						// deploy to release repo
-						stage('Release') {
-							if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
-								skipStage()
-								return
-							}
-							deployArtifacts repo: 'nexus-runeduniverse>maven-releases'
-							sshagent (credentials: ['RunedUniverse-Jenkins']) {
-								sh "git push origin \$(git-create-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') })"
-							}
+						deployArtifacts( bundle: mod.id(), repo: 'nexus-runeduniverse>maven-releases' )
+						sshagent (credentials: ['RunedUniverse-Jenkins']) {
+							sh "git push origin \$(git-create-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') })"
 						}
 					}
+					// merge bundles into default
+					mergeBundle( source: mod.id() )
 				}
 				stage('Stage at Maven-Central') {
 					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
 						skipStage()
 						return
 					}
-					deployArtifacts repo: 'maven-central>net.runeduniverse'
+					deployArtifacts( repo: 'maven-central>net.runeduniverse' )
 				}
 			}
 		}
