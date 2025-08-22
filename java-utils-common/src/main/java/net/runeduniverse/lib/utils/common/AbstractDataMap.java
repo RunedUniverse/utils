@@ -18,7 +18,6 @@ package net.runeduniverse.lib.utils.common;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -189,13 +188,13 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void forEach(final BiConsumer<K, V> action) {
-		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
+		for (Map.Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()));
 	}
 
 	@Override
 	public void forEach(final D modifier, final BiConsumer<K, V> action) {
-		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet()) {
+		for (Map.Entry<K, MEntry<K, V, D>> entry : this.map.entrySet()) {
 			final D eData = MEntry.getData(entry.getValue());
 			if (eData == null) {
 				if (modifier == null)
@@ -207,7 +206,7 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 
 	@Override
 	public void forEach(final TriConsumer<K, V, D> action) {
-		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
+		for (Map.Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			action.accept(entry.getKey(), MEntry.getValue(entry.getValue()), MEntry.getData(entry.getValue()));
 	}
 
@@ -217,8 +216,8 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 	}
 
 	@Override
-	public Set<DataMap.InternalEntry<K, V, D>> internalEntrySet() {
-		return new HashSet<DataMap.InternalEntry<K, V, D>>(this.map.values());
+	public Set<DataMap.Entry<K, V, D>> entrySet() {
+		return new HashSet<DataMap.Entry<K, V, D>>(this.map.values());
 	}
 
 	protected MEntry<K, V, D> createEntry(final K key) {
@@ -237,7 +236,7 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 	public Map<K, V> toValueMap() {
 		final Map<K, V> map = createValueMap();
 
-		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
+		for (Map.Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			map.put(entry.getKey(), MEntry.getValue(entry.getValue()));
 
 		return map;
@@ -247,14 +246,14 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 	public Map<K, D> toDataMap() {
 		final Map<K, D> map = createDataMap();
 
-		for (Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
+		for (Map.Entry<K, MEntry<K, V, D>> entry : this.map.entrySet())
 			map.put(entry.getKey(), MEntry.getData(entry.getValue()));
 
 		return map;
 	}
 
 	@Data
-	protected static class MEntry<K, V, D> implements DataMap.InternalEntry<K, V, D> {
+	protected static class MEntry<K, V, D> implements DataMap.Entry<K, V, D> {
 
 		protected final K key;
 		protected V value = null;
@@ -281,30 +280,30 @@ public abstract class AbstractDataMap<K, V, D> implements DataMap<K, V, D> {
 		}
 
 		@Override
-		public V computeValueIfAbsent(Function<? super K, ? extends V> mappingFunction) {
+		public V computeValueIfAbsent(final Function<? super K, ? extends V> mappingFunction) {
 			synchronized (lock()) {
-				return InternalEntry.super.computeValueIfAbsent(mappingFunction);
+				return Entry.super.computeValueIfAbsent(mappingFunction);
 			}
 		}
 
 		@Override
-		public D computeDataIfAbsent(Function<? super K, ? extends D> mappingFunction) {
+		public D computeDataIfAbsent(final Function<? super K, ? extends D> mappingFunction) {
 			synchronized (lock()) {
-				return InternalEntry.super.computeDataIfAbsent(mappingFunction);
+				return Entry.super.computeDataIfAbsent(mappingFunction);
 			}
 		}
 
 		@Override
-		public V computeValueIfPresent(BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+		public V computeValueIfPresent(final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
 			synchronized (lock()) {
-				return InternalEntry.super.computeValueIfPresent(remappingFunction);
+				return Entry.super.computeValueIfPresent(remappingFunction);
 			}
 		}
 
 		@Override
-		public D computeDataIfPresent(BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
+		public D computeDataIfPresent(final BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
 			synchronized (lock()) {
-				return InternalEntry.super.computeDataIfPresent(remappingFunction);
+				return Entry.super.computeDataIfPresent(remappingFunction);
 			}
 		}
 

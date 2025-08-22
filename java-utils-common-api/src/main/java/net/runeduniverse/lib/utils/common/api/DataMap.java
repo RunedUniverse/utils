@@ -72,13 +72,13 @@ public interface DataMap<K, V, D> {
 
 	public Set<K> keySet();
 
-	public Set<InternalEntry<K, V, D>> internalEntrySet();
+	public Set<Entry<K, V, D>> entrySet();
 
 	public Map<K, V> toValueMap();
 
 	public Map<K, D> toDataMap();
 
-	public interface InternalEntry<K, V, D> {
+	public interface Entry<K, V, D> {
 
 		public Object lock();
 
@@ -92,7 +92,7 @@ public interface DataMap<K, V, D> {
 
 		public void setData(D data);
 
-		public default V computeValueIfAbsent(Function<? super K, ? extends V> mappingFunction) {
+		public default V computeValueIfAbsent(final Function<? super K, ? extends V> mappingFunction) {
 			Objects.requireNonNull(mappingFunction);
 			final V v;
 			if ((v = getValue()) == null) {
@@ -105,7 +105,7 @@ public interface DataMap<K, V, D> {
 			return v;
 		}
 
-		public default D computeDataIfAbsent(Function<? super K, ? extends D> mappingFunction) {
+		public default D computeDataIfAbsent(final Function<? super K, ? extends D> mappingFunction) {
 			Objects.requireNonNull(mappingFunction);
 			final D d;
 			if ((d = getData()) == null) {
@@ -118,7 +118,7 @@ public interface DataMap<K, V, D> {
 			return d;
 		}
 
-		public default V computeValueIfPresent(BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+		public default V computeValueIfPresent(final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
 			Objects.requireNonNull(remappingFunction);
 			final V oldValue;
 			if ((oldValue = getValue()) == null)
@@ -128,7 +128,7 @@ public interface DataMap<K, V, D> {
 			return newValue;
 		}
 
-		public default D computeDataIfPresent(BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
+		public default D computeDataIfPresent(final BiFunction<? super K, ? super D, ? extends D> remappingFunction) {
 			Objects.requireNonNull(remappingFunction);
 			final D oldData;
 			if ((oldData = getData()) == null)
