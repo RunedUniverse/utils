@@ -118,9 +118,6 @@
 		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
 		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
 		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
-		<plugin-maven-gpg-version>3.0.1</plugin-maven-gpg-version>
-		<plugin-mojohaus-build-helper-version>3.2.0</plugin-mojohaus-build-helper-version>
-		<plugin-maven-deploy-version>3.0.0-M2</plugin-maven-deploy-version>
 		<!-- VERSIONS - TESTING -->
 		<junit-platform-launcher-version>1.8.2</junit-platform-launcher-version>
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
@@ -221,18 +218,6 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>deploy</id>
-			<build>
-				<defaultGoal>deploy/deploy]@pipeline</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>deploy-signed</id>
-			<build>
-				<defaultGoal>deploy-signed/deploy]@pipeline</defaultGoal>
-			</build>
-		</profile>
 		<!-- REPOSITORIES -->
 		<profile>
 			<id>repo-releases</id>
@@ -256,40 +241,6 @@
 					</url>
 				</repository>
 			</repositories>
-		</profile>
-		<!-- DISTRIBUTION REPOSITORIES -->
-		<profile>
-			<id>dist-repo-releases</id>
-			<distributionManagement>
-				<repository>
-					<id>runeduniverse-releases</id>
-					<url>
-						https://nexus.runeduniverse.net/repository/maven-releases/
-					</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>dist-repo-development</id>
-			<distributionManagement>
-				<repository>
-					<id>runeduniverse-development</id>
-					<url>
-						https://nexus.runeduniverse.net/repository/maven-development/
-					</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>dist-repo-maven-central</id>
-			<distributionManagement>
-				<repository>
-					<id>central-nexus</id>
-					<url>
-						https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
-					</url>
-				</repository>
-			</distributionManagement>
 		</profile>
 		<!-- LICENSES -->
 		<profile>
@@ -483,19 +434,7 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -644,92 +583,8 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>${plugin-maven-gpg-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>${plugin-maven-install-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>${plugin-mojohaus-build-helper-version}</version>
-					<executions>
-						<execution>
-							<id>packaging-jar</id>
-							<configuration>
-								<artifacts>
-									<!-- javadoc -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar
-										</file>
-										<type>jar</type>
-										<classifier>javadoc</classifier>
-									</artifact>
-									<!-- sources -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar
-										</file>
-										<type>jar</type>
-										<classifier>sources</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
-						</execution>
-						<execution>
-							<id>signed-pom</id>
-							<configuration>
-								<artifacts>
-									<!-- gpg signature -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}.pom.asc
-										</file>
-										<type>pom.asc</type>
-									</artifact>
-								</artifacts>
-							</configuration>
-						</execution>
-						<execution>
-							<id>signed-jar</id>
-							<configuration>
-								<artifacts>
-									<!-- gpg signatures -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}.jar.asc
-										</file>
-										<type>jar.asc</type>
-									</artifact>
-									<!-- javadoc -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar.asc
-										</file>
-										<type>jar.asc</type>
-										<classifier>javadoc</classifier>
-									</artifact>
-									<!-- sources -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar.asc
-										</file>
-										<type>jar.asc</type>
-										<classifier>sources</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${plugin-maven-deploy-version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
