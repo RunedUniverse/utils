@@ -27,7 +27,7 @@ def installArtifact(mod) {
 			}
 		}
 		// create signatures
-		signArtifacts(artifacts: "${ baseName }.*")
+		signArtifacts(artifacts: "${ baseName }*")
 		// bundle artifacts + signatures
 		bundleArtifacts( bundle: mod.id(), artifacts: "${ baseName }.pom*", metadata: [
 			'groupId': groupId, 'artifactId': artifactId, 'version': version
