@@ -9,13 +9,13 @@ def installArtifact(mod) {
 		return
 	}
 	// get module metadata
-	def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
-	def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
-	def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
+	String groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
+	String artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
+	String version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		def baseName="${ artifactId }-${ version }"
+		String baseName="${ artifactId }-${ version }"
 		// create spec .pom in target/ path
 		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ baseName }.pom"
 		// archive artifacts
