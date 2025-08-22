@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,25 @@ package net.runeduniverse.lib.utils.logging.test;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.DefaultCompoundTree;
 
 public class TreeTest {
 
 	@Test
 	@Tag("system")
 	public void buildTree() throws Exception {
-		CompoundTree pkgs = new CompoundTree("Packages");
-		pkgs.append(new CompoundTree("PKG", "net.runeduniverse.lib.utils.logging.test.fake")
-				.append(new CompoundTree("clAss", "Person").append("missing Class!")
+		DefaultCompoundTree pkgs = new DefaultCompoundTree("Packages");
+		pkgs.append(new DefaultCompoundTree("PKG", "net.runeduniverse.lib.utils.logging.test.fake")
+				.append(new DefaultCompoundTree("clAss", "Person").append("missing Class!")
 						.append("FIeLd", "id")
 						.append("fieD", "firstName")
 						.append("field", "lastName"))
-				.append(new CompoundTree("class", "House").append("yet another missing Class!")
+				.append(new DefaultCompoundTree("class", "House").append("yet another missing Class!")
 						.append("field", "address")
 						.append("field", "size")))
-				.append(new CompoundTree("net.runeduniverse.lib.utils.logging.test.fake.model"));
+				.append(new DefaultCompoundTree("net.runeduniverse.lib.utils.logging.test.fake.model"));
 
-		CompoundTree rootTree = new CompoundTree("ROOT");
+		DefaultCompoundTree rootTree = new DefaultCompoundTree("ROOT");
 		rootTree.append(pkgs);
 		System.out.println(rootTree);
 	}

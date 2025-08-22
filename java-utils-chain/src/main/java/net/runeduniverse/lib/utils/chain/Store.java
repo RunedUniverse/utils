@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Getter;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
 
 @Deprecated
 // for internal use only
 // depracted so that noone tries to get Store in chain args -> use ChainRuntime!
 public final class Store {
-	private final ChainRuntime<?> runtime;
+	private final DefaultChainRuntime<?> runtime;
 	@Getter
 	private final Map<Class<?>, Object> sourceDataMap = new HashMap<>();
 	@Getter
 	private final Map<Class<?>, Object> runtimeDataMap = new HashMap<>();
 	private Object last = null;
 
-	protected Store(ChainRuntime<?> runtime, Map<Class<?>, Object> sourceMap, Object[] args) {
+	protected Store(DefaultChainRuntime<?> runtime, Map<Class<?>, Object> sourceMap, Object[] args) {
 		this.runtime = runtime;
 		if (sourceMap != null)
 			this.sourceDataMap.putAll(sourceMap);
@@ -55,7 +56,7 @@ public final class Store {
 	public <T> T getData(Class<T> type) {
 		if (type == null)
 			return null;
-		if (type == ChainRuntime.class)
+		if (ChainRuntime.class.isAssignableFrom(type))
 			return (T) this.runtime;
 		Object obj = this.runtimeDataMap.get(type);
 		if (obj != null)

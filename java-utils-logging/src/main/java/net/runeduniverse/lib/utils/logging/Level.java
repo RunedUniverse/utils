@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package net.runeduniverse.lib.utils.logging;
 public class Level extends java.util.logging.Level {
 	private static final long serialVersionUID = -1369172045174361996L;
 
-	protected Level(String name, int value) {
+	protected Level(final String name, final int value) {
 		super(name, value);
 	}
 

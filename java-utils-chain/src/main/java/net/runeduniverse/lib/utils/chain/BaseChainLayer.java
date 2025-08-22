@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.runeduniverse.lib.utils.chain.api.Chain;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
+import net.runeduniverse.lib.utils.chain.api.Layer;
 import net.runeduniverse.lib.utils.chain.errors.ChainLayerCallException;
 
-public class BaseChainLayer implements ILayer {
+public class BaseChainLayer implements Layer {
 
 	private final Method method;
 	private final Class<?>[] paramTypes;

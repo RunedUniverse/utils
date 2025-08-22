@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
 import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
 public class DefaultIntercepter implements Intercepter {

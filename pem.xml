@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2024 VenaNocta (venanocta@gmail.com)
+    Copyright © 2025 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,89 +22,6 @@
 	https://api.runeduniverse.net/runes4tools/r4m-pem-v1_0_0.xsd">
 	<modelVersion>1.0.0</modelVersion>
 	<executions>
-
-		<!-- packaging-procedure: pom & jar (before upload) -->
-		<execution id="signed-pom" source="override">
-			<triggers>
-				<active-profile id="gpg-signature-software" />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>pom</packaging-procedure>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<!-- attach-artifact could be removed -->
-								<!-- if maven could cache more effective -->
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy-signed />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-
-		<execution source="override" id="packaging-jar">
-			<triggers>
-				<always />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy />
-										<deploy-signed />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-
-		<execution source="override" id="signed-jar">
-			<triggers>
-				<active-profile id="gpg-signature-software" />
-			</triggers>
-			<restrictions>
-				<packaging-procedure>jar</packaging-procedure>
-			</restrictions>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="deploy">
-							<goals>
-								<goal id="attach-artifact">
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>build-helper-maven-plugin</artifactId>
-									<modes>
-										<deploy-signed />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
 
 		<!-- general -->
 		<execution id="default" source="override">
@@ -171,18 +88,6 @@
 								<goal id="install">
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-install-plugin</artifactId>
-									<modes>
-										<default />
-										<dev />
-									</modes>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="deploy">
-							<goals>
-								<goal id="deploy">
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-deploy-plugin</artifactId>
 									<modes>
 										<default />
 										<dev />
@@ -322,18 +227,6 @@
 								</goal>
 							</goals>
 						</phase>
-						<phase id="deploy">
-							<goals>
-								<goal id="deploy">
-									<modes>
-										<deploy />
-										<deploy-signed />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-deploy-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
 					</phases>
 				</lifecycle>
 				<lifecycle id="site">
@@ -359,28 +252,6 @@
 										<default />
 										<dev />
 									</modes>
-								</goal>
-							</goals>
-						</phase>
-					</phases>
-				</lifecycle>
-			</lifecycles>
-		</execution>
-		<execution id="gpg-signature-credentials" source="override">
-			<triggers>
-				<active-profile id="gpg-signature-software" />
-			</triggers>
-			<lifecycles>
-				<lifecycle id="default">
-					<phases>
-						<phase id="verify">
-							<goals>
-								<goal id="sign">
-									<modes>
-										<install />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-gpg-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>
@@ -430,17 +301,6 @@
 								</goal>
 							</goals>
 						</phase>
-						<phase id="compile">
-							<goals>
-								<goal id="compile">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
 						<phase id="process-test-resources">
 							<goals>
 								<goal id="testResources">
@@ -449,28 +309,6 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-resources-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test-compile">
-							<goals>
-								<goal id="testCompile">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test">
-							<goals>
-								<goal id="test">
-									<modes>
-										<dev />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>
@@ -507,48 +345,11 @@
 			<lifecycles>
 				<lifecycle id="default">
 					<phases>
-						<phase id="compile">
-							<goals>
-								<goal id="compile">
-									<modes>
-										<install />
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test-compile">
-							<goals>
-								<goal id="testCompile">
-									<modes>
-										<install />
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-compiler-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
-						<phase id="test">
-							<goals>
-								<goal id="test">
-									<modes>
-										<junit />
-									</modes>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-surefire-plugin</artifactId>
-								</goal>
-							</goals>
-						</phase>
 						<phase id="package">
 							<goals>
 								<goal id="jar">
 									<modes>
 										<install />
-										<deploy />
-										<deploy-signed />
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-jar-plugin</artifactId>
@@ -587,6 +388,82 @@
 									</modes>
 									<groupId>org.apache.maven.plugins</groupId>
 									<artifactId>maven-javadoc-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="source-compile" source="override">
+			<triggers>
+				<always />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="compile">
+							<goals>
+								<goal id="compile">
+									<modes>
+										<dev />
+										<install />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+								<goal id="generate-metadata" optional="true">
+									<groupId>org.codehaus.plexus</groupId>
+									<artifactId>plexus-component-metadata</artifactId>
+									<modes>
+										<dev />
+										<install />
+									</modes>
+								</goal>
+							</goals>
+						</phase>
+					</phases>
+				</lifecycle>
+			</lifecycles>
+		</execution>
+
+		<execution id="test-compile" source="override">
+			<triggers>
+				<always />
+			</triggers>
+			<restrictions>
+				<packaging-procedure>jar</packaging-procedure>
+			</restrictions>
+			<lifecycles>
+				<lifecycle id="default">
+					<phases>
+						<phase id="test-compile">
+							<goals>
+								<goal id="testCompile">
+									<modes>
+										<dev />
+										<install />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-compiler-plugin</artifactId>
+								</goal>
+							</goals>
+						</phase>
+						<phase id="test">
+							<goals>
+								<goal id="test">
+									<modes>
+										<dev />
+										<junit />
+									</modes>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-surefire-plugin</artifactId>
 								</goal>
 							</goals>
 						</phase>

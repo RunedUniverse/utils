@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ package net.runeduniverse.lib.utils.chain;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
-import net.runeduniverse.lib.utils.errors.ExceptionSuppressions;
+import net.runeduniverse.lib.utils.chain.api.ChainRuntime;
+import net.runeduniverse.lib.utils.chain.api.Layer;
 
 public final class ChainContainer {
 
@@ -27,7 +28,7 @@ public final class ChainContainer {
 	private final ChainLogger logger;
 	@Getter
 	private final String label;
-	private final Map<Integer, ILayer> chain = new HashMap<>();
+	private final Map<Integer, Layer> chain = new HashMap<>();
 
 	private int lowestId = Integer.MAX_VALUE;
 	private int highestId = Integer.MIN_VALUE;
@@ -39,19 +40,20 @@ public final class ChainContainer {
 		this.label = label;
 	}
 
-	protected void putAtLayers(final int[] ids, final ILayer layer) {
+	protected void putAtLayers(final int[] ids, final Layer layer) {
 		this.dirty = true;
 		for (int id : ids)
 			this.chain.put(id, layer);
 	}
 
-	public <R> R callChain(Class<R> resultType, Object[] args) throws ExceptionSuppressions {
-		return this._callChain(new ChainRuntime<>(this, this.logger, resultType, args));
+	public <R> R callChain(Class<R> resultType, Object[] args) throws Exception {
+		return this._callChain(new DefaultChainRuntime<>(this, this.logger, resultType, args));
 	}
 
-	public <R> R callChain(Class<R> resultType, ChainRuntime<?> rootRuntime, Map<Class<?>, Object> sourceDataMap,
-			Object[] args) throws ExceptionSuppressions {
-		return this._callChain(new ChainRuntime<>(rootRuntime, this, this.logger, resultType, sourceDataMap, args));
+	public <R> R callChain(Class<R> resultType, DefaultChainRuntime<?> rootRuntime, Map<Class<?>, Object> sourceDataMap,
+			Object[] args) throws Exception {
+		return this
+				._callChain(new DefaultChainRuntime<>(rootRuntime, this, this.logger, resultType, sourceDataMap, args));
 	}
 
 	/***
@@ -64,7 +66,7 @@ public final class ChainContainer {
 	 *         Entity for the resultType got returned/stored
 	 * @throws <code>ExceptionSuppressions</code>
 	 */
-	private <R> R _callChain(ChainRuntime<R> runtime) throws ExceptionSuppressions {
+	private <R> R _callChain(ChainRuntime<R> runtime) throws Exception {
 		if (this.dirty)
 			this.purify();
 		runtime.executeOnChain(this.chain, this.lowestId, this.highestId);

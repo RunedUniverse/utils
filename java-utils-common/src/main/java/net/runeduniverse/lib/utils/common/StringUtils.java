@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,4 +23,15 @@ public class StringUtils {
 				.isEmpty();
 	}
 
+	public static boolean strEquals(final String a, final String b) {
+		return ComparisonUtils.objectEquals(a, b);
+	}
+
+	public static boolean strEqualsIgnoreCase(final String a, final String b) {
+		if (a == b)
+			return true;
+		if (a == null || b == null)
+			return false;
+		return a.equalsIgnoreCase(b);
+	}
 }

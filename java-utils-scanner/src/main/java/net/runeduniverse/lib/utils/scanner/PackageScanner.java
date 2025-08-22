@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 
 import lombok.NoArgsConstructor;
-import net.runeduniverse.lib.utils.common.LinkedDataHashMap;
+import net.runeduniverse.lib.utils.common.LinkedHashDataMap;
 import net.runeduniverse.lib.utils.common.api.DataMap;
 import net.runeduniverse.lib.utils.scanner.api.TypeScanner;
 import net.runeduniverse.lib.utils.scanner.debug.DefaultIntercepter;
@@ -116,11 +116,11 @@ public class PackageScanner {
 		if (this.loader.isEmpty())
 			this.loader.add(PackageScanner.class.getClassLoader());
 
-		DataMap<Class<?>, ClassLoader, String> classes = new LinkedDataHashMap<>();
-		DefaultIntercepter i = new DefaultIntercepter("PackageScanner INFO", this.debug);
-		Intercepter iPkg = i.addSection("URL", "Discovered URL's");
-		Intercepter iClass = i.addSection("CLASS", "Classes");
-		Intercepter iLoader = i.addSection("LOADER", "ClassLoader");
+		final DataMap<Class<?>, ClassLoader, String> classes = new LinkedHashDataMap<>();
+		final DefaultIntercepter i = new DefaultIntercepter("PackageScanner INFO", this.debug);
+		final Intercepter iPkg = i.addSection("URL", "Discovered URL's");
+		final Intercepter iClass = i.addSection("CLASS", "Classes");
+		final Intercepter iLoader = i.addSection("LOADER", "ClassLoader");
 		synchronized (this.loader) {
 			for (ClassLoader classLoader : this.loader) {
 				iLoader.intercept(classLoader);
@@ -170,15 +170,15 @@ public class PackageScanner {
 	 */
 	private void loadResources(DataMap<Class<?>, ClassLoader, String> classes, ClassLoader classLoader, String pkg,
 			Intercepter iPkg, Intercepter iClass) {
+		final String zpkg = pkg.replace('.', '/') + '/';
 		Enumeration<URL> resources;
-		String zpkg = pkg.replace('.', '/') + '/';
 		try {
 			resources = classLoader.getResources(zpkg);
 		} catch (IOException e) {
 			return;
 		}
 
-		Map<String, URL> pkgEntries = new HashMap<>();
+		final Map<String, URL> pkgEntries = new HashMap<>();
 		URL url = null;
 		URLConnection c = null;
 		Enumeration<JarEntry> entries = null;
@@ -217,7 +217,7 @@ public class PackageScanner {
 			}
 		}
 
-		URLClassLoader urlLoader = classLoader instanceof URLClassLoader ? (URLClassLoader) classLoader
+		final URLClassLoader urlLoader = classLoader instanceof URLClassLoader ? (URLClassLoader) classLoader
 				: new URLClassLoader((URL[]) new HashSet<>(pkgEntries.values()).toArray(), classLoader);
 
 		for (String clazzName : pkgEntries.keySet()) {

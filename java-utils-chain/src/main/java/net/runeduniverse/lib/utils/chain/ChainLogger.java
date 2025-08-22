@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class ChainLogger extends Logger {
 		super.log(Level.BURY, sourceMethod + "\n" + exception);
 	}
 
-	public void logTrace(ChainRuntimeExecutionTrace trace) {
+	public void logTrace(DefaultChainRuntimeExecutionTrace trace) {
 		super.log(Level.FINE, trace.toString());
 	}
 }

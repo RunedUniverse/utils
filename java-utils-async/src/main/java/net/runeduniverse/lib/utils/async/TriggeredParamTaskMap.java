@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.runeduniverse.lib.utils.async.api.IRegistry;
 
 @NoArgsConstructor
 public class TriggeredParamTaskMap<KEY, PARAM> implements IRegistry<KEY> {

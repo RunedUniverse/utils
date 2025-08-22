@@ -27,7 +27,7 @@ Each artifact starts with the name of the programming language followed by its r
     <dependency>
       <groupId>net.runeduniverse.lib.utils</groupId>
       <artifactId>utils-bom</artifactId>
-      <version>1.1.0</version>
+      <version>2.0.0</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -42,7 +42,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-async</artifactId>
-  <version>2.1.1</version>
+  <version>2.2.0</version>
 </dependency>
 ```
 
@@ -55,7 +55,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-chain</artifactId>
-  <version>1.0.1</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -66,7 +66,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-common</artifactId>
-  <version>1.1.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -77,7 +77,7 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-errors</artifactId>
-  <version>1.0.1</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -88,7 +88,62 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-logging</artifactId>
-  <version>1.0.2</version>
+  <version>2.0.0</version>
+</dependency>
+```
+
+#### [Maven] Java Conditional Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-conditional.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-conditional%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-conditional</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+#### [Maven] Java Config Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-config.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-config%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-config</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+#### [Maven] Java Maven3 Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-maven3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-maven3%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-maven3</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+#### [Maven] Java Maven3 Extension Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-maven3-ext.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-maven-ext3%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-maven3-ext</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+#### [Maven] Java Plexus Utils
+[![Maven Central](https://img.shields.io/maven-central/v/net.runeduniverse.lib.utils/utils-plexus.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22net.runeduniverse.lib.utils%22%20AND%20a:%22utils-plexus%22)
+
+```xml
+<dependency>
+  <groupId>net.runeduniverse.lib.utils</groupId>
+  <artifactId>utils-plexus</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -101,7 +156,6 @@ Each artifact starts with the name of the programming language followed by its r
 <dependency>
   <groupId>net.runeduniverse.lib.utils</groupId>
   <artifactId>utils-scanner</artifactId>
-  <version>1.2.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
-

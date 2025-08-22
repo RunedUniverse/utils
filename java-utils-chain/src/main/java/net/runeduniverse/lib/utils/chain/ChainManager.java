@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import net.runeduniverse.lib.utils.chain.api.Chain;
 
 public final class ChainManager {
 
@@ -76,7 +78,7 @@ public final class ChainManager {
 		return container.callChain(resultType, args);
 	}
 
-	protected <R> R callChain(String label, Class<R> resultType, ChainRuntime<?> rootRuntime,
+	protected <R> R callChain(String label, Class<R> resultType, DefaultChainRuntime<?> rootRuntime,
 			Map<Class<?>, Object> sourceDataMap, Object... args) throws Exception {
 		ChainContainer container = this.chains.get(label);
 		if (container == null)

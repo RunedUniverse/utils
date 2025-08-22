@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2024 VenaNocta (venanocta@gmail.com)
+    Copyright © 2025 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 	<groupId>net.runeduniverse.lib.utils</groupId>
 	<artifactId>utils-parent</artifactId>
-	<version>2.0.0</version>
+	<version>2.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>Utils-Project Maven Parent</name>
@@ -32,11 +32,25 @@
 
 	<modules>
 		<module>java-utils-bom</module>
+		<module>java-utils-async-api</module>
 		<module>java-utils-async</module>
+		<module>java-utils-chain-api</module>
 		<module>java-utils-chain</module>
+		<module>java-utils-common-api</module>
 		<module>java-utils-common</module>
+		<module>java-utils-conditional-api</module>
+		<module>java-utils-conditional</module>
+		<module>java-utils-config-api</module>
+		<module>java-utils-config</module>
 		<module>java-utils-errors</module>
+		<module>java-utils-logging-api</module>
 		<module>java-utils-logging</module>
+		<module>java-utils-maven3-api</module>
+		<module>java-utils-maven3</module>
+		<module>java-utils-maven3-ext-api</module>
+		<module>java-utils-maven3-ext</module>
+		<module>java-utils-plexus</module>
+		<module>java-utils-scanner-api</module>
 		<module>java-utils-scanner</module>
 	</modules>
 
@@ -79,9 +93,15 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root-dir>${project.basedir}</root-dir>
+		<!-- sources -->
+		<toolchain-jdk-source-version>openjdk-1.8.0</toolchain-jdk-source-version>
 		<java-source-version>1.8</java-source-version>
 		<java-target-version>${java-source-version}</java-target-version>
-		<root-dir>${project.basedir}</root-dir>
+		<!-- tests -->
+		<toolchain-jdk-test-version>${toolchain-jdk-source-version}</toolchain-jdk-test-version>
+		<java-test-source-version>${java-source-version}</java-test-source-version>
+		<java-test-target-version>${java-test-source-version}</java-test-target-version>
 		<!-- ARTIFACT VERSIONS -->
 		<maven-version-min>3.3.9</maven-version-min>
 		<lombok-version>1.18.12</lombok-version>
@@ -98,9 +118,6 @@
 		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
 		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
 		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
-		<plugin-maven-gpg-version>3.0.1</plugin-maven-gpg-version>
-		<plugin-mojohaus-build-helper-version>3.2.0</plugin-mojohaus-build-helper-version>
-		<plugin-maven-deploy-version>3.0.0-M2</plugin-maven-deploy-version>
 		<!-- VERSIONS - TESTING -->
 		<junit-platform-launcher-version>1.8.2</junit-platform-launcher-version>
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
@@ -112,40 +129,22 @@
 		<!-- TOOLCHAINS -->
 		<profile>
 			<id>toolchain-openjdk-1-8-0</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-toolchains-plugin</artifactId>
-						<configuration>
-							<toolchains>
-								<jdk>
-									<version>openjdk-1.8.0</version>
-								</jdk>
-							</toolchains>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
+			<properties>
+				<jdk-toolchain-source-version>openjdk-1.8.0</jdk-toolchain-source-version>
+				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
+			</properties>
 		</profile>
 		<!-- DEV-INSTALL -->
 		<profile>
 			<id>dev-install</id>
+			<properties>
+				<jdk-toolchain-source-version>openjdk-1.8.0</jdk-toolchain-source-version>
+				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
+			</properties>
 			<build>
 				<defaultGoal>clean dev/install]</defaultGoal>
 				<pluginManagement>
 					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-toolchains-plugin</artifactId>
-							<configuration>
-								<toolchains>
-									<jdk>
-										<version>openjdk-1.8.0</version>
-									</jdk>
-								</toolchains>
-							</configuration>
-						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-surefire-plugin</artifactId>
@@ -219,18 +218,6 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>deploy</id>
-			<build>
-				<defaultGoal>deploy/deploy]@pipeline</defaultGoal>
-			</build>
-		</profile>
-		<profile>
-			<id>deploy-signed</id>
-			<build>
-				<defaultGoal>deploy-signed/deploy]@pipeline</defaultGoal>
-			</build>
-		</profile>
 		<!-- REPOSITORIES -->
 		<profile>
 			<id>repo-releases</id>
@@ -255,40 +242,6 @@
 				</repository>
 			</repositories>
 		</profile>
-		<!-- DISTRIBUTION REPOSITORIES -->
-		<profile>
-			<id>dist-repo-releases</id>
-			<distributionManagement>
-				<repository>
-					<id>runeduniverse-releases</id>
-					<url>
-						https://nexus.runeduniverse.net/repository/maven-releases/
-					</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>dist-repo-development</id>
-			<distributionManagement>
-				<repository>
-					<id>runeduniverse-development</id>
-					<url>
-						https://nexus.runeduniverse.net/repository/maven-development/
-					</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>dist-repo-maven-central</id>
-			<distributionManagement>
-				<repository>
-					<id>central-nexus</id>
-					<url>
-						https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
-					</url>
-				</repository>
-			</distributionManagement>
-		</profile>
 		<!-- LICENSES -->
 		<profile>
 			<id>license-apache2-approve</id>
@@ -304,7 +257,7 @@
 						<groupId>com.mycila</groupId>
 						<artifactId>license-maven-plugin</artifactId>
 						<configuration>
-							<dependencyPolicies>
+							<dependencyPolicies combine.children="append">
 								<dependencyPolicy>
 									<type>LICENSE_NAME</type>
 									<rule>APPROVE</rule>
@@ -343,6 +296,46 @@
 									<rule>APPROVE</rule>
 									<value>
 										https://www.apache.org/licenses/LICENSE-2.0.txt
+									</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>license-epl-v10-approve</id>
+			<activation>
+				<property>
+					<name>license-epl-v10-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License, Version 1.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										http://www.eclipse.org/legal/epl-v10.html
+									</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										https://www.eclipse.org/legal/epl-v10.html
 									</value>
 								</dependencyPolicy>
 							</dependencyPolicies>
@@ -441,19 +434,7 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -470,7 +451,7 @@
 					<configuration>
 						<toolchains>
 							<jdk>
-								<version>openjdk-1.8.0</version>
+								<version>${toolchain-jdk-source-version}</version>
 							</jdk>
 						</toolchains>
 					</configuration>
@@ -500,7 +481,7 @@
 					<version>${plugin-mycila-license-version}</version>
 					<configuration>
 						<properties>
-							<year>2024</year>
+							<year>2025</year>
 							<owner>VenaNocta</owner>
 							<email>venanocta@gmail.com</email>
 						</properties>
@@ -539,6 +520,12 @@
 					<configuration>
 						<source>${java-source-version}</source>
 						<target>${java-target-version}</target>
+						<testSource>${java-test-source-version}</testSource>
+						<testTarget>${java-test-target-version}</testTarget>
+						<!-- use starting with version 3.12.0-->
+						<!--
+						<annotationProcessorPathsUseDepMgmt>true</annotationProcessorPathsUseDepMgmt>
+						-->
 						<annotationProcessorPaths>
 							<path>
 								<groupId>org.projectlombok</groupId>
@@ -547,6 +534,24 @@
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
+					<executions>
+						<execution>
+							<id>source-compile</id>
+							<configuration>
+								<jdkToolchain>
+									<version>${toolchain-jdk-source-version}</version>
+								</jdkToolchain>
+							</configuration>
+						</execution>
+						<execution>
+							<id>test-compile</id>
+							<configuration>
+								<jdkToolchain>
+									<version>${toolchain-jdk-test-version}</version>
+								</jdkToolchain>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -565,95 +570,21 @@
 					<configuration>
 						<trimStackTrace>false</trimStackTrace>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>${plugin-maven-gpg-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>${plugin-maven-install-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>${plugin-mojohaus-build-helper-version}</version>
 					<executions>
 						<execution>
-							<id>packaging-jar</id>
+							<id>test-compile</id>
 							<configuration>
-								<artifacts>
-									<!-- javadoc -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar
-										</file>
-										<type>jar</type>
-										<classifier>javadoc</classifier>
-									</artifact>
-									<!-- sources -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar
-										</file>
-										<type>jar</type>
-										<classifier>sources</classifier>
-									</artifact>
-								</artifacts>
-							</configuration>
-						</execution>
-						<execution>
-							<id>signed-pom</id>
-							<configuration>
-								<artifacts>
-									<!-- gpg signature -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}.pom.asc
-										</file>
-										<type>pom.asc</type>
-									</artifact>
-								</artifacts>
-							</configuration>
-						</execution>
-						<execution>
-							<id>signed-jar</id>
-							<configuration>
-								<artifacts>
-									<!-- gpg signatures -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}.jar.asc
-										</file>
-										<type>jar.asc</type>
-									</artifact>
-									<!-- javadoc -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-javadoc.jar.asc
-										</file>
-										<type>jar.asc</type>
-										<classifier>javadoc</classifier>
-									</artifact>
-									<!-- sources -->
-									<artifact>
-										<file>
-											${project.build.directory}/${project.build.finalName}-sources.jar.asc
-										</file>
-										<type>jar.asc</type>
-										<classifier>sources</classifier>
-									</artifact>
-								</artifacts>
+								<jdkToolchain>
+									<version>${toolchain-jdk-test-version}</version>
+								</jdkToolchain>
 							</configuration>
 						</execution>
 					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${plugin-maven-deploy-version}</version>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>${plugin-maven-install-version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

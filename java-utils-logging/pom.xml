@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2024 VenaNocta (venanocta@gmail.com)
+    Copyright © 2025 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@
 	<parent>
 		<groupId>net.runeduniverse.lib.utils</groupId>
 		<artifactId>utils-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.1.0</version>
 	</parent>
 
 	<artifactId>utils-logging</artifactId>
-	<version>1.0.2</version>
+	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>Java Logging Tools</name>
@@ -45,7 +45,7 @@
 		<!-- VERSIONS -->
 		<java-source-version>1.8</java-source-version>
 		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>1.0.1</runeduniverse-utils-bom-version>
+		<runeduniverse-utils-bom-version>2.0.0</runeduniverse-utils-bom-version>
 	</properties>
 
 	<licenses>
@@ -86,6 +86,10 @@
 	</issueManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.runeduniverse.lib.utils</groupId>
+			<artifactId>utils-logging-api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ package net.runeduniverse.lib.utils.scanner.debug;
 import java.net.URL;
 
 import lombok.Getter;
-import net.runeduniverse.lib.utils.logging.logs.CompoundTree;
+import net.runeduniverse.lib.utils.logging.log.DefaultCompoundTree;
+import net.runeduniverse.lib.utils.logging.log.api.CompoundTree;
 import net.runeduniverse.lib.utils.scanner.debug.api.Intercepter;
 
 @Getter
@@ -29,7 +30,7 @@ public class IntercepterSection implements Intercepter {
 
 	public IntercepterSection(String id, String headline) {
 		this.id = id;
-		this.tree = new CompoundTree(id, headline);
+		this.tree = new DefaultCompoundTree(id, headline);
 	}
 
 	public URL intercept(URL url) {

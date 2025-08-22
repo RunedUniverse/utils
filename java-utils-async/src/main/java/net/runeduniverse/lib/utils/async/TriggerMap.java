@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2025 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package net.runeduniverse.lib.utils.async;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import net.runeduniverse.lib.utils.async.api.IRegistry;
 
 public class TriggerMap<KEY> implements IRegistry<KEY> {
 
