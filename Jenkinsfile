@@ -57,7 +57,7 @@ node {
 		env.GLOBAL_MAVEN_SETTINGS     = '/srv/jenkins/.m2/global-settings.xml'
 		env.MAVEN_SETTINGS            = "${ env.WORKSPACE }/.mvn/settings.xml"
 		env.MAVEN_TOOLCHAINS          = "${ env.WORKSPACE }/.mvn/toolchains.xml"
-		if(env.GIT_BRANCH == 'master') {
+		if(env.BRANCH_NAME == 'master') {
 			env.REPOS = 'repo-releases'
 		} else {
 			env.REPOS = 'repo-releases,repo-development'
@@ -201,7 +201,7 @@ node {
 					}
 					// deploy to release repo
 					stage('Release') {
-						if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
+						if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.BRANCH_NAME != 'master') {
 							skipStage()
 							return
 						}
@@ -214,7 +214,7 @@ node {
 					mergeBundle( source: mod.id() )
 				}
 				stage('Stage at Maven-Central') {
-					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.GIT_BRANCH != 'master') {
+					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.BRANCH_NAME != 'master') {
 						skipStage()
 						return
 					}
