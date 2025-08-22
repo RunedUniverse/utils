@@ -17,7 +17,7 @@ def installArtifact(mod) {
 	} finally {
 		def baseName="${ artifactId }-${ version }"
 		// create spec .pom in target/ path
-		sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ baseName }.pom'"
+		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ baseName }.pom"
 		// archive artifacts
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
