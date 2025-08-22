@@ -183,34 +183,21 @@ node {
 						def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
 						def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 						// bundle basic artifacts
-						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom", metadata: [
-							'groupId': groupId, 'artifactId': artifactId, 'version': version, 'extension': 'pom'
+						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom*", metadata: [
+							'groupId': groupId, 'artifactId': artifactId, 'version': version
 						])
 						for (test in [ false, true ]) {
 							for (classifier in [ '', 'javadoc', 'sources' ]) {
 								if(test)
 									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar", metadata: [
-									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar'
+								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar*", metadata: [
+									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier
 								])
 							}
 						}
 						// deploy to development repo
 						stage('Develop'){
 							deployArtifacts repo: 'nexus-runeduniverse>maven-development'
-						}
-						// add signatures to bundle
-						bundleArtifacts( artifacts: "${ artifactId }-${ version }.pom.asc", metadata: [
-							'groupId': groupId, 'artifactId': artifactId, 'version': version, 'extension': 'pom.asc'
-						])
-						for (test in [ false, true ]) {
-							for (classifier in [ '', 'javadoc', 'sources' ]) {
-								if(test)
-									classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-								bundleArtifacts( artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar.asc", metadata: [
-									'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier, 'extension': 'jar.asc'
-								])
-							}
 						}
 						// deploy to release repo
 						stage('Release') {
@@ -230,8 +217,7 @@ node {
 						skipStage()
 						return
 					}
-					// never add : -P ${REPOS} => this is ment to fail here
-					sh "mvn-dev -P repo-releases,dist-repo-maven-central,deploy-signed -pl=${ mod.relPathFrom('maven-parent') }"
+					deployArtifacts repo: 'maven-central>net.runeduniverse'
 				}
 			}
 		}
