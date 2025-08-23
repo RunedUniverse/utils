@@ -6,6 +6,6 @@
 TAG=$1/v$(mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=project.version -q -DforceStdout -pl=$2 | tail -1)
 # delete local tag in case it remained from a previous one!
 git tag -d $TAG &>/dev/null
-mvn org.apache.maven.plugins:maven-scm-plugin:tag -Dtag=$TAG -DpushChanges=false -q
+mvn org.apache.maven.plugins:maven-scm-plugin:tag -Dtag=$TAG -DpushChanges=false -q &>/dev/null
 printf $TAG
 
