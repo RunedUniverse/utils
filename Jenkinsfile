@@ -15,28 +15,27 @@ def installArtifact(mod) {
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
-		String baseName="${ artifactId }-${ version }"
 		// create spec .pom in target/ path
-		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ baseName }.pom"
+		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ artifactId }-${ version }.pom"
 		// archive artifacts
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
-			archiveArtifacts artifacts: "${ baseName }.pom", fingerprint: true
+			archiveArtifacts artifacts: "${ artifactId }-${ version }.pom", fingerprint: true
 			if(mod.hasTag('pack-jar')) {
-				archiveArtifacts artifacts: "${ baseName }*.jar", fingerprint: true
+				archiveArtifacts artifacts: "${ artifactId }-${ version }*.jar", fingerprint: true
 			}
 		}
 		// create signatures
-		signArtifacts(artifacts: "${ baseName }*")
+		signArtifacts(artifacts: "${ artifactId }-${ version }*")
 		// bundle artifacts + signatures
-		bundleArtifacts( bundle: mod.id(), artifacts: "${ baseName }.pom*", metadata: [
+		bundleArtifacts( bundle: mod.id(), artifacts: "${ artifactId }-${ version }.pom*", metadata: [
 			'groupId': groupId, 'artifactId': artifactId, 'version': version
 		])
 		for (test in [ false, true ]) {
 			for (classifier in [ '', 'javadoc', 'sources' ]) {
 				if(test)
 					classifier = classifier=='' ? 'tests' : ('test-'+classifier)
-				bundleArtifacts( bundle: mod.id(), artifacts: "${ baseName }${ classifier=='' ? '' : ('-'+classifier) }.jar*", metadata: [
+				bundleArtifacts( bundle: mod.id(), artifacts: "${ artifactId }-${ version }${ classifier=='' ? '' : ('-'+classifier) }.jar*", metadata: [
 					'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier
 				])
 			}
