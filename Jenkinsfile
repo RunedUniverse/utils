@@ -12,11 +12,14 @@ def installArtifact(mod) {
 	String groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
 	String artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
 	String version = evalValue('project.version', mod.relPathFrom('maven-parent'))
+	echo "Building: ${ groupId }:${ artifactId }:${ version }"
 	try {
 		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
 		// create spec .pom in target/ path
-		sh "cp -T ${ mod.path() }/pom.xml ${ mod.path() }/target/${ artifactId }-${ version }.pom"
+		dir(path: "${ mod.path() }") {
+			sh( script: ('cp -T pom.xml target/' + artifactId + '-' + version + '.pom') )
+		}
 		// archive artifacts
 		dir(path: "${ mod.path() }/target") {
 			sh 'ls -l'
