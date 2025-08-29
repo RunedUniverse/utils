@@ -15,6 +15,9 @@
  */
 package net.runeduniverse.lib.utils.logging.log;
 
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.Getter;
 import net.runeduniverse.lib.utils.logging.log.api.CompoundTreeStyle;
 import net.runeduniverse.lib.utils.logging.log.api.LineRecord;
@@ -23,7 +26,9 @@ public class DefaultLineRecord implements LineRecord {
 
 	protected final CompoundTreeStyle style;
 
+	@Getter
 	protected CharSequence tag = null;
+	@Getter
 	protected CharSequence content = null;
 	@Getter
 	private int tagSize;
@@ -44,21 +49,21 @@ public class DefaultLineRecord implements LineRecord {
 		this.content = content;
 	}
 
-	protected String buildLine(final int tagSize) {
+	protected CharSequence buildLine(final int tagSize) {
 		if (this.tag == null)
-			return (String) this.content + '\n';
+			return this.content;
 
 		final StringBuilder builder = new StringBuilder(String.format(this.style.getTaggedTxtBox()
 				.toString(), this.tag));
 		for (int i = 0; i < (tagSize - this.tagSize); i++)
 			builder.append(' ');
 		builder.append(this.style.getTaggedTxtSplitter())
-				.append(this.content)
-				.append('\n');
+				.append(this.content);
 		return builder.toString();
 	}
 
-	public String write(final CharSequence[] baseOffset, final int tagSize) {
-		return String.join("", baseOffset) + this.buildLine(tagSize);
+	@Override
+	public List<String> write(final CharSequence[] baseOffset, final int tagSize) {
+		return Arrays.asList(String.join("", baseOffset) + buildLine(tagSize));
 	}
 }

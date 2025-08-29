@@ -79,7 +79,7 @@ public class DefaultCompoundTree implements CompoundTree {
 	}
 
 	protected boolean checkContent(final boolean matchLines, final boolean matchTrees) {
-		for (LogEntry entry : entries) {
+		for (LogEntry entry : this.entries) {
 			// check CompoundTree
 			if (entry instanceof CompoundTree) {
 				if (matchTrees)
@@ -108,20 +108,35 @@ public class DefaultCompoundTree implements CompoundTree {
 		return this;
 	}
 
+	protected TreeRecord toRecord() {
+		return new DefaultTreeRecord(this.style, this.tag, this.title);
+	}
+
+	protected TreeRecord toRecord2() {
+		final TreeRecord record = toRecord();
+		for (LogEntry e : this.entries)
+			e.toRecord(record);
+		return record;
+	}
+
 	@Override
 	public void toRecord(final TreeRecord rootRecord) {
-		final DefaultTreeRecord record = new DefaultTreeRecord(this.style, this.tag, this.title);
-		for (LogEntry e : entries)
-			e.toRecord(record);
-		rootRecord.append(record);
+		rootRecord.append(toRecord2());
 	}
 
 	@Override
 	public String toString() {
-		final DefaultTreeRecord record = new DefaultTreeRecord(this.style, this.tag, this.title);
-		for (LogEntry e : entries)
-			e.toRecord(record);
-		return record.toString();
+		return toRecord2().toString();
+	}
+
+	@Override
+	public List<String> toText() {
+		return toText(null);
+	}
+
+	@Override
+	public List<String> toText(final CharSequence prefix) {
+		return toRecord2().toText(prefix);
 	}
 
 	public static CompoundTreeStyle defaultBOM() {

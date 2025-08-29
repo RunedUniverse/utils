@@ -17,6 +17,7 @@ package net.runeduniverse.lib.utils.logging.log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -26,8 +27,8 @@ import net.runeduniverse.lib.utils.logging.log.api.TreeRecord;
 
 public class DefaultTreeRecord extends DefaultLineRecord implements TreeRecord {
 
-	private final List<LineRecord> subRecords;
-	private int mxTagSize = 0;
+	protected final List<LineRecord> subRecords;
+	protected int mxTagSize = 0;
 
 	public DefaultTreeRecord(final CompoundTreeStyle style, final CharSequence title) {
 		this(style, title, ArrayList::new);
@@ -57,32 +58,48 @@ public class DefaultTreeRecord extends DefaultLineRecord implements TreeRecord {
 		return this;
 	}
 
+	protected Iterator<LineRecord> subRecordIterator() {
+		return this.subRecords.stream()
+				.iterator();
+	}
+
 	@Override
-	public String write(final CharSequence[] baseOffset, final int tagSize) {
-		final StringBuilder builder = new StringBuilder(String.join("", baseOffset)).append(this.buildLine(tagSize));
+	public List<String> write(final CharSequence[] baseOffset, final int tagSize) {
+		final List<String> result = new LinkedList<>();
+		result.addAll(super.write(baseOffset, tagSize));
 		final CharSequence[] offset = new CharSequence[baseOffset.length + 1];
 		for (int i = 0; i < baseOffset.length; i++)
 			offset[i] = baseOffset[i];
 		if (baseOffset.length > 1) {
-			if (baseOffset[baseOffset.length - 1] == this.style.getElementOffset())
-				offset[baseOffset.length - 1] = this.style.getEmptyElementOffset();
 			if (baseOffset[baseOffset.length - 1] == this.style.getLastElementOffset())
 				offset[baseOffset.length - 1] = this.style.getNoElementOffset();
+			else if (baseOffset[baseOffset.length - 1] == this.style.getElementOffset())
+				offset[baseOffset.length - 1] = this.style.getEmptyElementOffset();
 		}
 
-		for (Iterator<LineRecord> iterator = subRecords.iterator(); iterator.hasNext();) {
+		for (Iterator<LineRecord> iterator = subRecordIterator(); iterator.hasNext();) {
 			final LineRecord r = (LineRecord) iterator.next();
 			if (iterator.hasNext())
 				offset[baseOffset.length] = this.style.getElementOffset();
 			else
 				offset[baseOffset.length] = this.style.getLastElementOffset();
-			builder.append(r.write(offset, this.mxTagSize));
+			result.addAll(r.write(offset, this.mxTagSize));
 		}
-		return builder.toString();
+		return result;
 	}
 
 	@Override
 	public String toString() {
-		return this.write(new CharSequence[] { this.style.getInitialOffset() }, 0);
+		return String.join("\n", write(new CharSequence[] { this.style.getInitialOffset() }, getTagSize()));
+	}
+
+	@Override
+	public List<String> toText(final CharSequence prefix) {
+		CharSequence offset = this.style.getInitialOffset();
+		if (offset == null)
+			offset = "";
+		if (prefix != null)
+			offset = prefix.toString() + offset.toString();
+		return write(new CharSequence[] { offset }, getTagSize());
 	}
 }

@@ -15,10 +15,16 @@
  */
 package net.runeduniverse.lib.utils.logging.log.api;
 
+import java.util.List;
+
 public interface LineRecord {
+
+	public CharSequence getTag();
 
 	public int getTagSize();
 
-	public String write(CharSequence[] baseOffset, int tagSize);
+	public CharSequence getContent();
+
+	public List<String> write(CharSequence[] baseOffset, int tagSize);
 
 }

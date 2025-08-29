@@ -16,7 +16,7 @@
 package net.runeduniverse.lib.utils.logging;
 
 public class Level extends java.util.logging.Level {
-	private static final long serialVersionUID = -1369172045174361996L;
+	private static final long serialVersionUID = 1L;
 
 	protected Level(final String name, final int value) {
 		super(name, value);

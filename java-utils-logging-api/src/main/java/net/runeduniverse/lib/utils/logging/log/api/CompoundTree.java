@@ -15,6 +15,8 @@
  */
 package net.runeduniverse.lib.utils.logging.log.api;
 
+import java.util.List;
+
 public interface CompoundTree extends LogEntry {
 
 	public boolean hasLines();
@@ -28,5 +30,11 @@ public interface CompoundTree extends LogEntry {
 	public CompoundTree append(CharSequence tag, CharSequence line);
 
 	public CompoundTree append(CompoundTree tree);
+
+	public String toString();
+
+	public List<String> toText();
+
+	public List<String> toText(CharSequence prefix);
 
 }

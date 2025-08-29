@@ -23,7 +23,7 @@ public final class DebugLogger extends Logger {
 
 	public DebugLogger() {
 		super("DEBUG-LOGGER", null);
-		this.setLevel(Level.ALL);
+		super.setLevel(Level.ALL);
 	}
 
 	public DebugLogger(final Logger parent) {

@@ -15,8 +15,14 @@
  */
 package net.runeduniverse.lib.utils.logging.log.api;
 
+import java.util.List;
+
 public interface TreeRecord extends LineRecord {
 
 	public TreeRecord append(LineRecord record);
+
+	public String toString();
+
+	public List<String> toText(CharSequence prefix);
 
 }
