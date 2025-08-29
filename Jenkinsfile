@@ -196,6 +196,8 @@ node {
 						skipStage()
 						return
 					}
+					// bundle info
+					bundleInfo( bundle: mod.id(), metadata: true )
 					// deploy to development repo
 					stage('Develop'){
 						deployArtifacts( bundle: mod.id(), repo: 'nexus-runeduniverse>maven-development' )
@@ -212,7 +214,7 @@ node {
 						}
 					}
 					// merge bundles into default
-					mergeBundle( source: mod.id() )
+					bundleMerge( source: mod.id() )
 				}
 				stage('Stage at Maven-Central') {
 					if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE') || env.BRANCH_NAME != 'master') {
