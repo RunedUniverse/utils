@@ -209,10 +209,11 @@ node {
 							return
 						}
 						deployArtifacts( bundle: mod.id(), repo: 'nexus-runeduniverse>maven-releases' )
+						def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
+						def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
 						def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 						sshagent (credentials: ['RunedUniverse-Jenkins']) {
-							sh "git tag -d ${ mod.id() }/v${ version } || true"
-							sh "git tag -a ${ mod.id() }/v${ version }"
+							sh "git tag -a ${ mod.id() }/v${ version } -f -m '[artifact] ${ groupId }:${ artifactId }:${ version }'"
 							sh "git push origin ${ mod.id() }/v${ version }"
 						}
 					}
