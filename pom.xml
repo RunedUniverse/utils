@@ -118,11 +118,15 @@
 		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
 		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
 		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
+		<!-- ARTIFACT VERSIONS - WORKFLOW -->
+		<plugin-workflow-java-version>0.1.0</plugin-workflow-java-version>
+		<plugin-workflow-pipeline-version>0.1.0</plugin-workflow-pipeline-version>
 		<!-- VERSIONS - TESTING -->
 		<junit-platform-launcher-version>1.8.2</junit-platform-launcher-version>
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
 		<junit-jupiter-api-version>5.8.2</junit-jupiter-api-version>
 		<junit-jupiter-engine-version>5.8.2</junit-jupiter-engine-version>
+
 	</properties>
 
 	<profiles>
@@ -142,7 +146,7 @@
 				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
 			</properties>
 			<build>
-				<defaultGoal>clean dev/install]</defaultGoal>
+				<defaultGoal>clean dev/install</defaultGoal>
 				<pluginManagement>
 					<plugins>
 						<plugin>
@@ -159,12 +163,12 @@
 		<profile>
 			<id>format</id>
 			<build>
-				<defaultGoal>dev/validate</defaultGoal>
+				<defaultGoal>dev/[validate]</defaultGoal>
 			</build>
 		</profile>
 		<!-- PIPELINE -->
 		<profile>
-			<id>debug</id>
+			<id>ci-debug</id>
 			<properties>
 				<r4m.fancy-output>false</r4m.fancy-output>
 			</properties>
@@ -173,30 +177,30 @@
 			</build>
 		</profile>
 		<profile>
-			<id>validate</id>
+			<id>ci-validate</id>
 			<build>
 				<defaultGoal>check/[validate]@pipeline</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>install</id>
+			<id>ci-install</id>
 			<build>
 				<defaultGoal>
-					clean@pipeline
-					install/install]@pipeline
+					install/clean@pipeline
+					install/install@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>build-tests</id>
+			<id>ci-test-build</id>
 			<build>
 				<defaultGoal>
-					junit/test-compile]@pipeline
+					junit/]test@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>test-junit-jupiter</id>
+			<id>ci-test-exec</id>
 			<build>
 				<defaultGoal>
 					junit/validate@pipeline
@@ -404,13 +408,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>toolchain</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>net.revelc.code.formatter</groupId>
@@ -439,6 +436,14 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+				<artifactId>maven-pipeline-workflow</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+				<artifactId>maven-java-workflow</artifactId>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -594,6 +599,16 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>${plugin-maven-install-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+					<artifactId>maven-pipeline-workflow</artifactId>
+					<version>${plugin-workflow-pipeline-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+					<artifactId>maven-java-workflow</artifactId>
+					<version>${plugin-workflow-java-version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
