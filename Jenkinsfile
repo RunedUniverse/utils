@@ -14,7 +14,7 @@ def installArtifact(mod) {
 	def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
 	echo "Building: ${ groupId }:${ artifactId }:${ version }"
 	try {
-		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,install -pl=${ mod.relPathFrom('maven-parent') }"
+		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,ci-install -pl=${ mod.relPathFrom('maven-parent') }"
 	} finally {
 		def baseName="${ artifactId }-${ version }"
 		// create spec .pom in target/ path
@@ -117,11 +117,11 @@ node {
 				return
 			}
 			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
-			sh "mvn-dev -P ${ REPOS },install,validate dependency:go-offline -U --fail-never"
+			sh "mvn-dev -P ${ REPOS },ci-install,ci-validate dependency:go-offline -U --fail-never"
 		}
 
 		stage('Code Validation') {
-			sh "mvn-dev -P ${ REPOS },validate,license-apache2-approve,license-epl-v10-approve --fail-at-end -T1C"
+			sh "mvn-dev -P ${ REPOS },ci-validate,license-apache2-approve,license-epl-v10-approve --fail-at-end -T1C"
 		}
 
 		bundleContext {
@@ -164,8 +164,8 @@ node {
 					skipStage()
 					return
 				}
-				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,build-tests"
-				sh "mvn-dev --fail-never -P ${ REPOS },toolchain-openjdk-1-8-0,test-junit-jupiter,test-system"
+				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,ci-test-build"
+				sh "mvn-dev --fail-never -P ${ REPOS },toolchain-openjdk-1-8-0,ci-test-exec,test-system"
 				// check tests, archive reports in case junit flags errors
 				junit '*/target/surefire-reports/*.xml'
 				if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
