@@ -45,7 +45,7 @@ def installArtifact(mod) {
 	}
 }
 
-node {
+node( label: 'linux' ) {
 	withModules {
 		tool(name: 'maven-latest', type: 'maven')
 
