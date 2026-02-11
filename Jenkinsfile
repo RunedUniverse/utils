@@ -112,12 +112,18 @@ node( label: 'linux' ) {
 		}
 
 		stage('Update Maven Repo') {
-			if(checkAllModules(match: 'all', active: false)) {
-				skipStage()
-				return
-			}
+			echo 'purging local maven repository'
 			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
-			sh "mvn-dev -P ${ REPOS },ci-install,ci-validate dependency:go-offline -U --fail-never"
+
+			echo 'caching validation dependencies'
+			sh "mvn-dev -P ${ REPOS },ci-validate dependency:go-offline -U --fail-never"
+
+			if(checkAllModules(match: 'all', active: false)) {
+				echo 'skipping build dependency download » unused'
+			} else {
+				echo 'caching build dependencies'
+				sh "mvn-dev -P ${ REPOS },ci-install dependency:go-offline -U --fail-never"
+			}
 		}
 
 		stage('Code Validation') {
