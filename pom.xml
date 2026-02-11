@@ -233,9 +233,17 @@
 					</url>
 				</repository>
 			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>runeduniverse-releases</id>
+					<url>
+						https://nexus.runeduniverse.net/repository/maven-releases/
+					</url>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 		<profile>
-			<!-- dev-repo contains: build-helper-java & development builds -->
+			<!-- dev-repo contains: development builds -->
 			<id>repo-development</id>
 			<repositories>
 				<repository>
@@ -245,6 +253,14 @@
 					</url>
 				</repository>
 			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>runeduniverse-development</id>
+					<url>
+						https://nexus.runeduniverse.net/repository/maven-development/
+					</url>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 		<!-- LICENSES -->
 		<profile>
