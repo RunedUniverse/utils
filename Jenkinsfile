@@ -116,13 +116,13 @@ node( label: 'linux' ) {
 			sh "mvn-dev -P ${ REPOS } dependency:purge-local-repository -DactTransitively=false -DreResolve=false"
 
 			echo 'caching validation dependencies'
-			sh "mvn-dev -P ${ REPOS },ci-validate dependency:go-offline -U --fail-never"
+			sh "mvn-dev -P ${ REPOS },ci-validate dependency:resolve-plugins dependency:resolve -U --fail-never"
 
 			if(checkAllModules(match: 'all', active: false)) {
 				echo 'skipping build dependency download » unused'
 			} else {
 				echo 'caching build dependencies'
-				sh "mvn-dev -P ${ REPOS },ci-install dependency:go-offline -U --fail-never"
+				sh "mvn-dev -P ${ REPOS },ci-install dependency:resolve -U --fail-never"
 			}
 		}
 
