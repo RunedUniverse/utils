@@ -1,22 +1,29 @@
-def evalValue(expression, path) {
+def evalValue(expression, path = null) {
 	return sh( returnStdout: true,
-		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=${ expression } -q -DforceStdout -pl=${ path } | tail -1")
+		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=${ expression } -q -DforceStdout ${ path==null ? '' : ('-pl='+path) } | tail -1")
 }
 
-def installArtifact(mod) {
+def getToolchainId(mod) {
+	if(mod.hasTag('jdk-11'))
+		return 'toolchain-openjdk-11';
+	return 'toolchain-openjdk-1-8-0';
+}
+
+def installArtifact(mod, parent = null) {
 	if(!mod.active()) {
 		skipStage()
 		return
 	}
+	def relPath = (parent == null ? '.' : mod.relPathFrom(parent))
 	// get module metadata
-	def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
-	def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
-	def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
+	def groupId = evalValue('project.groupId', relPath)
+	def artifactId = evalValue('project.artifactId', relPath)
+	def version = evalValue('project.version', relPath)
 	echo "Building: ${ groupId }:${ artifactId }:${ version }"
 	try {
-		sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,ci-install -pl=${ mod.relPathFrom('maven-parent') }"
+		sh "mvn-dev -P ${ REPOS },${ getToolchainId(mod) },ci-install -pl=${ relPath }"
 	} finally {
-		def baseName="${ artifactId }-${ version }"
+		def baseName = "${ artifactId }-${ version }"
 		// create spec .pom in target/ path
 		sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ baseName }.pom'"
 		// archive artifacts
@@ -41,6 +48,26 @@ def installArtifact(mod) {
 					'groupId': groupId, 'artifactId': artifactId, 'version': version, 'classifier': classifier
 				])
 			}
+		}
+	}
+}
+
+def testArtifacts(toolchainId, tag, parent) {
+	stage(tag) {
+		def mods = getModules(withTags: [ 'test', tag ]);
+
+		if(!mods) {
+			skipStage()
+			return
+		}
+
+		def modPaths = mods.collect({ it.relPathFrom(parent) }).join(',');
+		sh "mvn-dev -P ${ REPOS },${ toolchainId },ci-test-build -pl=${ modPaths }"
+		sh "mvn-dev --fail-never -P ${ REPOS },${ toolchainId },ci-test-exec,test-system -pl=${ modPaths }"
+		// check tests, archive reports in case junit flags errors
+		junit '*/target/surefire-reports/*.xml'
+		if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
+			archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
 		}
 	}
 }
@@ -72,27 +99,28 @@ node( label: 'linux' ) {
 			
 			addModule id: 'maven-parent',               path: '.',                          name: 'Maven Parent',                      tags: [ 'parent' ]
 			addModule id: 'java-utils-bom',             path: 'java-utils-bom',             name: 'Bill of Materials',                 tags: [ 'bom' ]
-			addModule id: 'java-utils-async-api',       path: 'java-utils-async-api',       name: 'Java Async Utils [API]',            tags: [         'build1a', 'pack-jar' ]
-			addModule id: 'java-utils-async',           path: 'java-utils-async',           name: 'Java Async Utils',                  tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-chain-api',       path: 'java-utils-chain-api',       name: 'Java Chain Library [API]',          tags: [         'build2a', 'pack-jar' ]
-			addModule id: 'java-utils-chain',           path: 'java-utils-chain',           name: 'Java Chain Library',                tags: [ 'test', 'build2',  'pack-jar' ]
-			addModule id: 'java-utils-common-api',      path: 'java-utils-common-api',      name: 'Java Common Utils [API]',           tags: [         'build1a', 'pack-jar' ]
-			addModule id: 'java-utils-common',          path: 'java-utils-common',          name: 'Java Common Utils',                 tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-conditional-api', path: 'java-utils-conditional-api', name: 'Java Conditional Utils [API]',      tags: [         'build2a', 'pack-jar' ]
-			addModule id: 'java-utils-conditional',     path: 'java-utils-conditional',     name: 'Java Conditional Utils',            tags: [ 'test', 'build2',  'pack-jar' ]
-			addModule id: 'java-utils-config-api',      path: 'java-utils-config-api',      name: 'Java Config Utils [API]',           tags: [         'build1a', 'pack-jar' ]
-			addModule id: 'java-utils-config',          path: 'java-utils-config',          name: 'Java Config Utils',                 tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-errors',          path: 'java-utils-errors',          name: 'Java Error Handling Library',       tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-logging-api',     path: 'java-utils-logging-api',	    name: 'Java Logging Tools [API]',          tags: [         'build1a', 'pack-jar' ]
-			addModule id: 'java-utils-logging',         path: 'java-utils-logging',	        name: 'Java Logging Tools',                tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-maven3-api',      path: 'java-utils-maven3-api',      name: 'Java Maven3 Utils [API]',           tags: [         'build1a', 'pack-jar' ]
-			addModule id: 'java-utils-maven3',          path: 'java-utils-maven3',          name: 'Java Maven3 Utils',                 tags: [ 'test', 'build1',  'pack-jar' ]
-			addModule id: 'java-utils-maven3-ext-api',  path: 'java-utils-maven3-ext-api',  name: 'Java Maven3 Extension Utils [API]', tags: [         'build3a', 'pack-jar' ]
-			addModule id: 'java-utils-maven3-ext',      path: 'java-utils-maven3-ext',      name: 'Java Maven3 Extension Utils',       tags: [ 'test', 'build3',  'pack-jar' ]
-			addModule id: 'java-utils-plexus',          path: 'java-utils-plexus',          name: 'Java Plexus Utils',                 tags: [ 'test', 'build2',  'pack-jar' ]
-			addModule id: 'java-utils-scanner-api',     path: 'java-utils-scanner-api',     name: 'Java Scanner [API]',                tags: [         'build2a', 'pack-jar' ]
-			addModule id: 'java-utils-scanner',         path: 'java-utils-scanner',         name: 'Java Scanner',                      tags: [ 'test', 'build2',  'pack-jar' ]
+			addModule id: 'java-utils-async-api',       path: 'java-utils-async-api',       name: 'Java Async Utils [API]',            tags: [         'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-async',           path: 'java-utils-async',           name: 'Java Async Utils',                  tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-chain-api',       path: 'java-utils-chain-api',       name: 'Java Chain Library [API]',          tags: [         'build2a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-chain',           path: 'java-utils-chain',           name: 'Java Chain Library',                tags: [ 'test', 'build2',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-common-api',      path: 'java-utils-common-api',      name: 'Java Common Utils [API]',           tags: [         'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-common',          path: 'java-utils-common',          name: 'Java Common Utils',                 tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-conditional-api', path: 'java-utils-conditional-api', name: 'Java Conditional Utils [API]',      tags: [         'build2a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-conditional',     path: 'java-utils-conditional',     name: 'Java Conditional Utils',            tags: [ 'test', 'build2',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-config-api',      path: 'java-utils-config-api',      name: 'Java Config Utils [API]',           tags: [         'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-config',          path: 'java-utils-config',          name: 'Java Config Utils',                 tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-errors',          path: 'java-utils-errors',          name: 'Java Error Handling Library',       tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-logging-api',     path: 'java-utils-logging-api',	    name: 'Java Logging Tools [API]',          tags: [         'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-logging',         path: 'java-utils-logging',	        name: 'Java Logging Tools',                tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-maven3-api',      path: 'java-utils-maven3-api',      name: 'Java Maven3 Utils [API]',           tags: [         'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-maven3',          path: 'java-utils-maven3',          name: 'Java Maven3 Utils',                 tags: [ 'test', 'build1',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-maven3-ext-api',  path: 'java-utils-maven3-ext-api',  name: 'Java Maven3 Extension Utils [API]', tags: [         'build3a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-maven3-ext',      path: 'java-utils-maven3-ext',      name: 'Java Maven3 Extension Utils',       tags: [ 'test', 'build3',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-plexus',          path: 'java-utils-plexus',          name: 'Java Plexus Utils',                 tags: [ 'test', 'build2',  'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-scanner-api',     path: 'java-utils-scanner-api',     name: 'Java Scanner [API]',                tags: [         'build2a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-scanner',         path: 'java-utils-scanner',         name: 'Java Scanner',                      tags: [ 'test', 'build2',  'pack-jar', 'jdk-1.8.0' ]
 		}
+		def parentMod = getModule(id: 'maven-parent');
 
 		stage('Init Modules') {
 			sshagent (credentials: ['RunedUniverse-Jenkins']) {
@@ -101,7 +129,7 @@ node( label: 'linux' ) {
 					mod.activate(
 						!mod.hasTag('skip') && sh(
 								returnStdout: true,
-								script: "git-check-version-tag ${ mod.id() } ${ mod.relPathFrom('maven-parent') }"
+								script: "git-check-version-tag ${ mod.id() } ${ mod.relPathFrom(parentMod) }"
 							) == '1'
 					);
 				}
@@ -132,36 +160,36 @@ node( label: 'linux' ) {
 
 		bundleContext {
 			stage('Install Maven Parent') {
-				installArtifact( getModule(id: 'maven-parent') );
+				installArtifact( parentMod );
 			}
 			stage('Install - BOMs') {
 				perModule(withTagIn: [ 'bom' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 			}
 
 			stage('Build [1st Level]') {
 				perModule(withTagIn: [ 'build1a' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 				perModule(withTagIn: [ 'build1' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 			}
 			stage('Build [2nd Level]') {
 				perModule(withTagIn: [ 'build2a' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 				perModule(withTagIn: [ 'build2' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 			}
 			stage('Build [3rd Level]') {
 				perModule(withTagIn: [ 'build3a' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 				perModule(withTagIn: [ 'build3' ]) {
-					installArtifact( module );
+					installArtifact( getModule(), parentMod );
 				}
 			}
 
@@ -170,13 +198,9 @@ node( label: 'linux' ) {
 					skipStage()
 					return
 				}
-				sh "mvn-dev -P ${ REPOS },toolchain-openjdk-1-8-0,ci-test-build"
-				sh "mvn-dev --fail-never -P ${ REPOS },toolchain-openjdk-1-8-0,ci-test-exec,test-system"
-				// check tests, archive reports in case junit flags errors
-				junit '*/target/surefire-reports/*.xml'
-				if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
-					archiveArtifacts artifacts: '*/target/surefire-reports/*.xml'
-				}
+
+				testArtifacts('toolchain-openjdk-1-8-0', 'jdk-1.8.0', parentMod);
+				testArtifacts('toolchain-openjdk-11',    'jdk-11',    parentMod);
 			}
 
 			stage('Package Build Result') {
@@ -215,9 +239,9 @@ node( label: 'linux' ) {
 							return
 						}
 						deployArtifacts( bundle: mod.id(), repo: 'nexus-runeduniverse>maven-releases' )
-						def groupId = evalValue('project.groupId', mod.relPathFrom('maven-parent'))
-						def artifactId = evalValue('project.artifactId', mod.relPathFrom('maven-parent'))
-						def version = evalValue('project.version', mod.relPathFrom('maven-parent'))
+						def groupId = evalValue('project.groupId', mod.relPathFrom(parentMod))
+						def artifactId = evalValue('project.artifactId', mod.relPathFrom(parentMod))
+						def version = evalValue('project.version', mod.relPathFrom(parentMod))
 						sshagent (credentials: ['RunedUniverse-Jenkins']) {
 							sh "git tag -a ${ mod.id() }/v${ version } -f -m '[artifact] ${ groupId }:${ artifactId }:${ version }'"
 							sh "git push origin ${ mod.id() }/v${ version }"
