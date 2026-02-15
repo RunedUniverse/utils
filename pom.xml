@@ -107,6 +107,7 @@
 		<lombok-version>1.18.12</lombok-version>
 		<plexus-component-version>1.7.1</plexus-component-version>
 		<!-- ARTIFACT VERSIONS - COMPILER -->
+		<plugin-maven-dependency-version>3.10.0</plugin-maven-dependency-version>
 		<plugin-maven-clean-version>3.1.0</plugin-maven-clean-version>
 		<plugin-maven-toolchains-version>3.1.0</plugin-maven-toolchains-version>
 		<plugin-maven-resources-version>3.2.0</plugin-maven-resources-version>
@@ -126,7 +127,6 @@
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
 		<junit-jupiter-api-version>5.8.2</junit-jupiter-api-version>
 		<junit-jupiter-engine-version>5.8.2</junit-jupiter-engine-version>
-
 	</properties>
 
 	<profiles>
@@ -419,6 +419,10 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 			</plugin>
 			<plugin>
@@ -464,6 +468,11 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${plugin-maven-dependency-version}</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
