@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>UTILS - Bill of Materials</name>
@@ -80,7 +80,7 @@
 		<utils-chain-api-version>2.0.0</utils-chain-api-version>
 		<utils-chain-version>2.0.0</utils-chain-version>
 		<utils-common-api-version>2.0.0</utils-common-api-version>
-		<utils-common-version>2.0.0</utils-common-version>
+		<utils-common-version>2.0.1</utils-common-version>
 		<utils-conditional-api-version>2.0.0</utils-conditional-api-version>
 		<utils-conditional-version>2.0.0</utils-conditional-version>
 		<utils-config-api-version>2.0.0</utils-config-api-version>
