@@ -204,7 +204,7 @@
 			<build>
 				<defaultGoal>
 					test/validate@pipeline
-					test/test@pipeline
+					test/[test]@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
