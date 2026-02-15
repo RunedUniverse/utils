@@ -121,6 +121,7 @@ node( label: 'linux' ) {
 			addModule id: 'java-utils-scanner',         path: 'java-utils-scanner',         name: 'Java Scanner',                      tags: [ 'test', 'build2',  'pack-jar', 'jdk-1.8.0' ]
 		}
 		def parentMod = getModule(id: 'maven-parent');
+		def bomMod = getModule(id: 'java-utils-bom');
 
 		stage('Init Modules') {
 			sshagent (credentials: ['RunedUniverse-Jenkins']) {
@@ -198,6 +199,10 @@ node( label: 'linux' ) {
 					skipStage()
 					return
 				}
+
+				echo 'force update bom version for tests -> test for possible collisions caused by this update'
+				def bomVersion = evalValue('project.version', bomMod.relPathFrom(parentMod))
+				sh "update-pom-property 'runeduniverse-utils-bom-version' '${ bomVersion }'"
 
 				testArtifacts('toolchain-openjdk-1-8-0', 'jdk-1.8.0', parentMod);
 				testArtifacts('toolchain-openjdk-11',    'jdk-11',    parentMod);
