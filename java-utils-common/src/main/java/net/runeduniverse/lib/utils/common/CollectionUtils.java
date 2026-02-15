@@ -50,8 +50,8 @@ public class CollectionUtils {
 			return deque.getLast();
 		}
 		for (Iterator<T> i = collection.iterator(); i.hasNext();) {
-			boolean next = i.hasNext();
 			final T obj = (T) i.next();
+			boolean next = i.hasNext();
 			if (!next)
 				return obj;
 		}
@@ -72,12 +72,12 @@ public class CollectionUtils {
 		// otherwise search everything
 		T value = null;
 		for (Iterator<T> i = collection.iterator(); i.hasNext();) {
-			boolean next = i.hasNext();
 			final T obj = (T) i.next();
+			boolean next = i.hasNext();
 			if (obj != null)
 				value = obj;
 			if (!next)
-				return obj;
+				return value;
 		}
 		return value;
 	}
