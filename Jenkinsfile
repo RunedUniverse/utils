@@ -52,7 +52,7 @@ def installArtifact(mod, parent = null) {
 	}
 }
 
-def testArtifacts(toolchainId, tag, parent) {
+def testArtifacts(toolchainId, tag, parent, flags = []) {
 	stage(tag) {
 		def mods = getModules(withTags: [ 'test', tag ]);
 
@@ -62,8 +62,10 @@ def testArtifacts(toolchainId, tag, parent) {
 		}
 
 		def modPaths = mods.collect({ it.relPathFrom(parent) }).join(',');
-		sh "mvn-dev -P ${ REPOS },${ toolchainId },ci-test-build -pl=${ modPaths }"
-		sh "mvn-dev --fail-never -P ${ REPOS },${ toolchainId },ci-test-exec,test-system -pl=${ modPaths }"
+		def testFlags = flags.collect({ "-D${ it }" }).join(' ');
+
+		sh "mvn-dev -P ${ REPOS },${ toolchainId },ci-test-build -pl=${ modPaths } ${ testFlags }"
+		sh "mvn-dev --fail-never -P ${ REPOS },${ toolchainId },ci-test-exec,test-system -pl=${ modPaths } ${ testFlags }"
 		// check tests, archive reports in case junit flags errors
 		junit '*/target/surefire-reports/*.xml'
 		if(currentBuild.resultIsWorseOrEqualTo('UNSTABLE')) {
@@ -201,11 +203,11 @@ node( label: 'linux' ) {
 				}
 
 				echo 'force update bom version for tests -> test for possible collisions caused by this update'
-				def bomVersion = evalValue('project.version', bomMod.relPathFrom(parentMod))
-				sh "update-pom-property 'runeduniverse-utils-bom-version' '${ bomVersion }'"
+				def bomVersion = evalValue('project.version', bomMod.relPathFrom(parentMod));
+				def flags = [ "runeduniverse-utils-bom-version=${ bomVersion }" ];
 
-				testArtifacts('toolchain-openjdk-1-8-0', 'jdk-1.8.0', parentMod);
-				testArtifacts('toolchain-openjdk-11',    'jdk-11',    parentMod);
+				testArtifacts('toolchain-openjdk-1-8-0', 'jdk-1.8.0', parentMod, flags);
+				testArtifacts('toolchain-openjdk-11',    'jdk-11',    parentMod, flags);
 			}
 
 			stage('Package Build Result') {
