@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>utils-maven3-ext-api</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version>
 
 	<name>Java Maven3 Extension Utils [API]</name>
 	<url>https://github.com/RunedUniverse/utils</url>
@@ -80,7 +80,7 @@
 		<maven-version>3.8.4</maven-version>
 		<lombok-version>1.18.12</lombok-version>
 		<!-- ARTIFACT VERSIONS -->
-		<runeduniverse-utils-bom-version>2.0.0</runeduniverse-utils-bom-version>
+		<runeduniverse-utils-bom-version>2.0.1</runeduniverse-utils-bom-version>
 	</properties>
 
 	<dependencies>
