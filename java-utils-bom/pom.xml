@@ -91,7 +91,7 @@
 		<utils-maven3-api-version>2.0.0</utils-maven3-api-version>
 		<utils-maven3-version>2.0.0</utils-maven3-version>
 		<utils-maven3-ext-api-version>2.0.0</utils-maven3-ext-api-version>
-		<utils-maven3-ext-version>2.0.0</utils-maven3-ext-version>
+		<utils-maven3-ext-version>2.0.1</utils-maven3-ext-version>
 		<utils-plexus-version>2.0.0</utils-plexus-version>
 		<utils-scanner-api-version>2.0.0</utils-scanner-api-version>
 		<utils-scanner-version>2.0.0</utils-scanner-version>
