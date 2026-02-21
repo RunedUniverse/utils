@@ -37,15 +37,13 @@ import net.runeduniverse.lib.utils.maven3.ext.data.api.Extension;
 import net.runeduniverse.lib.utils.maven3.ext.data.api.ExtensionData;
 import net.runeduniverse.lib.utils.maven3.ext.data.api.PluginData;
 
+import static net.runeduniverse.lib.utils.maven3.ext.data.api.Extension.REALM_ID_PLEXUS_CORE;
+import static net.runeduniverse.lib.utils.maven3.ext.api.ExtensionIndex.REALM_ID_MAVEN_EXT;
+
 public class MvnCorePatcher {
 
 	public static final String ERR_FAILED_TO_LOAD_MAVEN_EXTENSION_CLASSREALM = //
 			"Failed to load maven-extension ClassRealm";
-
-	public static final String REALM_ID_PLEXUS_CORE = "plexus.core";
-	public static final String REALM_ID_MAVEN_EXT = "maven.ext";
-	public static final String REALM_ID_CORE_EXT_PREFIX = "coreExtension>";
-	public static final String REALM_ID_BUILD_EXT_PREFIX = "extension>";
 
 	protected final ExtensionIndex extensionIndex;
 
@@ -118,9 +116,22 @@ public class MvnCorePatcher {
 
 		callInfo_PatchingStarted();
 
-		final ClassRealm currentRealm = (ClassRealm) Thread.currentThread()
+		final ClassWorld world = this.extensionIndex.getClassWorld();
+
+		final ClassLoader currentClassLoader = Thread.currentThread()
 				.getContextClassLoader();
-		final ClassWorld world = currentRealm.getWorld();
+		final ClassRealm currentRealm;
+
+		if (currentClassLoader instanceof ClassRealm) {
+			currentRealm = (ClassRealm) currentClassLoader;
+		} else {
+			// ---- this case only happens with m2e ----
+			// because of that I can not infere how the extension is loaded
+			// => so I expect that only core-extensions are bootstrapped from outside the
+			// maven architecture!
+			this.coreExtension = true;
+			currentRealm = world.getClassRealm(REALM_ID_MAVEN_EXT);
+		}
 
 		// extLoadState= 2 -> system core ext | 1 -> core ext | 0 -> build ext
 		final short extLoadState;
@@ -180,7 +191,7 @@ public class MvnCorePatcher {
 		} finally {
 			callInfo_ResetRealm();
 			Thread.currentThread()
-					.setContextClassLoader(currentRealm);
+					.setContextClassLoader(currentClassLoader);
 		}
 
 		final Map<MavenProject, Set<Plugin>> invalidPlugins = this.extensionIndex.getInvalidPlugins();

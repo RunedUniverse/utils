@@ -31,11 +31,13 @@ import org.eclipse.aether.RepositorySystemSession;
 
 import net.runeduniverse.lib.utils.common.StringUtils;
 import net.runeduniverse.lib.utils.maven3.ext.data.api.Extension;
+import net.runeduniverse.lib.utils.maven3.ext.data.api.ExtensionType;
 
 public class DefaultExtension implements Extension {
 
 	protected ClassRealm realm = null;
 	protected CodeSource source = null;
+	protected ExtensionType type = ExtensionType.UNKNOWN;
 	protected String groupId = null;
 	protected String artifactId = null;
 	protected String version = null;
@@ -52,6 +54,11 @@ public class DefaultExtension implements Extension {
 	@Override
 	public CodeSource getCodeSource() {
 		return this.source;
+	}
+
+	@Override
+	public ExtensionType getType() {
+		return this.type;
 	}
 
 	@Override
@@ -91,6 +98,18 @@ public class DefaultExtension implements Extension {
 	@Override
 	public void setClassRealm(final ClassRealm realm) {
 		this.realm = realm;
+
+		final String realmId = realm.getId();
+		if (realmId == null)
+			this.type = ExtensionType.UNKNOWN;
+		else if (REALM_ID_PLEXUS_CORE.equals(realmId))
+			this.type = ExtensionType.PLEXUS;
+		else if (realmId.startsWith(REALM_ID_CORE_EXT_PREFIX))
+			this.type = ExtensionType.CORE;
+		else if (realmId.startsWith(REALM_ID_BUILD_EXT_PREFIX))
+			this.type = ExtensionType.BUILD;
+		else
+			this.type = ExtensionType.UNKNOWN;
 	}
 
 	@Override

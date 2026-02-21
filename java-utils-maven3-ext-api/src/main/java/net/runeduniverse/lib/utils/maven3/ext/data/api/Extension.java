@@ -28,9 +28,15 @@ import org.eclipse.aether.RepositorySystemSession;
 
 public interface Extension {
 
+	public static final String REALM_ID_PLEXUS_CORE = "plexus.core";
+	public static final String REALM_ID_CORE_EXT_PREFIX = "coreExtension>";
+	public static final String REALM_ID_BUILD_EXT_PREFIX = "extension>";
+
 	public ClassRealm getClassRealm();
 
 	public CodeSource getCodeSource();
+
+	public ExtensionType getType();
 
 	public String getGroupId();
 
