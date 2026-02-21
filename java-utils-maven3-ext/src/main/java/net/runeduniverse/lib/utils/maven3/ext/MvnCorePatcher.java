@@ -16,6 +16,7 @@
 package net.runeduniverse.lib.utils.maven3.ext;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -49,6 +50,7 @@ public class MvnCorePatcher {
 
 	protected boolean coreExtension = false;
 	protected boolean supportBuildExtension = false;
+	protected boolean m2eDetected = false;
 	// supplier
 	protected ClassRealmFactory extensionRealmFactory = null;
 	// events
@@ -117,6 +119,7 @@ public class MvnCorePatcher {
 		callInfo_PatchingStarted();
 
 		final ClassWorld world = this.extensionIndex.getClassWorld();
+		final String realmIdMavenExt;
 
 		final ClassLoader currentClassLoader = Thread.currentThread()
 				.getContextClassLoader();
@@ -124,13 +127,29 @@ public class MvnCorePatcher {
 
 		if (currentClassLoader instanceof ClassRealm) {
 			currentRealm = (ClassRealm) currentClassLoader;
+			realmIdMavenExt = REALM_ID_MAVEN_EXT;
 		} else {
 			// ---- this case only happens with m2e ----
 			// because of that I can not infere how the extension is loaded
 			// => so I expect that only core-extensions are bootstrapped from outside the
 			// maven architecture!
+			if ("org.eclipse.osgi.internal.framework.ContextFinder".equals(currentClassLoader.getClass()
+					.getCanonicalName())) {
+				// yep - really sure it's m2e
+				this.m2eDetected = true;
+				// note: for some weird reason m2e creates the extension realm
+				// with id="maven.ext."
+				realmIdMavenExt = "maven.ext.";
+			} else {
+				realmIdMavenExt = REALM_ID_MAVEN_EXT;
+			}
+
 			this.coreExtension = true;
-			currentRealm = world.getClassRealm(REALM_ID_MAVEN_EXT);
+			// try to find the ClassRealm that contains the extensions
+			ClassRealm searchRealm = world.getClassRealm(realmIdMavenExt);
+			if (searchRealm == null)
+				searchRealm = world.getClassRealm(REALM_ID_PLEXUS_CORE);
+			currentRealm = searchRealm;
 		}
 
 		// extLoadState= 2 -> system core ext | 1 -> core ext | 0 -> build ext
@@ -146,7 +165,7 @@ public class MvnCorePatcher {
 				extLoadState = 2;
 			} else if (this.coreExtension) {
 				callInfo_SwitchRealmToMavenExt();
-				realm = world.getRealm(REALM_ID_MAVEN_EXT);
+				realm = world.getRealm(realmIdMavenExt);
 				extLoadState = 1;
 			} else if (this.supportBuildExtension) {
 				realm = createExtensionRealm(plexusCore, currentRealm);
@@ -166,9 +185,13 @@ public class MvnCorePatcher {
 
 			this.extensionIndex.discoverExtensions();
 
-			for (MavenProject mvnProject : mvnSession.getAllProjects()) {
-				this.extensionIndex.seedExtensions(mvnProject);
-				this.extensionIndex.discoverPlugins(mvnSession.getRepositorySession(), mvnProject);
+			final List<MavenProject> allProjects = mvnSession.getAllProjects();
+			if (allProjects != null) {
+				// in maven3 this is never null, except when m2e is in play!
+				for (MavenProject mvnProject : mvnSession.getAllProjects()) {
+					this.extensionIndex.seedExtensions(mvnProject);
+					this.extensionIndex.discoverPlugins(mvnSession.getRepositorySession(), mvnProject);
+				}
 			}
 
 			final Map<MavenProject, Set<Extension>> extensions = this.extensionIndex.getExtensions();
