@@ -378,53 +378,42 @@
 				</plugins>
 			</build>
 		</profile>
-		<!-- DEPENDENCY MANAGEMENT -->
-		<profile>
-			<id>dependencyManagement</id>
-			<!-- this profile provides the project only dependencyManagement and
-			prevents them from being acidentally imported via the bom module! -->
-			<activation>
-				<property>
-					<!-- always active! -->
-					<name>!noAlwaysActiveProfile</name>
-				</property>
-			</activation>
-			<dependencyManagement>
-				<dependencies>
-					<dependency>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok</artifactId>
-						<version>${lombok-version}</version>
-						<scope>provided</scope>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-api</artifactId>
-						<version>${junit-jupiter-api-version}</version>
-						<scope>test</scope>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>${junit-jupiter-engine-version}</version>
-						<scope>test</scope>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-launcher</artifactId>
-						<version>${junit-platform-launcher-version}</version>
-						<scope>test</scope>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-runner</artifactId>
-						<version>${junit-platform-runner-version}</version>
-						<scope>test</scope>
-					</dependency>
-				</dependencies>
-			</dependencyManagement>
-		</profile>
 	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok-version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit-jupiter-api-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit-jupiter-engine-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-launcher</artifactId>
+				<version>${junit-platform-launcher-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-runner</artifactId>
+				<version>${junit-platform-runner-version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<resources>
