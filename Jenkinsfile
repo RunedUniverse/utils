@@ -26,8 +26,10 @@ def installArtifact(mod, parent = null) {
 		def baseName = "${ artifactId }-${ version }"
 		// archive artifacts
 		dir(path: "${ mod.path() }/target") {
-			// create spec .pom in target/ path
-			sh "cp -T '${ mod.path() }/pom.xml' '${ mod.path() }/target/${ baseName }.pom'"
+			if(!fileExists("${ baseName }.pom")) {
+				// create spec .pom in target/ path
+				sh "cp -T '${ mod.path() }/pom.xml' '${ baseName }.pom'"
+			}
 			sh 'ls -l'
 			archiveArtifacts artifacts: "${ baseName }.pom", fingerprint: true
 			if(mod.hasTag('pack-jar')) {

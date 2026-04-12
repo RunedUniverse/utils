@@ -111,6 +111,7 @@
 		<plugin-maven-clean-version>3.1.0</plugin-maven-clean-version>
 		<plugin-maven-toolchains-version>3.1.0</plugin-maven-toolchains-version>
 		<plugin-maven-resources-version>3.2.0</plugin-maven-resources-version>
+		<plugin-codehaus-flatten-version>1.7.3</plugin-codehaus-flatten-version>
 		<plugin-maven-compiler-version>3.8.0</plugin-maven-compiler-version>
 		<plugin-maven-jar-version>3.0.2</plugin-maven-jar-version>
 		<plugin-maven-source-version>3.2.1</plugin-maven-source-version>
@@ -554,6 +555,18 @@
 						<dependencyExceptionMessage>1 or more dependencies got
 							rejected doe to invalid licenses! Contact the
 							Maintainer for a solution!</dependencyExceptionMessage>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>flatten-maven-plugin</artifactId>
+					<version>${plugin-codehaus-flatten-version}</version>
+					<configuration>
+						<outputDirectory>${project.build.directory}</outputDirectory>
+						<flattenedPomFilename>
+							${project.artifactId}-${project.version}.pom
+						</flattenedPomFilename>
+						<updatePomFile>true</updatePomFile>
 					</configuration>
 				</plugin>
 				<plugin>
