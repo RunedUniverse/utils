@@ -49,6 +49,8 @@
 		<module>java-utils-maven3</module>
 		<module>java-utils-maven3-ext-api</module>
 		<module>java-utils-maven3-ext</module>
+		<module>java-utils-net-api</module>
+		<module>java-utils-net</module>
 		<module>java-utils-plexus</module>
 		<module>java-utils-scanner-api</module>
 		<module>java-utils-scanner</module>
