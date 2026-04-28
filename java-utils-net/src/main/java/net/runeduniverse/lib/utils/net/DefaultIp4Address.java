@@ -15,8 +15,9 @@
  */
 package net.runeduniverse.lib.utils.net;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip4Address;
@@ -75,11 +76,12 @@ public class DefaultIp4Address extends AIpAddress implements Ip4Address {
 	@Override
 	public Inet4Address toInetAddress() {
 		try {
-			return Inet4Address.class.getDeclaredConstructor(String.class, byte[].class)
-					.newInstance(null, this.data);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException ignored) {
-			return null;
+			final InetAddress address = InetAddress.getByAddress(null, this.data);
+			if (address instanceof Inet4Address)
+				return (Inet4Address) address;
+		} catch (UnknownHostException ignored) {
+			ignored.printStackTrace();
 		}
+		return null;
 	}
 }

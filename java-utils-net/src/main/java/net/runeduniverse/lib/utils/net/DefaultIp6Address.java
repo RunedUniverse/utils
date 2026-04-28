@@ -15,8 +15,8 @@
  */
 package net.runeduniverse.lib.utils.net;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.Inet6Address;
+import java.net.UnknownHostException;
 
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip6Address;
@@ -68,11 +68,10 @@ public class DefaultIp6Address extends AIpAddress implements Ip6Address {
 	@Override
 	public Inet6Address toInetAddress() {
 		try {
-			return Inet6Address.class.getDeclaredConstructor(String.class, byte[].class)
-					.newInstance(null, this.data);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException ignored) {
-			return null;
+			return Inet6Address.getByAddress(null, this.data, null);
+		} catch (UnknownHostException ignored) {
+			ignored.printStackTrace();
 		}
+		return null;
 	}
 }
