@@ -233,4 +233,66 @@ public class IpBinaryUtils {
 		final byte b1 = (byte) (address1[segIndex] & bitmask);
 		return b0 == b1;
 	}
+
+	public static List<byte[]> splitNetworkForMask(final byte[] rawData, final short mask, final short newMask,
+			final int count) {
+		return splitNetworkForMask(rawData, null, mask, newMask, count);
+	}
+
+	public static List<byte[]> splitNetworkForMask(byte[] rawData, byte[] workData, final short mask,
+			final short newMask, int count) {
+		final List<byte[]> col = new LinkedList<>();
+
+		if (newMask < mask || count == 0)
+			return col;
+		if (count < -1)
+			count = -1;
+		rawData = lowestAddress(rawData, mask);
+		// if workData == null
+		// -> split the network from the start
+		// else -> start with the next sub-network
+		if (workData == null) {
+			col.add(copyData(rawData));
+			workData = copyData(rawData);
+			if (count != -1)
+				count = count - 1;
+		} else {
+			workData = lowestAddress(workData, newMask);
+		}
+		if (mask == newMask || count == 0)
+			return col;
+
+		final int maxMask = rawData.length * 8;
+		final int offset = maxMask - newMask;
+		final int offsetMod = offset % 8;
+
+		final int lowIdx = mask / 8;
+		final int lowIdxMod = mask % 8;
+		final int highIdx = newMask / 8 - (offsetMod == 0 ? 1 : 0);
+
+		final byte refMask = (byte) (~(0xff >>> lowIdxMod));
+		final byte refByte = (byte) (rawData[lowIdx] & refMask);
+		final byte addStep = (byte) (0x01 << offsetMod);
+
+		loop: for (int cnt = 0; count == -1 || cnt < count; cnt++) {
+			int next = addStep;
+			// add & deal with binary overdraw
+			for (int i = highIdx; 0 < next && lowIdx <= i; i--) {
+				workData[i] = (byte) (workData[i] + next);
+				// get overdraw
+				next = (byte) workData[i] == 0x00 ? 0x01 : 0x00;
+			}
+			// check leftmost byte
+			if (0 < lowIdxMod) {
+				if (refByte != (byte) (workData[lowIdx] & refMask)) {
+					break loop;
+				}
+			} else if (0 < next) {
+				break loop;
+			}
+			col.add(copyData(workData));
+		}
+
+		return col;
+	}
 }

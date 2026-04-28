@@ -16,6 +16,9 @@
 package net.runeduniverse.lib.utils.net;
 
 import net.runeduniverse.lib.utils.net.api.IpAddress;
+
+import java.util.Collection;
+
 import net.runeduniverse.lib.utils.net.api.Ip6Address;
 import net.runeduniverse.lib.utils.net.api.IpNet6Address;
 import net.runeduniverse.lib.utils.net.api.IpNetAddress;
@@ -51,9 +54,14 @@ public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Addres
 	}
 
 	@Override
-	public boolean contains(final IpAddress<?> subnet) {
-		if (!(subnet instanceof Ip6Address))
+	public boolean contains(final IpAddress<?> address) {
+		if (!(address instanceof Ip6Address))
 			return false;
-		return equalsByMask(this.address.getBinaryAddress(), subnet.getBinaryAddress(), this.mask);
+		return equalsByMask(this.address.getBinaryAddress(), address.getBinaryAddress(), this.mask);
+	}
+
+	@Override
+	public Collection<IpNet6Address> splitForMask(final Ip6Address lastSubnet, final short newMask, final int count) {
+		return _splitForMask(IpNetworkUtils::createIpNet6Address, lastSubnet, newMask, count);
 	}
 }

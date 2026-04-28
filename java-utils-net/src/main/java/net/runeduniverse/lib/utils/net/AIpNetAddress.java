@@ -15,6 +15,10 @@
  */
 package net.runeduniverse.lib.utils.net;
 
+import java.util.Collection;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.IpNetAddress;
 
@@ -50,6 +54,16 @@ public abstract class AIpNetAddress<A extends IpAddress<A>, T extends IpNetAddre
 
 	protected boolean equalsByMask(final byte[] address0, final byte[] address1, final short mask) {
 		return IpBinaryUtils.equalsByMask(address0, address1, mask);
+	}
+
+	protected Collection<T> _splitForMask(final BiFunction<byte[], Short, T> factory, final A lastSubnet,
+			final short newMask, final int count) {
+		final byte[] rawData = getLowestAddress().getBinaryAddress();
+		final byte[] lastNetData = lastSubnet == null ? null : lastSubnet.getBinaryAddress();
+		return IpBinaryUtils.splitNetworkForMask(rawData, lastNetData, this.mask, newMask, count)
+				.stream()
+				.map(data -> factory.apply(data, newMask))
+				.collect(Collectors.toList());
 	}
 
 	@Override

@@ -15,6 +15,8 @@
  */
 package net.runeduniverse.lib.utils.net;
 
+import java.util.Collection;
+
 import net.runeduniverse.lib.utils.net.api.Ip4Address;
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.IpNet4Address;
@@ -51,9 +53,14 @@ public class DefaultIpNet4Address extends AIpNetAddress<Ip4Address, IpNet4Addres
 	}
 
 	@Override
-	public boolean contains(final IpAddress<?> subnet) {
-		if (!(subnet instanceof Ip4Address))
+	public boolean contains(final IpAddress<?> address) {
+		if (!(address instanceof Ip4Address))
 			return false;
-		return equalsByMask(this.address.getBinaryAddress(), subnet.getBinaryAddress(), this.mask);
+		return equalsByMask(this.address.getBinaryAddress(), address.getBinaryAddress(), this.mask);
+	}
+
+	@Override
+	public Collection<IpNet4Address> splitForMask(final Ip4Address lastSubnet, final short newMask, final int count) {
+		return _splitForMask(IpNetworkUtils::createIpNet4Address, lastSubnet, newMask, count);
 	}
 }

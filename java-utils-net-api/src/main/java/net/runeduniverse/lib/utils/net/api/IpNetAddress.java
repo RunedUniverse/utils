@@ -15,6 +15,7 @@
  */
 package net.runeduniverse.lib.utils.net.api;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Function;
 
@@ -37,6 +38,20 @@ public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, 
 	public boolean isSupernetOf(IpNetAddress<?, ?> subnet);
 
 	public boolean contains(IpAddress<?> address);
+
+	public default Collection<T> splitForMask(short newMask) {
+		return splitForMask(null, newMask, -1);
+	}
+
+	public default Collection<T> splitForMask(short newMask, int count) {
+		return splitForMask(null, newMask, count);
+	}
+
+	public default Collection<T> splitForMask(final A lastSubnet, final short newMask) {
+		return splitForMask(lastSubnet, newMask, -1);
+	}
+
+	public Collection<T> splitForMask(A lastSubnet, short newMask, int count);
 
 	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByAddress(
 			final Function<S, A> selector) {
