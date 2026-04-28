@@ -27,6 +27,8 @@ public interface IpAddress<T extends IpAddress<T>> extends Comparable<IpAddress<
 
 	public short getIpFamily();
 
-	public InetAddress toInetAddress();
+	public T increment();
+
+	public InetAddress toInetAddress(String host);
 
 }

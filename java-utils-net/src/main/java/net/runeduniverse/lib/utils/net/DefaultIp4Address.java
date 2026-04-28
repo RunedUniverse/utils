@@ -59,6 +59,14 @@ public class DefaultIp4Address extends AIpAddress implements Ip4Address {
 	}
 
 	@Override
+	public Ip4Address increment() {
+		final byte[] data = IpBinaryUtils.increment(this.data);
+		if (data.length == 0)
+			return null;
+		return new DefaultIp4Address(data);
+	}
+
+	@Override
 	public String toCidrNotation() {
 		return IpBinaryUtils.toCidrNotation(this.data, ".", 1, 10);
 	}
@@ -74,9 +82,9 @@ public class DefaultIp4Address extends AIpAddress implements Ip4Address {
 	}
 
 	@Override
-	public Inet4Address toInetAddress() {
+	public Inet4Address toInetAddress(String host) {
 		try {
-			final InetAddress address = InetAddress.getByAddress(null, this.data);
+			final InetAddress address = InetAddress.getByAddress(host, this.data);
 			if (address instanceof Inet4Address)
 				return (Inet4Address) address;
 		} catch (UnknownHostException ignored) {

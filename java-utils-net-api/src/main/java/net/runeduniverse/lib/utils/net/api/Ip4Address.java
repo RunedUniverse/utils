@@ -21,7 +21,7 @@ public interface Ip4Address extends IpAddress<Ip4Address> {
 
 	public static final short IP_FAMILY = 4;
 
-	public Inet4Address toInetAddress();
+	public Inet4Address toInetAddress(String host);
 
 	@Override
 	public default short getIpFamily() {

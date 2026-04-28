@@ -51,6 +51,14 @@ public class DefaultIp6Address extends AIpAddress implements Ip6Address {
 	}
 
 	@Override
+	public Ip6Address increment() {
+		final byte[] data = IpBinaryUtils.increment(this.data);
+		if (data.length == 0)
+			return null;
+		return new DefaultIp6Address(data);
+	}
+
+	@Override
 	public byte[] getBinaryAddress() {
 		return this.data;
 	}
@@ -66,9 +74,9 @@ public class DefaultIp6Address extends AIpAddress implements Ip6Address {
 	}
 
 	@Override
-	public Inet6Address toInetAddress() {
+	public Inet6Address toInetAddress(String host) {
 		try {
-			return Inet6Address.getByAddress(null, this.data, null);
+			return Inet6Address.getByAddress(host, this.data, null);
 		} catch (UnknownHostException ignored) {
 			ignored.printStackTrace();
 		}

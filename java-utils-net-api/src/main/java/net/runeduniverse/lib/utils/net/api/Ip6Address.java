@@ -21,7 +21,7 @@ public interface Ip6Address extends IpAddress<Ip6Address> {
 
 	public static final short IP_FAMILY = 6;
 
-	public Inet6Address toInetAddress();
+	public Inet6Address toInetAddress(String host);
 
 	@Override
 	public default short getIpFamily() {
