@@ -25,6 +25,8 @@ import net.runeduniverse.lib.utils.net.api.IpNetAddress;
 public abstract class AIpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>>
 		implements IpNetAddress<A, T> {
 
+	private static final long serialVersionUID = 1L;
+
 	protected final A address;
 	protected final short mask;
 
@@ -67,18 +69,18 @@ public abstract class AIpNetAddress<A extends IpAddress<A>, T extends IpNetAddre
 	}
 
 	@Override
-	public boolean equals(final IpNetAddress<?, ?> subnet) {
-		if (!isApplicable(subnet) || this.mask != subnet.getMask())
-			return false;
-		return equals(subnet, this.mask);
-	}
-
-	@Override
 	public boolean equals(final IpNetAddress<?, ?> subnet, final short mask) {
 		if (!isApplicable(subnet))
 			return false;
 		return equalsByMask(this.address.getBinaryAddress(), subnet.getBaseAddress()
 				.getBinaryAddress(), mask);
+	}
+
+	@Override
+	public boolean equals(final IpNetAddress<?, ?> subnet) {
+		if (!isApplicable(subnet) || this.mask != subnet.getMask())
+			return false;
+		return equals(subnet, this.mask);
 	}
 
 	@Override

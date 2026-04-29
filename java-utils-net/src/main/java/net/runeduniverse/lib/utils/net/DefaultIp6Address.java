@@ -21,28 +21,21 @@ import java.net.UnknownHostException;
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip6Address;
 
-public class DefaultIp6Address extends AIpAddress implements Ip6Address {
+public class DefaultIp6Address extends AIpAddress<Ip6Address> implements Ip6Address {
 
-	private final byte[] data;
+	private static final long serialVersionUID = 1L;
 
 	public DefaultIp6Address() {
-		this(new byte[16]);
+		super(new byte[16]);
 	}
 
 	public DefaultIp6Address(final byte[] data) {
-		this.data = data;
+		super(data);
 	}
 
 	@Override
-	public boolean equals(final IpAddress<?> address) {
-		if (address instanceof Ip6Address)
-			return compareTo((Ip6Address) address) == 0;
-		return false;
-	}
-
-	@Override
-	public int compareTo(final IpAddress<?> address) {
-		return compareTo(this, address);
+	protected boolean isApplicable(final IpAddress<?> instance) {
+		return instance instanceof Ip6Address;
 	}
 
 	@Override
@@ -59,22 +52,12 @@ public class DefaultIp6Address extends AIpAddress implements Ip6Address {
 	}
 
 	@Override
-	public byte[] getBinaryAddress() {
-		return this.data;
-	}
-
-	@Override
 	public String toCidrNotation() {
 		return IpBinaryUtils.toCidrNotation(this.data, ":", 2, 16);
 	}
 
 	@Override
-	public int hashCode() {
-		return toCidrNotation().hashCode();
-	}
-
-	@Override
-	public Inet6Address toInetAddress(String host) {
+	public Inet6Address toInetAddress(final String host) {
 		try {
 			return Inet6Address.getByAddress(host, this.data, null);
 		} catch (UnknownHostException ignored) {

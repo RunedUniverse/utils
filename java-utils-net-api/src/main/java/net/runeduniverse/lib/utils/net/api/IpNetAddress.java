@@ -15,11 +15,12 @@
  */
 package net.runeduniverse.lib.utils.net.api;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Function;
 
-public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>> extends CidrObject {
+public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>> extends CidrObject, Serializable {
 
 	public boolean equals(IpNetAddress<?, ?> subnet);
 

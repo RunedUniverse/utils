@@ -25,6 +25,8 @@ import net.runeduniverse.lib.utils.net.api.IpNetAddress;
 
 public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Address> implements IpNet6Address {
 
+	private static final long serialVersionUID = 1L;
+
 	public DefaultIpNet6Address(final Ip6Address address) {
 		this(address, (short) 128);
 	}

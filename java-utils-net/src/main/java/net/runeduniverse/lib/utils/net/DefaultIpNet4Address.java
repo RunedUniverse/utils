@@ -24,6 +24,8 @@ import net.runeduniverse.lib.utils.net.api.IpNetAddress;
 
 public class DefaultIpNet4Address extends AIpNetAddress<Ip4Address, IpNet4Address> implements IpNet4Address {
 
+	private static final long serialVersionUID = 1L;
+
 	public DefaultIpNet4Address(final Ip4Address address) {
 		this(address, (short) 32);
 	}

@@ -17,15 +17,45 @@ package net.runeduniverse.lib.utils.net;
 
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 
-public abstract class AIpAddress {
+public abstract class AIpAddress<T extends IpAddress<T>> implements IpAddress<T> {
 
-	public abstract boolean equals(final IpAddress<?> ip);
+	private static final long serialVersionUID = 1L;
+
+	protected final byte[] data;
+
+	public AIpAddress(final byte[] data) {
+		this.data = data;
+	}
+
+	@Override
+	public byte[] getBinaryAddress() {
+		return this.data;
+	}
+
+	@Override
+	public int hashCode() {
+		return toCidrNotation().hashCode();
+	}
+
+	protected abstract boolean isApplicable(final IpAddress<?> instance);
+
+	@Override
+	public boolean equals(final IpAddress<?> address) {
+		if (isApplicable(address))
+			return compareTo(address) == 0;
+		return false;
+	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof IpAddress<?>)
-			return equals((IpAddress<?>) obj);
-		return super.equals(obj);
+		if (!(obj instanceof IpAddress<?>))
+			return false;
+		return equals((IpAddress<?>) obj);
+	}
+
+	@Override
+	public int compareTo(final IpAddress<?> address) {
+		return compareTo(this, address);
 	}
 
 	public int compareTo(final IpAddress<?> a, final IpAddress<?> b) {

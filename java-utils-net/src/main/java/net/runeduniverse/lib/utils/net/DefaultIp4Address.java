@@ -22,35 +22,27 @@ import java.net.UnknownHostException;
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip4Address;
 
-public class DefaultIp4Address extends AIpAddress implements Ip4Address {
+public class DefaultIp4Address extends AIpAddress<Ip4Address> implements Ip4Address {
 
-	private final byte[] data;
+	private static final long serialVersionUID = 1L;
 
 	public DefaultIp4Address() {
-		this(new byte[4]);
+		super(new byte[4]);
 	}
 
 	public DefaultIp4Address(final byte byte0, final byte byte1, final byte byte2, final byte byte3) {
 		// byte0.byte1.byte2.byte3
 		// data[0].data[1].data[2].data[3]
-		this.data = new byte[] { byte0, byte1, byte2, byte3 };
+		super(new byte[] { byte0, byte1, byte2, byte3 });
 	}
 
 	public DefaultIp4Address(final byte[] data) {
-		this.data = data;
+		super(data);
 	}
 
 	@Override
-	public boolean equals(final IpAddress<?> ip) {
-		if (ip instanceof Ip4Address) {
-			return compareTo((Ip4Address) ip) == 0;
-		}
-		return false;
-	}
-
-	@Override
-	public int compareTo(final IpAddress<?> address) {
-		return compareTo(this, address);
+	protected boolean isApplicable(final IpAddress<?> instance) {
+		return instance instanceof Ip4Address;
 	}
 
 	@Override
@@ -72,17 +64,7 @@ public class DefaultIp4Address extends AIpAddress implements Ip4Address {
 	}
 
 	@Override
-	public int hashCode() {
-		return toCidrNotation().hashCode();
-	}
-
-	@Override
-	public byte[] getBinaryAddress() {
-		return this.data;
-	}
-
-	@Override
-	public Inet4Address toInetAddress(String host) {
+	public Inet4Address toInetAddress(final String host) {
 		try {
 			final InetAddress address = InetAddress.getByAddress(host, this.data);
 			if (address instanceof Inet4Address)

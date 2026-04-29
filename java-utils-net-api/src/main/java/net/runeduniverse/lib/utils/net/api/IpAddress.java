@@ -15,9 +15,10 @@
  */
 package net.runeduniverse.lib.utils.net.api;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
-public interface IpAddress<T extends IpAddress<T>> extends Comparable<IpAddress<?>>, CidrObject {
+public interface IpAddress<T extends IpAddress<T>> extends Comparable<IpAddress<?>>, CidrObject, Serializable {
 
 	public boolean equals(IpAddress<?> address);
 
