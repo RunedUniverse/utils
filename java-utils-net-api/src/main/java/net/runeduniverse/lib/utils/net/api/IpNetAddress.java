@@ -40,11 +40,11 @@ public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, 
 
 	public boolean contains(IpAddress<?> address);
 
-	public default Collection<T> splitForMask(short newMask) {
+	public default Collection<T> splitForMask(final short newMask) {
 		return splitForMask(null, newMask, -1);
 	}
 
-	public default Collection<T> splitForMask(short newMask, int count) {
+	public default Collection<T> splitForMask(final short newMask, final int count) {
 		return splitForMask(null, newMask, count);
 	}
 
@@ -56,30 +56,7 @@ public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, 
 
 	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByAddress(
 			final Function<S, A> selector) {
-		return new Comparator<S>() {
-			@Override
-			public int compare(final S n0, final S n1) {
-				if (n0 == null) {
-					if (n1 == null)
-						return 0;
-					return -1;
-				}
-				if (n1 == null)
-					return 1;
-
-				final A ip0 = selector.apply(n0);
-				final A ip1 = selector.apply(n1);
-				if (ip0 == null) {
-					if (ip1 == null)
-						return 0;
-					return -1;
-				}
-				if (ip1 == null)
-					return 1;
-
-				return ip0.compareTo(ip1);
-			}
-		};
+		return new IpNetComparator<A, S>(selector);
 	}
 
 	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByBaseAddress() {
@@ -92,5 +69,38 @@ public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, 
 
 	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByHighestAddress() {
 		return compareByAddress(S::getHighestAddress);
+	}
+
+	public static final class IpNetComparator<A extends IpAddress<A>, S extends IpNetAddress<A, S>>
+			implements Comparator<S> {
+
+		private final Function<S, A> selector;
+
+		public IpNetComparator(final Function<S, A> selector) {
+			this.selector = selector;
+		}
+
+		@Override
+		public int compare(final S n0, final S n1) {
+			if (n0 == null) {
+				if (n1 == null)
+					return 0;
+				return -1;
+			}
+			if (n1 == null)
+				return 1;
+
+			final A ip0 = this.selector.apply(n0);
+			final A ip1 = this.selector.apply(n1);
+			if (ip0 == null) {
+				if (ip1 == null)
+					return 0;
+				return -1;
+			}
+			if (ip1 == null)
+				return 1;
+
+			return ip0.compareTo(ip1);
+		}
 	}
 }
