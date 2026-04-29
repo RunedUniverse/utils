@@ -56,6 +56,11 @@ public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Addres
 	}
 
 	@Override
+	public int compareTo(final IpNet6Address o) {
+		return IpNetAddress.compare(this, o);
+	}
+
+	@Override
 	public boolean contains(final IpAddress<?> address) {
 		if (!(address instanceof Ip6Address))
 			return false;

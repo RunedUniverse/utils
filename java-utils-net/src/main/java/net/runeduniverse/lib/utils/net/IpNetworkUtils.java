@@ -243,7 +243,7 @@ public class IpNetworkUtils {
 			final Collection<IP> addresses, final short fullMask, final BiFunction<IP, Short, NET> factory) {
 		final Set<NET> results = new LinkedHashSet<>();
 		final List<NET> subnets = new LinkedList<>();
-		final SortedSet<NET> next = new TreeSet<>(IpNetAddress.compareByLowestAddress());
+		final SortedSet<NET> next = new TreeSet<>();
 
 		// prime the algorithm
 		// ensure that next does not contain 'null' elements!

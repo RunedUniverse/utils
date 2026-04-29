@@ -17,10 +17,9 @@ package net.runeduniverse.lib.utils.net.api;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.function.Function;
 
-public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>> extends CidrObject, Serializable {
+public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>>
+		extends Comparable<T>, CidrObject, Serializable {
 
 	public boolean equals(IpNetAddress<?, ?> subnet);
 
@@ -54,53 +53,25 @@ public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, 
 
 	public Collection<T> splitForMask(A lastSubnet, short newMask, int count);
 
-	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByAddress(
-			final Function<S, A> selector) {
-		return new IpNetComparator<A, S>(selector);
-	}
-
-	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByBaseAddress() {
-		return compareByAddress(S::getBaseAddress);
-	}
-
-	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByLowestAddress() {
-		return compareByAddress(S::getLowestAddress);
-	}
-
-	public static <A extends IpAddress<A>, S extends IpNetAddress<A, S>> Comparator<S> compareByHighestAddress() {
-		return compareByAddress(S::getHighestAddress);
-	}
-
-	public static final class IpNetComparator<A extends IpAddress<A>, S extends IpNetAddress<A, S>>
-			implements Comparator<S> {
-
-		private final Function<S, A> selector;
-
-		public IpNetComparator(final Function<S, A> selector) {
-			this.selector = selector;
-		}
-
-		@Override
-		public int compare(final S n0, final S n1) {
-			if (n0 == null) {
-				if (n1 == null)
-					return 0;
-				return -1;
-			}
+	public static <A extends IpAddress<A>, T extends IpNetAddress<A, T>> int compare(final T n0, final T n1) {
+		if (n0 == null) {
 			if (n1 == null)
-				return 1;
-
-			final A ip0 = this.selector.apply(n0);
-			final A ip1 = this.selector.apply(n1);
-			if (ip0 == null) {
-				if (ip1 == null)
-					return 0;
-				return -1;
-			}
-			if (ip1 == null)
-				return 1;
-
-			return ip0.compareTo(ip1);
+				return 0;
+			return -1;
 		}
+		if (n1 == null)
+			return 1;
+
+		final A ip0 = n0.getLowestAddress();
+		final A ip1 = n1.getLowestAddress();
+		if (ip0 == null) {
+			if (ip1 == null)
+				return 0;
+			return -1;
+		}
+		if (ip1 == null)
+			return 1;
+
+		return ip0.compareTo(ip1);
 	}
 }

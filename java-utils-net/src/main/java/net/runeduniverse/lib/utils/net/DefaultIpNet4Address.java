@@ -55,6 +55,11 @@ public class DefaultIpNet4Address extends AIpNetAddress<Ip4Address, IpNet4Addres
 	}
 
 	@Override
+	public int compareTo(final IpNet4Address o) {
+		return IpNetAddress.compare(this, o);
+	}
+
+	@Override
 	public boolean contains(final IpAddress<?> address) {
 		if (!(address instanceof Ip4Address))
 			return false;
