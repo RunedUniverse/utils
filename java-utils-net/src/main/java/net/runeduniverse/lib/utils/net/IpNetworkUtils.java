@@ -111,6 +111,8 @@ public class IpNetworkUtils {
 	}
 
 	public static IpNet4Address tryParseIpNet4Address(final String subnet) {
+		if (subnet == null)
+			return null;
 		final String[] segments = subnet.trim()
 				.split("/", -1);
 		if (segments.length == 1) {
@@ -156,6 +158,8 @@ public class IpNetworkUtils {
 	}
 
 	public static IpNet6Address tryParseIpNet6Address(final String subnet) {
+		if (subnet == null)
+			return null;
 		final String[] segments = subnet.trim()
 				.split("/", -1);
 		if (segments.length == 1) {
