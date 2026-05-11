@@ -92,6 +92,8 @@
 		<utils-maven3-version>2.0.0</utils-maven3-version>
 		<utils-maven3-ext-api-version>2.0.1</utils-maven3-ext-api-version>
 		<utils-maven3-ext-version>2.0.1</utils-maven3-ext-version>
+		<utils-net-api-version>2.0.0</utils-net-api-version>
+		<utils-net-version>2.0.0</utils-net-version>
 		<utils-plexus-version>2.0.0</utils-plexus-version>
 		<utils-scanner-api-version>2.0.0</utils-scanner-api-version>
 		<utils-scanner-version>2.0.0</utils-scanner-version>
@@ -186,6 +188,16 @@
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-net-api</artifactId>
+				<version>${utils-net-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-net</artifactId>
+				<version>${utils-net-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-plexus</artifactId>
 				<version>${utils-plexus-version}</version>
 			</dependency>
@@ -207,7 +219,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
-				<configuration>
+				<configuration combine.children="append">
 					<flattenMode>bom</flattenMode>
 					<pomElements>
 						<properties>remove</properties>

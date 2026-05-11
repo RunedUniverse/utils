@@ -120,6 +120,8 @@ node( label: 'linux' ) {
 			addModule id: 'java-utils-maven3',          path: 'java-utils-maven3',          name: 'Java Maven3 Utils',                 tags: [ 'build1',  'pack-jar', 'jdk-1.8.0', 'test-smoke' ]
 			addModule id: 'java-utils-maven3-ext-api',  path: 'java-utils-maven3-ext-api',  name: 'Java Maven3 Extension Utils [API]', tags: [ 'build3a', 'pack-jar', 'jdk-1.8.0' ]
 			addModule id: 'java-utils-maven3-ext',      path: 'java-utils-maven3-ext',      name: 'Java Maven3 Extension Utils',       tags: [ 'build3',  'pack-jar', 'jdk-1.8.0', 'test-smoke' ]
+			addModule id: 'java-utils-net-api',         path: 'java-utils-net-api',         name: 'Java Network Library [API]',        tags: [ 'build1a', 'pack-jar', 'jdk-1.8.0' ]
+			addModule id: 'java-utils-net',             path: 'java-utils-net',             name: 'Java Network Library',              tags: [ 'build1',  'pack-jar', 'jdk-1.8.0' ]
 			addModule id: 'java-utils-plexus',          path: 'java-utils-plexus',          name: 'Java Plexus Utils',                 tags: [ 'build2',  'pack-jar', 'jdk-1.8.0', 'test-smoke' ]
 			addModule id: 'java-utils-scanner-api',     path: 'java-utils-scanner-api',     name: 'Java Scanner [API]',                tags: [ 'build2a', 'pack-jar', 'jdk-1.8.0' ]
 			addModule id: 'java-utils-scanner',         path: 'java-utils-scanner',         name: 'Java Scanner',                      tags: [ 'build2',  'pack-jar', 'jdk-1.8.0', 'test-smoke' ]
