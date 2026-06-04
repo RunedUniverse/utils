@@ -225,6 +225,8 @@ public class IpBinaryUtils {
 			if (address0[i] != address1[i])
 				return false;
 		}
+		if (segIndex == address0.length)
+			return true;
 		// now check the remaining bytes
 		// ex: do for 5 bits (= 21 - 2*8)
 		// ex: bitmask = 1111 1000
