@@ -110,18 +110,18 @@
 		<plexus-component-version>1.7.1</plexus-component-version>
 		<!-- ARTIFACT VERSIONS - COMPILER -->
 		<plugin-maven-dependency-version>3.10.0</plugin-maven-dependency-version>
-		<plugin-maven-clean-version>3.1.0</plugin-maven-clean-version>
-		<plugin-maven-toolchains-version>3.1.0</plugin-maven-toolchains-version>
-		<plugin-maven-resources-version>3.2.0</plugin-maven-resources-version>
+		<plugin-maven-clean-version>3.4.1</plugin-maven-clean-version>
+		<plugin-maven-toolchains-version>3.2.0</plugin-maven-toolchains-version>
+		<plugin-maven-resources-version>3.5.0</plugin-maven-resources-version>
 		<plugin-codehaus-flatten-version>1.7.3</plugin-codehaus-flatten-version>
-		<plugin-maven-compiler-version>3.8.0</plugin-maven-compiler-version>
-		<plugin-maven-jar-version>3.0.2</plugin-maven-jar-version>
-		<plugin-maven-source-version>3.2.1</plugin-maven-source-version>
-		<plugin-maven-javadoc-version>3.2.0</plugin-maven-javadoc-version>
-		<plugin-maven-surefire-version>3.0.0-M5</plugin-maven-surefire-version>
-		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
-		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
-		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
+		<plugin-maven-compiler-version>3.14.0</plugin-maven-compiler-version>
+		<plugin-maven-jar-version>3.4.2</plugin-maven-jar-version>
+		<plugin-maven-source-version>3.3.1</plugin-maven-source-version>
+		<plugin-maven-javadoc-version>3.11.2</plugin-maven-javadoc-version>
+		<plugin-maven-surefire-version>3.2.5</plugin-maven-surefire-version>
+		<plugin-maven-install-version>3.1.4</plugin-maven-install-version>
+		<plugin-revelc-formatter-version>2.25.0</plugin-revelc-formatter-version>
+		<plugin-mycila-license-version>4.6</plugin-mycila-license-version>
 		<!-- ARTIFACT VERSIONS - WORKFLOW -->
 		<plugin-workflow-java-version>0.1.0</plugin-workflow-java-version>
 		<plugin-workflow-pipeline-version>0.1.0</plugin-workflow-pipeline-version>
