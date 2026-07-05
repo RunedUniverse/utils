@@ -1,6 +1,6 @@
 def evalValue(expression, path = null) {
 	return sh( returnStdout: true,
-		script: "mvn org.apache.maven.plugins:maven-help-plugin:evaluate -Dexpression=${ expression } -q -DforceStdout ${ path==null ? '' : ('-pl='+path) } | tail -1")
+		script: "mvn-dev org.apache.maven.plugins:maven-help-plugin:3.5.1:evaluate -Dexpression=${ expression } -q -DforceStdout ${ path==null ? '' : ('-pl='+path) } | tail -1")
 }
 
 def getToolchainId(mod) {
@@ -77,11 +77,12 @@ def testArtifacts(mods, tag, toolchainId, testProfile, parent = null, properties
 }
 
 node( label: 'linux' ) {
+	repoProxy(['maven>central': 'central', 'maven>runeduniverse>releases': 'rnet-releases', 'maven>runeduniverse>development': 'rnet-development']) {
 	withModules {
 		tool(name: 'maven-latest', type: 'maven')
 
 		stage('Checkout SCM') {
-			checkout(scm)
+			checkout2(scm)
 		}
 
 		sh 'chmod +x $WORKSPACE/.build/*'
@@ -130,24 +131,16 @@ node( label: 'linux' ) {
 		def bomMod = getModule(id: 'java-utils-bom');
 
 		stage('Init Modules') {
-			sshagent (credentials: ['RunedUniverse-Jenkins']) {
-				perModule(failFast: true) {
-					def mod = getModule();
-					def relPath = mod.relPathFrom(parentMod);
-					mod.metadata().put('maven.groupId', evalValue('project.groupId', relPath));
-					mod.metadata().put('maven.artifactId', evalValue('project.artifactId', relPath));
-					def version = evalValue('project.version', relPath);
-					mod.metadata().put('maven.version', version);
-					// check skip flag
-					// if not skipped -> check if this version already exists!
-					mod.activate(
-						!mod.hasTag('skip') && sh(
-								label: "check if git tag \"${ mod.id() }/v${ version }\" exists",
-								returnStatus: true,
-								script: "git ls-remote --tags --exit-code origin refs/tags/${ mod.id() }/v${ version } &>/dev/null"
-							) != 0
-					);
-				}
+			perModule(failFast: true) {
+				def mod = getModule();
+				def relPath = mod.relPathFrom(parentMod);
+				mod.metadata().put('maven.groupId', evalValue('project.groupId', relPath));
+				mod.metadata().put('maven.artifactId', evalValue('project.artifactId', relPath));
+				def version = evalValue('project.version', relPath);
+				mod.metadata().put('maven.version', version);
+				// check skip flag
+				// if not skipped -> check if this version already exists!
+				mod.activate(!mod.hasTag('skip') && !gitTagExists2(scm: scm, tag: "${ mod.id() }/v${ version }"));
 			}
 		}
 		stage ('Info') {
@@ -276,10 +269,7 @@ node( label: 'linux' ) {
 						def groupId = mod.metadata().get('maven.groupId');
 						def artifactId = mod.metadata().get('maven.artifactId');
 						def version = mod.metadata().get('maven.version');
-						sshagent (credentials: ['RunedUniverse-Jenkins']) {
-							sh "git tag -a ${ mod.id() }/v${ version } -f -m '[artifact] ${ groupId }:${ artifactId }:${ version }'"
-							sh "git push origin ${ mod.id() }/v${ version }"
-						}
+						gitTagPush2(scm: scm, tag: "${ mod.id() }/v${ version }", comment: "[artifact] ${ groupId }:${ artifactId }:${ version }")
 					}
 					// merge bundles into default
 					bundleMerge( source: mod.id() )
@@ -295,5 +285,5 @@ node( label: 'linux' ) {
 		}
 
 		cleanWs()
-	}
+	}}
 }
