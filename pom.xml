@@ -557,13 +557,13 @@
 						<dependencyExceptionMessage>1 or more dependencies got
 							rejected doe to invalid licenses! Contact the
 							Maintainer for a solution!</dependencyExceptionMessage>
-						<dependencySets>
-							<dependencySet>
-								<excludeScopes>
-									<excludeScope>provided</excludeScope>
-								</excludeScopes>
-							</dependencySet>
-						</dependencySets>
+						<dependencyScopes>
+							<dependencyScope>import</dependencyScope>
+							<dependencyScope>compile</dependencyScope>
+							<dependencyScope>runtime</dependencyScope>
+							<dependencyScope>system</dependencyScope>
+							<dependencyScope>test</dependencyScope>
+						</dependencyScopes>
 					</configuration>
 				</plugin>
 				<plugin>
