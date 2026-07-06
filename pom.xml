@@ -281,6 +281,32 @@
 		</profile>
 		<!-- LICENSES -->
 		<profile>
+			<id>license-mit-approve</id>
+			<activation>
+				<property>
+					<name>license-mit-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>The MIT License</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>license-apache2-approve</id>
 			<activation>
 				<property>
@@ -373,6 +399,51 @@
 									<rule>APPROVE</rule>
 									<value>
 										https://www.eclipse.org/legal/epl-v10.html
+									</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>license-epl-v20-approve</id>
+			<activation>
+				<property>
+					<name>license-epl-v20-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License v2.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License, Version 2.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										http://www.eclipse.org/legal/epl-v20.html
+									</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										https://www.eclipse.org/legal/epl-v20.html
 									</value>
 								</dependencyPolicy>
 							</dependencyPolicies>

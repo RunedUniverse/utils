@@ -199,7 +199,9 @@ node( label: 'linux' ) {
 
 			stage('Code Validation') {
 				// note: bugged maven artifact resolve requires all modules to be locally installed before license verification
-				sh "mvn-dev -P ${ REPOS },ci-validate,license-apache2-approve,license-epl-v10-approve --fail-at-end -T1C"
+				def approvedLicenses = [ 'mit', 'apache2', 'epl-v10', 'epl-v20' ]
+				def licenseProfiles = approvedLicenses.collect({ "license-${ it }-approve" }).join(',');
+				sh "mvn-dev -P ${ REPOS },ci-validate,${ licenseProfiles } --fail-at-end -T1C"
 			}
 
 			stage('Smoke Test') {
