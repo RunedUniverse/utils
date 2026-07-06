@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2025 VenaNocta (venanocta@gmail.com)
+    Copyright © 2026 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@
 		<module>java-utils-maven3</module>
 		<module>java-utils-maven3-ext-api</module>
 		<module>java-utils-maven3-ext</module>
+		<module>java-utils-net-api</module>
+		<module>java-utils-net</module>
 		<module>java-utils-plexus</module>
 		<module>java-utils-scanner-api</module>
 		<module>java-utils-scanner</module>
@@ -107,17 +109,22 @@
 		<lombok-version>1.18.12</lombok-version>
 		<plexus-component-version>1.7.1</plexus-component-version>
 		<!-- ARTIFACT VERSIONS - COMPILER -->
-		<plugin-maven-clean-version>3.1.0</plugin-maven-clean-version>
-		<plugin-maven-toolchains-version>3.1.0</plugin-maven-toolchains-version>
-		<plugin-maven-resources-version>3.2.0</plugin-maven-resources-version>
-		<plugin-maven-compiler-version>3.8.0</plugin-maven-compiler-version>
-		<plugin-maven-jar-version>3.0.2</plugin-maven-jar-version>
-		<plugin-maven-source-version>3.2.1</plugin-maven-source-version>
-		<plugin-maven-javadoc-version>3.2.0</plugin-maven-javadoc-version>
-		<plugin-maven-surefire-version>3.0.0-M5</plugin-maven-surefire-version>
-		<plugin-maven-install-version>3.0.0-M1</plugin-maven-install-version>
-		<plugin-revelc-formatter-version>2.23.0</plugin-revelc-formatter-version>
-		<plugin-mycila-license-version>4.2.rc1</plugin-mycila-license-version>
+		<plugin-maven-dependency-version>3.10.0</plugin-maven-dependency-version>
+		<plugin-maven-clean-version>3.4.1</plugin-maven-clean-version>
+		<plugin-maven-toolchains-version>3.2.0</plugin-maven-toolchains-version>
+		<plugin-maven-resources-version>3.5.0</plugin-maven-resources-version>
+		<plugin-codehaus-flatten-version>1.7.3</plugin-codehaus-flatten-version>
+		<plugin-maven-compiler-version>3.14.0</plugin-maven-compiler-version>
+		<plugin-maven-jar-version>3.4.2</plugin-maven-jar-version>
+		<plugin-maven-source-version>3.3.1</plugin-maven-source-version>
+		<plugin-maven-javadoc-version>3.11.2</plugin-maven-javadoc-version>
+		<plugin-maven-surefire-version>3.2.5</plugin-maven-surefire-version>
+		<plugin-maven-install-version>3.1.4</plugin-maven-install-version>
+		<plugin-revelc-formatter-version>2.25.0</plugin-revelc-formatter-version>
+		<plugin-mycila-license-version>4.6</plugin-mycila-license-version>
+		<!-- ARTIFACT VERSIONS - WORKFLOW -->
+		<plugin-workflow-java-version>0.1.0</plugin-workflow-java-version>
+		<plugin-workflow-pipeline-version>0.1.0</plugin-workflow-pipeline-version>
 		<!-- VERSIONS - TESTING -->
 		<junit-platform-launcher-version>1.8.2</junit-platform-launcher-version>
 		<junit-platform-runner-version>1.8.2</junit-platform-runner-version>
@@ -130,8 +137,8 @@
 		<profile>
 			<id>toolchain-openjdk-1-8-0</id>
 			<properties>
-				<jdk-toolchain-source-version>openjdk-1.8.0</jdk-toolchain-source-version>
-				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
+				<toolchain-jdk-source-version>openjdk-1.8.0</toolchain-jdk-source-version>
+				<toolchain-jdk-test-version>openjdk-1.8.0</toolchain-jdk-test-version>
 			</properties>
 		</profile>
 		<!-- DEV-INSTALL -->
@@ -142,7 +149,7 @@
 				<jdk-toolchain-test-version>openjdk-1.8.0</jdk-toolchain-test-version>
 			</properties>
 			<build>
-				<defaultGoal>clean dev/install]</defaultGoal>
+				<defaultGoal>clean dev/install</defaultGoal>
 				<pluginManagement>
 					<plugins>
 						<plugin>
@@ -159,12 +166,12 @@
 		<profile>
 			<id>format</id>
 			<build>
-				<defaultGoal>dev/validate</defaultGoal>
+				<defaultGoal>dev/[validate]</defaultGoal>
 			</build>
 		</profile>
 		<!-- PIPELINE -->
 		<profile>
-			<id>debug</id>
+			<id>ci-debug</id>
 			<properties>
 				<r4m.fancy-output>false</r4m.fancy-output>
 			</properties>
@@ -173,46 +180,60 @@
 			</build>
 		</profile>
 		<profile>
-			<id>validate</id>
+			<id>ci-validate</id>
 			<build>
 				<defaultGoal>check/[validate]@pipeline</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>install</id>
+			<id>ci-install</id>
 			<build>
 				<defaultGoal>
-					clean@pipeline
-					install/install]@pipeline
+					install/clean@pipeline
+					install/install@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>build-tests</id>
+			<id>ci-test-build</id>
 			<build>
 				<defaultGoal>
-					junit/test-compile]@pipeline
+					test/]test@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>test-junit-jupiter</id>
+			<id>ci-test-exec</id>
 			<build>
 				<defaultGoal>
-					junit/validate@pipeline
-					junit/test@pipeline
+					test/validate@pipeline
+					test/[test]@pipeline
 				</defaultGoal>
 			</build>
 		</profile>
 		<profile>
-			<id>test-system</id>
+			<id>test-smoke</id>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<groups>system</groups>
+							<groups>smoke,system</groups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>test-live</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<groups>live</groups>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -229,9 +250,17 @@
 					</url>
 				</repository>
 			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>runeduniverse-releases</id>
+					<url>
+						https://nexus.runeduniverse.net/repository/maven-releases/
+					</url>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 		<profile>
-			<!-- dev-repo contains: build-helper-java & development builds -->
+			<!-- dev-repo contains: development builds -->
 			<id>repo-development</id>
 			<repositories>
 				<repository>
@@ -241,8 +270,42 @@
 					</url>
 				</repository>
 			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>runeduniverse-development</id>
+					<url>
+						https://nexus.runeduniverse.net/repository/maven-development/
+					</url>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 		<!-- LICENSES -->
+		<profile>
+			<id>license-mit-approve</id>
+			<activation>
+				<property>
+					<name>license-mit-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>The MIT License</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>license-apache2-approve</id>
 			<activation>
@@ -344,6 +407,51 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>license-epl-v20-approve</id>
+			<activation>
+				<property>
+					<name>license-epl-v20-approve</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<configuration>
+							<dependencyPolicies combine.children="append">
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License v2.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_NAME</type>
+									<rule>APPROVE</rule>
+									<value>Eclipse Public License, Version 2.0</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										http://www.eclipse.org/legal/epl-v20.html
+									</value>
+								</dependencyPolicy>
+								<dependencyPolicy>
+									<type>LICENSE_URL</type>
+									<rule>APPROVE</rule>
+									<value>
+										https://www.eclipse.org/legal/epl-v20.html
+									</value>
+								</dependencyPolicy>
+							</dependencyPolicies>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencyManagement>
@@ -399,18 +507,15 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>toolchain</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>net.revelc.code.formatter</groupId>
@@ -440,9 +545,22 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+				<artifactId>maven-pipeline-workflow</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+				<artifactId>maven-java-workflow</artifactId>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${plugin-maven-dependency-version}</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
@@ -485,7 +603,7 @@
 					<version>${plugin-mycila-license-version}</version>
 					<configuration>
 						<properties>
-							<year>2025</year>
+							<year>2026</year>
 							<owner>VenaNocta</owner>
 							<email>venanocta@gmail.com</email>
 						</properties>
@@ -510,6 +628,25 @@
 						<dependencyExceptionMessage>1 or more dependencies got
 							rejected doe to invalid licenses! Contact the
 							Maintainer for a solution!</dependencyExceptionMessage>
+						<dependencyScopes>
+							<dependencyScope>import</dependencyScope>
+							<dependencyScope>compile</dependencyScope>
+							<dependencyScope>runtime</dependencyScope>
+							<dependencyScope>system</dependencyScope>
+							<dependencyScope>test</dependencyScope>
+						</dependencyScopes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>flatten-maven-plugin</artifactId>
+					<version>${plugin-codehaus-flatten-version}</version>
+					<configuration>
+						<outputDirectory>${project.build.directory}</outputDirectory>
+						<flattenedPomFilename>
+							${project.artifactId}-${project.version}.pom
+						</flattenedPomFilename>
+						<updatePomFile>true</updatePomFile>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -594,6 +731,16 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<version>${plugin-maven-install-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+					<artifactId>maven-pipeline-workflow</artifactId>
+					<version>${plugin-workflow-pipeline-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>net.runeduniverse.tools.maven.workflow</groupId>
+					<artifactId>maven-java-workflow</artifactId>
+					<version>${plugin-workflow-java-version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

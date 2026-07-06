@@ -1,5 +1,5 @@
 /*
- * Copyright © 2025 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2026 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,14 +50,13 @@ import net.runeduniverse.lib.utils.plexus.PlexusContextUtils;
 
 import static net.runeduniverse.lib.utils.common.CollectionUtils.copy;
 import static net.runeduniverse.lib.utils.common.CollectionUtils.unmodifiable;
+import static net.runeduniverse.lib.utils.maven3.ext.data.api.Extension.REALM_ID_PLEXUS_CORE;
+import static net.runeduniverse.lib.utils.maven3.ext.data.api.Extension.REALM_ID_CORE_EXT_PREFIX;
+import static net.runeduniverse.lib.utils.maven3.ext.data.api.Extension.REALM_ID_BUILD_EXT_PREFIX;
 
 @Component(role = ExtensionIndex.class)
 public class DefaultExtensionIndex implements ExtensionIndex {
 
-	public static final String REALM_ID_PLEXUS_CORE = "plexus.core";
-	public static final String REALM_ID_MAVEN_EXT = "maven.ext";
-	public static final String REALM_ID_CORE_EXT_PREFIX = "coreExtension>";
-	public static final String REALM_ID_BUILD_EXT_PREFIX = "extension>";
 	public static final String POM_PROP_FILE = "/META-INF/maven/*/*/pom.properties";
 
 	// supplier
@@ -107,10 +106,15 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 	}
 
 	@Override
+	public ClassWorld getClassWorld() {
+		return this.container.getContainerRealm()
+				.getWorld();
+	}
+
+	@Override
 	public void discoverExtensions() {
-		final ClassRealm currentRealm = (ClassRealm) Thread.currentThread()
-				.getContextClassLoader();
-		final ClassWorld world = currentRealm.getWorld();
+		final ClassWorld world = this.container.getContainerRealm()
+				.getWorld();
 
 		ClassRealm searchRealm = world.getClassRealm(REALM_ID_MAVEN_EXT);
 		if (searchRealm == null)
@@ -226,7 +230,6 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		} else
 			return set;
 
-		ext.setClassRealm(realm);
 		set.add(ext);
 
 		if (!ext.validate()) {
@@ -330,10 +333,12 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		return;
 	}
 
+	@Override
 	public Set<Extension> getCoreExtensions() {
 		return unmodifiable(this.coreExtensions);
 	}
 
+	@Override
 	public Map<MavenProject, Set<Extension>> getExtensions() {
 		final Map<MavenProject, Set<Extension>> map = this.extMapSupplier.get();
 		for (Entry<MavenProject, Set<Extension>> entry : this.extensionMap.entrySet()) {
@@ -342,6 +347,7 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		return unmodifiable(map);
 	}
 
+	@Override
 	public Map<MavenProject, Set<Plugin>> getExtPlugins() {
 		final Map<MavenProject, Set<Plugin>> map = this.pluginMapSupplier.get();
 		for (Entry<MavenProject, Set<Plugin>> entry : this.extPlugins.entrySet()) {
@@ -350,11 +356,32 @@ public class DefaultExtensionIndex implements ExtensionIndex {
 		return unmodifiable(map);
 	}
 
+	@Override
 	public Map<MavenProject, Set<Plugin>> getInvalidPlugins() {
 		final Map<MavenProject, Set<Plugin>> map = this.pluginMapSupplier.get();
 		for (Entry<MavenProject, Set<Plugin>> entry : this.invalidPlugins.entrySet()) {
 			map.put(entry.getKey(), unmodifiable(copy(entry.getValue(), this.pluginSetSupplier)));
 		}
 		return unmodifiable(map);
+	}
+
+	@Override
+	public Set<Extension> findExtensions(String groupId, String artifactId) {
+		final Set<Extension> result = this.extSetSupplier.get();
+		final boolean groupFilter = groupId != null;
+		final boolean artifactFilter = artifactId != null;
+		for (Entry<ClassRealm, Set<Extension>> entry : this.realmMap.entrySet()) {
+			final Set<Extension> set = entry.getValue();
+			if (set == null)
+				continue;
+			for (Extension ext : set) {
+				if (groupFilter && !groupId.equals(ext.getGroupId()))
+					continue;
+				if (artifactFilter && !artifactId.equals(ext.getArtifactId()))
+					continue;
+				result.add(ext);
+			}
+		}
+		return result;
 	}
 }

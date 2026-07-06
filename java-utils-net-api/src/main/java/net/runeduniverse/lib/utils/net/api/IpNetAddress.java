@@ -1,0 +1,77 @@
+/*
+ * Copyright © 2026 VenaNocta (venanocta@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.runeduniverse.lib.utils.net.api;
+
+import java.io.Serializable;
+import java.util.Collection;
+
+public interface IpNetAddress<A extends IpAddress<A>, T extends IpNetAddress<A, T>>
+		extends Comparable<T>, CidrObject, Serializable {
+
+	public boolean equals(IpNetAddress<?, ?> subnet);
+
+	public boolean equals(IpNetAddress<?, ?> subnet, short mask);
+
+	public A getBaseAddress();
+
+	public A getLowestAddress();
+
+	public A getHighestAddress();
+
+	public short getMask();
+
+	public T copy();
+
+	public boolean isSupernetOf(IpNetAddress<?, ?> subnet);
+
+	public boolean contains(IpAddress<?> address);
+
+	public default Collection<T> splitForMask(final short newMask) {
+		return splitForMask(null, newMask, -1);
+	}
+
+	public default Collection<T> splitForMask(final short newMask, final int count) {
+		return splitForMask(null, newMask, count);
+	}
+
+	public default Collection<T> splitForMask(final A lastSubnet, final short newMask) {
+		return splitForMask(lastSubnet, newMask, -1);
+	}
+
+	public Collection<T> splitForMask(A lastSubnet, short newMask, int count);
+
+	public static <A extends IpAddress<A>, T extends IpNetAddress<A, T>> int compare(final T n0, final T n1) {
+		if (n0 == null) {
+			if (n1 == null)
+				return 0;
+			return -1;
+		}
+		if (n1 == null)
+			return 1;
+
+		final A ip0 = n0.getLowestAddress();
+		final A ip1 = n1.getLowestAddress();
+		if (ip0 == null) {
+			if (ip1 == null)
+				return 0;
+			return -1;
+		}
+		if (ip1 == null)
+			return 1;
+
+		return ip0.compareTo(ip1);
+	}
+}

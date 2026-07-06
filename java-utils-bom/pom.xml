@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2025 VenaNocta (venanocta@gmail.com)
+    Copyright © 2026 VenaNocta (venanocta@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>utils-bom</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version>
 	<packaging>pom</packaging>
 
 	<name>UTILS - Bill of Materials</name>
@@ -80,7 +80,7 @@
 		<utils-chain-api-version>2.0.0</utils-chain-api-version>
 		<utils-chain-version>2.0.0</utils-chain-version>
 		<utils-common-api-version>2.0.0</utils-common-api-version>
-		<utils-common-version>2.0.0</utils-common-version>
+		<utils-common-version>2.0.1</utils-common-version>
 		<utils-conditional-api-version>2.0.0</utils-conditional-api-version>
 		<utils-conditional-version>2.0.0</utils-conditional-version>
 		<utils-config-api-version>2.0.0</utils-config-api-version>
@@ -90,8 +90,10 @@
 		<utils-logging-version>2.0.0</utils-logging-version>
 		<utils-maven3-api-version>2.0.0</utils-maven3-api-version>
 		<utils-maven3-version>2.0.0</utils-maven3-version>
-		<utils-maven3-ext-api-version>2.0.0</utils-maven3-ext-api-version>
-		<utils-maven3-ext-version>2.0.0</utils-maven3-ext-version>
+		<utils-maven3-ext-api-version>2.0.1</utils-maven3-ext-api-version>
+		<utils-maven3-ext-version>2.0.1</utils-maven3-ext-version>
+		<utils-net-api-version>2.0.0</utils-net-api-version>
+		<utils-net-version>2.0.0</utils-net-version>
 		<utils-plexus-version>2.0.0</utils-plexus-version>
 		<utils-scanner-api-version>2.0.0</utils-scanner-api-version>
 		<utils-scanner-version>2.0.0</utils-scanner-version>
@@ -186,6 +188,16 @@
 			</dependency>
 			<dependency>
 				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-net-api</artifactId>
+				<version>${utils-net-api-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
+				<artifactId>utils-net</artifactId>
+				<version>${utils-net-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.runeduniverse.lib.utils</groupId>
 				<artifactId>utils-plexus</artifactId>
 				<version>${utils-plexus-version}</version>
 			</dependency>
@@ -201,4 +213,20 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<configuration combine.children="append">
+					<flattenMode>bom</flattenMode>
+					<pomElements>
+						<properties>remove</properties>
+						<dependencyManagement>interpolate</dependencyManagement>
+					</pomElements>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2025 VenaNocta (venanocta@gmail.com)
+ * Copyright © 2026 VenaNocta (venanocta@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.eclipse.aether.RepositorySystemSession;
 
@@ -27,13 +28,17 @@ import net.runeduniverse.lib.utils.maven3.ext.data.api.Extension;
 
 public interface ExtensionIndex {
 
+	public static final String REALM_ID_MAVEN_EXT = "maven.ext";
+
+	public ClassWorld getClassWorld();
+
 	public void discoverExtensions();
 
-	public boolean discoverExtRealm(final ClassRealm realm);
+	public boolean discoverExtRealm(ClassRealm realm);
 
-	public void seedExtensions(final MavenProject mvnProject);
+	public void seedExtensions(MavenProject mvnProject);
 
-	public void discoverPlugins(final RepositorySystemSession repoSysSession, final MavenProject mvnProject);
+	public void discoverPlugins(RepositorySystemSession repoSysSession, MavenProject mvnProject);
 
 	public Set<Extension> getCoreExtensions();
 
@@ -42,5 +47,7 @@ public interface ExtensionIndex {
 	public Map<MavenProject, Set<Plugin>> getExtPlugins();
 
 	public Map<MavenProject, Set<Plugin>> getInvalidPlugins();
+
+	public Set<Extension> findExtensions(String groupId, String artifactId);
 
 }
