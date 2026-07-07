@@ -1,6 +1,13 @@
 def evalValue(expression, path = null) {
-	return sh( returnStdout: true,
-		script: "mvn-dev org.apache.maven.plugins:maven-help-plugin:3.5.1:evaluate -Dexpression=${ expression } -q -DforceStdout ${ path==null ? '' : ('-pl='+path) } | tail -1")
+    def output = sh( returnStdout: true, script: """
+            mvn-dev org.apache.maven.plugins:maven-help-plugin:3.5.1:evaluate \
+                -Dexpression=${ expression } -q -DforceStdout \
+                ${ path==null ? '' : ('-pl='+path) }
+        """);
+    def result = output.readLines().last();
+    if (result.startsWith('[ERROR]'))
+        error("[ERROR] Failed to get property » ${ expression } \n ${ output }")
+    return result;
 }
 
 def getToolchainId(mod) {
