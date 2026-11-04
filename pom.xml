@@ -121,7 +121,7 @@
 		<plugin-maven-surefire-version>3.2.5</plugin-maven-surefire-version>
 		<plugin-maven-install-version>3.1.4</plugin-maven-install-version>
 		<plugin-revelc-formatter-version>2.25.0</plugin-revelc-formatter-version>
-		<plugin-mycila-license-version>4.6</plugin-mycila-license-version>
+		<plugin-mycila-license-version>5.1.2</plugin-mycila-license-version>
 		<!-- ARTIFACT VERSIONS - WORKFLOW -->
 		<plugin-workflow-java-version>0.1.0</plugin-workflow-java-version>
 		<plugin-workflow-pipeline-version>0.1.0</plugin-workflow-pipeline-version>
@@ -631,7 +631,7 @@
 						<dependencyScopes>
 							<dependencyScope>import</dependencyScope>
 							<dependencyScope>compile</dependencyScope>
-							<dependencyScope>runtime</dependencyScope>
+							<!--<dependencyScope>runtime</dependencyScope>-->
 							<dependencyScope>system</dependencyScope>
 							<dependencyScope>test</dependencyScope>
 						</dependencyScopes>
@@ -664,14 +664,11 @@
 						<testSource>${java-test-source-version}</testSource>
 						<testTarget>${java-test-target-version}</testTarget>
 						<!-- use starting with version 3.12.0-->
-						<!--
 						<annotationProcessorPathsUseDepMgmt>true</annotationProcessorPathsUseDepMgmt>
-						-->
 						<annotationProcessorPaths>
 							<path>
 								<groupId>org.projectlombok</groupId>
 								<artifactId>lombok</artifactId>
-								<version>${lombok-version}</version>
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
