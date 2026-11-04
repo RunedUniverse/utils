@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip4Address;
@@ -183,7 +184,7 @@ public class IpNetworkUtils {
 		return null;
 	}
 
-	protected static <T extends IpAddress<T>> Collection<T> _interpolateIpRange(final T ip1, final T ip2,
+	public static <T extends IpAddress<T>> Collection<T> _interpolateIpRange(final T ip1, final T ip2,
 			final Function<byte[], T> factory) {
 		final List<T> list = new LinkedList<>();
 		final T lowerIp;
@@ -243,7 +244,7 @@ public class IpNetworkUtils {
 		return interpolateIpRange(subnet.getLowestAddress(), subnet.getHighestAddress());
 	}
 
-	protected static <IP extends IpAddress<IP>, NET extends IpNetAddress<IP, NET>> Collection<NET> _extractIpSubnets(
+	public static <IP extends IpAddress<IP>, NET extends IpNetAddress<IP, NET>> Collection<NET> _extractIpSubnets(
 			final Collection<IP> addresses, final short fullMask, final BiFunction<IP, Short, NET> factory) {
 		final Set<NET> results = new LinkedHashSet<>();
 		final List<NET> subnets = new LinkedList<>();
@@ -307,7 +308,9 @@ public class IpNetworkUtils {
 		final Set<Ip4Address> ip4s = new LinkedHashSet<>();
 		final Set<Ip6Address> ip6s = new LinkedHashSet<>();
 
-		filter(addresses, ip4s, ip6s);
+		_forEach(addresses, //
+				new TypeFilter<>(Ip4Address.class, ip4s::add), //
+				new TypeFilter<>(Ip6Address.class, ip6s::add));
 
 		// extract the subnets
 		final Set<IpNetAddress<?, ?>> subnets = new LinkedHashSet<>();
@@ -320,7 +323,7 @@ public class IpNetworkUtils {
 		return subnets;
 	}
 
-	protected static <IP extends IpAddress<IP>> Collection<Deque<IP>> _extractIpRanges(final Collection<IP> addresses) {
+	public static <IP extends IpAddress<IP>> Collection<Deque<IP>> _extractIpRanges(final Collection<IP> addresses) {
 		final List<IP> list;
 		if (addresses instanceof List<?>) {
 			list = (List<IP>) addresses;
@@ -393,7 +396,9 @@ public class IpNetworkUtils {
 		final Collection<Ip4Address> ipv4Col = new LinkedList<>();
 		final Collection<Ip6Address> ipv6Col = new LinkedList<>();
 
-		filter(addresses, ipv4Col, ipv6Col);
+		_forEach(addresses, //
+				new TypeFilter<>(Ip4Address.class, ipv4Col::add), //
+				new TypeFilter<>(Ip6Address.class, ipv6Col::add));
 
 		final List<Deque<IpAddress<?>>> list = new LinkedList<>();
 		for (Deque<Ip4Address> deque : extractIp4Ranges(ipv4Col)) {
@@ -405,13 +410,28 @@ public class IpNetworkUtils {
 		return list;
 	}
 
-	protected static void filter(final Collection<IpAddress<?>> addresses, final Collection<Ip4Address> ipv4Col,
-			final Collection<Ip6Address> ipv6Col) {
+	@SafeVarargs
+	public static void _forEach(final Collection<IpAddress<?>> addresses, final Consumer<IpAddress<?>>... consumers) {
 		for (IpAddress<?> ip : addresses) {
-			if (ip instanceof Ip4Address)
-				ipv4Col.add((Ip4Address) ip);
-			else if (ip instanceof Ip6Address)
-				ipv6Col.add((Ip6Address) ip);
+			for (Consumer<IpAddress<?>> filter : consumers)
+				filter.accept(ip);
+		}
+	}
+
+	public static final class TypeFilter<T extends IpAddress<?>> implements Consumer<IpAddress<?>> {
+
+		private final Class<T> type;
+		private final Consumer<T> consumer;
+
+		public TypeFilter(final Class<T> type, final Consumer<T> consumer) {
+			this.type = Objects.requireNonNull(type);
+			this.consumer = Objects.requireNonNull(consumer);
+		}
+
+		@Override
+		public void accept(final IpAddress<?> ip) {
+			if (this.type.isInstance(ip))
+				this.consumer.accept(this.type.cast(ip));
 		}
 	}
 }

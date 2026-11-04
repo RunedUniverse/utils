@@ -15,13 +15,12 @@
  */
 package net.runeduniverse.lib.utils.net;
 
-import net.runeduniverse.lib.utils.net.api.IpAddress;
-
 import java.util.Collection;
 
+import net.runeduniverse.lib.utils.net.api.IpAddress;
 import net.runeduniverse.lib.utils.net.api.Ip6Address;
-import net.runeduniverse.lib.utils.net.api.IpNet6Address;
 import net.runeduniverse.lib.utils.net.api.IpNetAddress;
+import net.runeduniverse.lib.utils.net.api.IpNet6Address;
 
 public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Address> implements IpNet6Address {
 
@@ -35,6 +34,18 @@ public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Addres
 		super(address, mask);
 	}
 
+	protected IpNet6Address _new(final Ip6Address address, final short mask) {
+		return new DefaultIpNet6Address(address, mask);
+	}
+
+	protected final IpNet6Address _new(final byte[] data, final short mask) {
+		return _new(_newIp(data), mask);
+	}
+
+	protected Ip6Address _newIp(final byte[] data) {
+		return new DefaultIp6Address(data);
+	}
+
 	@Override
 	protected boolean isApplicable(final IpNetAddress<?, ?> instance) {
 		return instance instanceof IpNet6Address;
@@ -42,17 +53,17 @@ public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Addres
 
 	@Override
 	public IpNet6Address copy() {
-		return new DefaultIpNet6Address(this.address, this.mask);
+		return _new(this.address, this.mask);
 	}
 
 	@Override
 	public Ip6Address getLowestAddress() {
-		return new DefaultIp6Address(lowestAddress(this.address.getBinaryAddress(), this.mask));
+		return _newIp(lowestAddress(this.address.getBinaryAddress(), this.mask));
 	}
 
 	@Override
 	public Ip6Address getHighestAddress() {
-		return new DefaultIp6Address(highestAddress(this.address.getBinaryAddress(), this.mask));
+		return _newIp(highestAddress(this.address.getBinaryAddress(), this.mask));
 	}
 
 	@Override
@@ -69,6 +80,6 @@ public class DefaultIpNet6Address extends AIpNetAddress<Ip6Address, IpNet6Addres
 
 	@Override
 	public Collection<IpNet6Address> splitForMask(final Ip6Address lastSubnet, final short newMask, final int count) {
-		return _splitForMask(IpNetworkUtils::createIpNet6Address, lastSubnet, newMask, count);
+		return _splitForMask(this::_new, lastSubnet, newMask, count);
 	}
 }
