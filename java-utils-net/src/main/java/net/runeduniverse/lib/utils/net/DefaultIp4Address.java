@@ -40,6 +40,10 @@ public class DefaultIp4Address extends AIpAddress<Ip4Address> implements Ip4Addr
 		super(data);
 	}
 
+	protected Ip4Address _new(final byte[] data) {
+		return new DefaultIp4Address(data);
+	}
+
 	@Override
 	protected boolean isApplicable(final IpAddress<?> instance) {
 		return instance instanceof Ip4Address;
@@ -47,7 +51,7 @@ public class DefaultIp4Address extends AIpAddress<Ip4Address> implements Ip4Addr
 
 	@Override
 	public Ip4Address copy() {
-		return new DefaultIp4Address(this.data);
+		return _new(this.data);
 	}
 
 	@Override
@@ -55,7 +59,7 @@ public class DefaultIp4Address extends AIpAddress<Ip4Address> implements Ip4Addr
 		final byte[] data = IpBinaryUtils.increment(this.data);
 		if (data.length == 0)
 			return null;
-		return new DefaultIp4Address(data);
+		return _new(data);
 	}
 
 	@Override

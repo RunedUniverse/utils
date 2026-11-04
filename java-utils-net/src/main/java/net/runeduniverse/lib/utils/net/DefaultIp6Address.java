@@ -33,6 +33,10 @@ public class DefaultIp6Address extends AIpAddress<Ip6Address> implements Ip6Addr
 		super(data);
 	}
 
+	protected Ip6Address _new(final byte[] data) {
+		return new DefaultIp6Address(data);
+	}
+
 	@Override
 	protected boolean isApplicable(final IpAddress<?> instance) {
 		return instance instanceof Ip6Address;
@@ -40,7 +44,7 @@ public class DefaultIp6Address extends AIpAddress<Ip6Address> implements Ip6Addr
 
 	@Override
 	public Ip6Address copy() {
-		return new DefaultIp6Address(this.data);
+		return _new(this.data);
 	}
 
 	@Override
@@ -48,7 +52,7 @@ public class DefaultIp6Address extends AIpAddress<Ip6Address> implements Ip6Addr
 		final byte[] data = IpBinaryUtils.increment(this.data);
 		if (data.length == 0)
 			return null;
-		return new DefaultIp6Address(data);
+		return _new(data);
 	}
 
 	@Override
